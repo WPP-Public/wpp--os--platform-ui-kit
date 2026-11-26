@@ -57,6 +57,11 @@
   cursor: pointer;
   max-width: 100%;
 }
+:host .trigger:focus-visible {
+  border-radius: var(--inline-edit-content-border-radius);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
 :host .label {
   margin: var(--inline-edit-label-margin);
 }
@@ -141,4 +146,17 @@
 :host(.wpp-inline-edit-error) ::slotted([slot=form-element]) {
   --wpp-input-border-color-active: var(--wpp-danger-color-400);
   --wpp-text-area-border-color-active: var(--wpp-danger-color-400);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
 }

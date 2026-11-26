@@ -75,6 +75,9 @@ export const iconsList = [
             name: 'export',
           },
           {
+            name: 'extract',
+          },
+          {
             name: 'external-link',
           },
           {

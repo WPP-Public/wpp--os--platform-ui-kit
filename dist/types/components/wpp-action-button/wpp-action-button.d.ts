@@ -76,6 +76,7 @@ export declare class WppActionButton {
   onUpdateAriaProps(): void;
   onDisabledChange(newVal: boolean): void;
   componentWillLoad(): void;
+  disconnectedCallback(): void;
   private updateSlotData;
   private onKeyDown;
   private handleClick;

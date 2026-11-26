@@ -1,15 +1,15 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement, F as Fragment } from './index-a0877c3d.js';
 import { l as lodash } from './lodash-cc2b04b5.js';
-import { b as hexToRgb } from './utils-afecf564.js';
-import { k as transformToVersionedTag, y as mergeLocales } from './utils-49ce8daf.js';
-import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
+import { n as getSliderMarkerLeft, o as getSliderKeyValue, b as hexToRgb } from './utils-b2432c57.js';
+import { k as transformToVersionedTag, z as mergeLocales } from './utils-711e1d1b.js';
+import { W as WrappedSlot } from './WrappedSlot-ed0f29d7.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './consts-744c144f.js';
 import './theme-observer-b7886d19.js';
 
-const wppHueSliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host canvas{width:100%;height:100%;border-radius:32px;display:block}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
+const wppHueSliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host canvas{width:100%;height:100%;border-radius:32px;display:block}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}:host .marker:focus{outline:none}:host .marker:focus-visible{border-radius:var(--wpp-border-radius-round);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}";
 
 const HueSlider = class {
   constructor(hostRef) {
@@ -43,11 +43,6 @@ const HueSlider = class {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      const position = (this.hue / 360) * rect.width;
-      this.markerPosition = lodash.clamp(position, 8, rect.width - 8);
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       event.preventDefault();
@@ -68,33 +63,32 @@ const HueSlider = class {
       const xClamped = lodash.clamp(xRaw, 0, rect.width);
       const hueValue = Math.round((xClamped / rect.width) * 360);
       this.hueChanged.emit(hueValue);
-      this.markerPosition = lodash.clamp(xClamped, 8, rect.width - 8);
+    };
+    this.handleKeyDown = (event) => {
+      const hueValue = getSliderKeyValue(event.key, Math.round(this.hue), 0, 360);
+      if (hueValue === undefined)
+        return;
+      event.preventDefault();
+      this.hueChanged.emit(hueValue);
     };
     this.hue = 0;
-    this.markerPosition = 8;
-  }
-  updateHue() {
-    this.updateMarkerPosition();
+    this.label = undefined;
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawHueSlider();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-hue-slider" }, h("div", { class: "slider-container" }, h("canvas", null), h("div", { class: "marker", style: {
-        left: `${this.markerPosition}px`,
+    return (h(Host, { class: "wpp-hue-slider" }, h("div", { class: "slider-container" }, h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 360, "aria-valuenow": Math.round(this.hue), onKeyDown: this.handleKeyDown, style: {
+        left: getSliderMarkerLeft(this.hue / 360),
       } }))));
   }
-  static get registryIs() { return "wpp-hue-slider-v4-6-0"; }
+  static get registryIs() { return "wpp-hue-slider-v4-7-0"; }
   get host() { return getElement(this); }
-  static get watchers() { return {
-    "hue": ["updateHue"]
-  }; }
 };
 HueSlider.style = wppHueSliderCss;
 
@@ -108,11 +102,11 @@ const WppIconSwatch = class {
   render() {
     return (h(Fragment, null, this.size === 's' ? (h("svg", { width: "26", height: "26", viewBox: "0 0 26 26", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, h("rect", { width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }))) : (h("svg", { width: "40", height: "40", viewBox: "0 0 40 40", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, h("rect", { width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" })))));
   }
-  static get registryIs() { return "wpp-icon-swatch-v4-6-0"; }
+  static get registryIs() { return "wpp-icon-swatch-v4-7-0"; }
 };
 WppIconSwatch.style = wppIconCss;
 
-const wppOpacitySliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .checkerboard{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:32px;overflow:hidden}:host canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:32px;display:block;z-index:1}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
+const wppOpacitySliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .checkerboard{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:32px;overflow:hidden}:host canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:32px;display:block;z-index:1}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}:host .marker:focus{outline:none}:host .marker:focus-visible{border-radius:var(--wpp-border-radius-round);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}";
 
 const OpacitySlider = class {
   constructor(hostRef) {
@@ -143,11 +137,6 @@ const OpacitySlider = class {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      const position = this.opacity * rect.width;
-      this.markerPosition = lodash.clamp(position, 8, rect.width - 8);
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       event.preventDefault();
@@ -168,31 +157,35 @@ const OpacitySlider = class {
       const xClamped = lodash.clamp(xRaw, 0, rect.width);
       const newOpacity = xClamped / rect.width;
       this.opacityChanged.emit(newOpacity);
-      this.markerPosition = lodash.clamp(xClamped, 8, rect.width - 8);
+    };
+    this.handleKeyDown = (event) => {
+      const percent = getSliderKeyValue(event.key, Math.round(this.opacity * 100), 0, 100);
+      if (percent === undefined)
+        return;
+      event.preventDefault();
+      this.opacityChanged.emit(percent / 100);
     };
     this.hexColor = undefined;
     this.opacity = 1;
-    this.markerPosition = 8;
+    this.label = undefined;
   }
   onPropertyChange() {
-    this.updateMarkerPosition();
     this.drawOpacitySlider();
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawOpacitySlider();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-6-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
-        left: `${this.markerPosition}px`,
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-7-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": Math.round(this.opacity * 100), "aria-valuetext": `${Math.round(this.opacity * 100)}%`, onKeyDown: this.handleKeyDown, style: {
+        left: getSliderMarkerLeft(this.opacity),
       } }))));
   }
-  static get registryIs() { return "wpp-opacity-slider-v4-6-0"; }
+  static get registryIs() { return "wpp-opacity-slider-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "hexColor": ["onPropertyChange"],
@@ -201,7 +194,7 @@ const OpacitySlider = class {
 };
 OpacitySlider.style = wppOpacitySliderCss;
 
-const wppSaturationPickerCss = ":host{position:relative;display:block;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .picker-container{position:relative;width:100%;height:208px}:host canvas{width:100%;height:100%;border-radius:var(--wpp-border-radius-s)}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none}";
+const wppSaturationPickerCss = ":host{position:relative;display:block;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .picker-container{position:relative;width:100%;height:208px}:host canvas{width:100%;height:100%;border-radius:var(--wpp-border-radius-s)}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none}:host .marker:focus{outline:none}:host .marker:focus-visible{border-radius:var(--wpp-border-radius-round);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}";
 
 const SaturationPicker = class {
   constructor(hostRef) {
@@ -236,11 +229,6 @@ const SaturationPicker = class {
       ctx.fillStyle = valueGradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      this.markerX = (this.saturation / 100) * rect.width;
-      this.markerY = (1 - this.value / 100) * rect.height;
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       this.updateSaturationValue(event);
@@ -259,8 +247,6 @@ const SaturationPicker = class {
       const y = Math.min(Math.max(0, event.clientY - rect.top), rect.height);
       this.saturation = Math.round((x / rect.width) * 100);
       this.value = Math.round(100 - (y / rect.height) * 100);
-      this.markerX = x;
-      this.markerY = y;
       this.saturationChanged.emit({ saturation: this.saturation, saturationValue: this.value });
     };
     this.handleMarkerMouseDown = (event) => {
@@ -269,32 +255,50 @@ const SaturationPicker = class {
       window.addEventListener('mousemove', this.handleMouseMove);
       window.addEventListener('mouseup', this.handleMouseUp);
     };
+    // A two-dimensional slider: Left/Right change saturation, Up/Down and Page Up/Down change brightness, and
+    // Home/End move saturation to its ends.
+    this.handleKeyDown = (event) => {
+      const isBrightnessKey = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(event.key);
+      const current = Math.round(isBrightnessKey ? this.value : this.saturation);
+      const next = getSliderKeyValue(event.key, current, 0, 100);
+      if (next === undefined)
+        return;
+      event.preventDefault();
+      if (isBrightnessKey) {
+        this.value = next;
+      }
+      else {
+        this.saturation = next;
+      }
+      this.saturationChanged.emit({ saturation: this.saturation, saturationValue: this.value });
+    };
     this.saturation = undefined;
     this.value = undefined;
     this.hue = 0;
-    this.markerX = 0;
-    this.markerY = 0;
+    this.label = undefined;
+    this.valueText = undefined;
   }
   onPropertyChange() {
     this.drawSaturationValuePicker();
-    this.updateMarkerPosition();
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawSaturationValuePicker();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-saturation-picker" }, h("div", { class: "picker-container" }, h("canvas", null), h("div", { class: "marker", onMouseDown: this.handleMarkerMouseDown, style: {
-        left: `${this.markerX}px`,
-        top: `${this.markerY}px`,
+    return (h(Host, { class: "wpp-saturation-picker" }, h("div", { class: "picker-container" }, h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": Math.round(this.saturation), "aria-valuetext": this.valueText, onKeyDown: this.handleKeyDown, onMouseDown: this.handleMarkerMouseDown,
+      // Percentages of the area rather than measured pixels: the picker first renders inside the closed
+      // popover, where the canvas has no size yet.
+      style: {
+        left: `${this.saturation}%`,
+        top: `${100 - this.value}%`,
       } }))));
   }
-  static get registryIs() { return "wpp-saturation-picker-v4-6-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "hue": ["onPropertyChange"],
@@ -486,9 +490,9 @@ const WppSegmentedControl = class {
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
   }
-  static get registryIs() { return "wpp-segmented-control-v4-6-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["valueChanged"],
@@ -598,7 +602,7 @@ const WppSegmentedControlItem = class {
   render() {
     return (h(Host, { id: this.uniqueId, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item" }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-segmented-control-item-v4-6-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "disabled": ["disabledChanged"]

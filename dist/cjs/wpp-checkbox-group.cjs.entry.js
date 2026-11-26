@@ -18,7 +18,10 @@ const WppCheckboxGroup = class {
         this.items = Array.from(this.host.querySelectorAll('.wpp-checkbox'));
         this.items.forEach((checkbox) => {
           checkbox.checked = this.value.includes(checkbox.value);
-          checkbox.required = true;
+          // Only the group label shows "(Optional)". Forcing `required` onto every checkbox did that too, but it
+          // made each unchecked box natively required: announced as required and invalid, and blocking form
+          // submission until every box in the group was checked.
+          checkbox.isGroupItem = true;
         });
       }, 0);
     };
@@ -70,9 +73,13 @@ const WppCheckboxGroup = class {
     this.wppChange.emit({ value: this.value });
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, index.h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (index.h("wpp-label-v4-6-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), index.h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, index.h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (index.h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    // A custom ariaProps object replaces the default ids, so fall back to them rather than leaving the group
+    // unnamed and the message unreferenced.
+    const labelId = this.ariaProps.labelledby ?? 'label-id';
+    const messageId = this.ariaProps.describedby ?? 'description-id';
+    return (index.h(index.Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, index.h("div", { class: "group-container", role: "group", "aria-labelledby": this.labelConfig?.text ? labelId : undefined, "aria-label": this.ariaProps.label, "aria-describedby": this.message ? messageId : undefined }, this.labelConfig?.text && (index.h("wpp-label-v4-7-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: labelId })), index.h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, index.h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (index.h("wpp-inline-message-v4-7-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: messageId })))));
   }
-  static get registryIs() { return "wpp-checkbox-group-v4-6-0"; }
+  static get registryIs() { return "wpp-checkbox-group-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["updateValue"]

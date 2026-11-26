@@ -1,8 +1,8 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, DropdownConfig, FOCUS_TYPE } from '../../types/common';
+import { DropdownConfig, FOCUS_TYPE } from '../../types/common';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
-import { DisplayMarkState, MarkState, SliderInputValue, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue, InputWidth } from './types';
+import { DisplayMarkState, MarkState, SliderInputValue, SliderChangeEventDetail, SliderLabelConfig, SliderLocales, SliderTypes, SliderValue, InputWidth, WppSliderAriaProps } from './types';
 import { MaskitoNumberParams } from '@maskito/kit/src/lib/masks/number/number-params';
 interface FocusType {
   min: FOCUS_TYPE;
@@ -101,8 +101,17 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   readonly withValue: boolean;
   /**
    * Contains the slider `aria-` props.
+   *
+   * `label` names the control, and is deprecated for `range` sliders because it names BOTH thumbs,
+   * leaving them indistinguishable — set `min` and `max` there instead. The deprecation is on that
+   * one key, not on this prop.
    */
-  readonly ariaProps: AriaProps;
+  readonly ariaProps: WppSliderAriaProps;
+  /**
+   * Translations for the strings this component generates itself — the thumb qualifiers and the
+   * spoken value of a `middle-range` band. The field's own label comes from `labelConfig`.
+   */
+  readonly locales: Partial<SliderLocales>;
   /**
    * Tooltip config for label, under the hood tooltip using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
@@ -145,6 +154,19 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
+  /**
+   * Accessibility helpers.
+   *
+   * The visible label lives inside wpp-label's shadow root and the range input inside this one, so
+   * `for`/`id` can never associate them. The name is built here instead and set as `aria-label`.
+   */
+  private get accessibleNameBase();
+  private getThumbLabel;
+  private getThumbLabelledBy;
+  private getMarkLabelAt;
+  private getValueText;
+  private getRangeValueText;
   private getMidValueRespectingStep;
   private computeSegmentWidth;
   private onUpdateMinMaxValues;

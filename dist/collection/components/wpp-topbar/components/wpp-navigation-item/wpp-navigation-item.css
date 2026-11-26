@@ -259,6 +259,24 @@
 :host .navigation-item-wrapper.with-menu-expanded .chevron-icon {
   transform: rotate(180deg);
 }
+:host:host(:not([aria-expanded=true])) .link:focus-visible .navigation-item-wrapper {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--topbar-menu-item-first-border-color-focus), 0 0 0 3px var(--topbar-menu-item-second-border-color-focus);
+  background-color: var(--navigation-item-bg-color-hover);
+}
+:host:host(:not([aria-expanded=true])) .link:focus-visible .navigation-item-wrapper .label-text {
+  color: var(--navigation-item-text-color-hover);
+}
+:host:host(:not([aria-expanded=true])) .link:focus-visible .navigation-item-wrapper .chevron-icon {
+  color: var(--navigation-item-extended-icon-color-hover);
+}
+:host:host(:not([aria-expanded=true])) .link:focus-visible .navigation-item-wrapper.menu {
+  background-color: var(--navigation-item-menu-bg-color-hover);
+}
+:host:host(:not([aria-expanded=true])) .link:focus-visible .navigation-item-wrapper.menu .menu-icon {
+  color: var(--navigation-item-menu-icon-color-hover);
+}
 :host:host(:not([aria-expanded=true])) .navigation-item-wrapper {
   background-color: var(--navigation-item-bg-color);
 }
@@ -366,20 +384,23 @@
   display: block;
   width: 100%;
 }
-:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper {
+:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper {
   outline: none;
   box-shadow: none;
+  background-color: var(--navigation-item-bg-color-hover);
+}
+:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper .label-text, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .label-text {
+  color: var(--navigation-item-text-color-hover);
+}
+:host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper {
   background-color: var(--navigation-item-bg-color-active);
-}
-:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper .label-text, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .label-text, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper .label-text {
-  color: var(--navigation-item-text-color-active);
-}
-:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper .chevron-icon, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .chevron-icon, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper .chevron-icon {
-  color: var(--navigation-item-extended-icon-color-active);
 }
 
 .link {
   text-decoration: none;
+}
+.link:focus-visible {
+  outline: none;
 }
 
 .list-item {

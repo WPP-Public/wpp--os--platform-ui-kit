@@ -1,4 +1,5 @@
 import { h, Host } from '@stencil/core';
+import { getSliderKeyValue } from '../../utils';
 /**
  * @internal
  */
@@ -33,11 +34,6 @@ export class SaturationPicker {
       ctx.fillStyle = valueGradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      this.markerX = (this.saturation / 100) * rect.width;
-      this.markerY = (1 - this.value / 100) * rect.height;
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       this.updateSaturationValue(event);
@@ -56,8 +52,6 @@ export class SaturationPicker {
       const y = Math.min(Math.max(0, event.clientY - rect.top), rect.height);
       this.saturation = Math.round((x / rect.width) * 100);
       this.value = Math.round(100 - (y / rect.height) * 100);
-      this.markerX = x;
-      this.markerY = y;
       this.saturationChanged.emit({ saturation: this.saturation, saturationValue: this.value });
     };
     this.handleMarkerMouseDown = (event) => {
@@ -66,33 +60,51 @@ export class SaturationPicker {
       window.addEventListener('mousemove', this.handleMouseMove);
       window.addEventListener('mouseup', this.handleMouseUp);
     };
+    // A two-dimensional slider: Left/Right change saturation, Up/Down and Page Up/Down change brightness, and
+    // Home/End move saturation to its ends.
+    this.handleKeyDown = (event) => {
+      const isBrightnessKey = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(event.key);
+      const current = Math.round(isBrightnessKey ? this.value : this.saturation);
+      const next = getSliderKeyValue(event.key, current, 0, 100);
+      if (next === undefined)
+        return;
+      event.preventDefault();
+      if (isBrightnessKey) {
+        this.value = next;
+      }
+      else {
+        this.saturation = next;
+      }
+      this.saturationChanged.emit({ saturation: this.saturation, saturationValue: this.value });
+    };
     this.saturation = undefined;
     this.value = undefined;
     this.hue = 0;
-    this.markerX = 0;
-    this.markerY = 0;
+    this.label = undefined;
+    this.valueText = undefined;
   }
   onPropertyChange() {
     this.drawSaturationValuePicker();
-    this.updateMarkerPosition();
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawSaturationValuePicker();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-saturation-picker" }, h("div", { class: "picker-container" }, h("canvas", null), h("div", { class: "marker", onMouseDown: this.handleMarkerMouseDown, style: {
-        left: `${this.markerX}px`,
-        top: `${this.markerY}px`,
+    return (h(Host, { class: "wpp-saturation-picker" }, h("div", { class: "picker-container" }, h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": Math.round(this.saturation), "aria-valuetext": this.valueText, onKeyDown: this.handleKeyDown, onMouseDown: this.handleMarkerMouseDown,
+      // Percentages of the area rather than measured pixels: the picker first renders inside the closed
+      // popover, where the canvas has no size yet.
+      style: {
+        left: `${this.saturation}%`,
+        top: `${100 - this.value}%`,
       } }))));
   }
   static get is() { return "wpp-saturation-picker"; }
-  static get registryIs() { return "wpp-saturation-picker-v4-6-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -157,13 +169,41 @@ export class SaturationPicker {
         "attribute": "hue",
         "reflect": false,
         "defaultValue": "0"
+      },
+      "label": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name of the area, set by wpp-color-picker from its locales."
+        },
+        "attribute": "label",
+        "reflect": false
+      },
+      "valueText": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Value text announced for the current saturation and brightness, set by wpp-color-picker from its locales."
+        },
+        "attribute": "value-text",
+        "reflect": false
       }
-    };
-  }
-  static get states() {
-    return {
-      "markerX": {},
-      "markerY": {}
     };
   }
   static get events() {

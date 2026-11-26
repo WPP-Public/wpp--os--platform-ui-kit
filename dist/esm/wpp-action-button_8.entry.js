@@ -1,12 +1,12 @@
 import { r as registerInstance, h, H as Host, g as getElement, F as Fragment } from './index-a0877c3d.js';
-import { g as getSlotEmptyStates, l as closestElement, D as getAriaProps, w as getHighestContainerInDOM, E as isWppElement } from './utils-49ce8daf.js';
+import { g as getSlotEmptyStates, m as closestElement, E as getAriaProps, x as getHighestContainerInDOM, G as isWppElement } from './utils-711e1d1b.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
+import { W as WrappedSlot } from './WrappedSlot-ed0f29d7.js';
 import { W as WppIcon } from './WppIcon-bb52ef53.js';
 import { c as isEqual_1 } from './isEqual-cbad439f.js';
 import { m as menuListConfig } from './menuListConfig-084f335e.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { g as getDeepActiveElement } from './dialog-focus-06045aaf.js';
+import { g as getDeepActiveElement } from './dialog-focus-73993dfd.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import { t as themeObserver } from './theme-observer-b7886d19.js';
 import './_commonjsHelpers-ba3f0406.js';
@@ -34,8 +34,10 @@ const WppActionButton = class {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
-        this.host.dispatchEvent(clickEvent);
+        // Pressed goes on before the click: a click that closes a popover removes the button from the page, and the
+        // disconnectedCallback that clears the look runs during the dispatch.
         this.isPressed = true;
+        this.host.dispatchEvent(clickEvent);
       }
     };
     this.handleClick = (e) => {
@@ -187,14 +189,20 @@ const WppActionButton = class {
     this.updateSlotData();
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
+  // A button removed from the page while hovered or pressed - a popover that detaches its content when it closes -
+  // never sees the pointerleave or keyup that would clear the state, and would show it again when put back.
+  disconnectedCallback() {
+    this.isHovered = false;
+    this.isPressed = false;
+  }
   render() {
     return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton",
       // `isPressed` is the transient pressed visual (mouse/key down), not a toggle state —
       // exposing it as `aria-pressed` made every action button announce as an unpressed
       // toggle button. Consumers with real toggle semantics can pass `ariaProps.pressed`.
-      tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-6-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
+      tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-7-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
   }
-  static get registryIs() { return "wpp-action-button-v4-6-0"; }
+  static get registryIs() { return "wpp-action-button-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"],
@@ -216,7 +224,7 @@ const WppIconCross = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-cross", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M5.70711 4.29289C5.31658 3.90237 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.90237 5.31658 4.29289 5.70711L8.58579 10L4.29289 14.2929C3.90237 14.6834 3.90237 15.3166 4.29289 15.7071C4.68342 16.0976 5.31658 16.0976 5.70711 15.7071L10 11.4142L14.2929 15.7071C14.6834 16.0976 15.3166 16.0976 15.7071 15.7071C16.0976 15.3166 16.0976 14.6834 15.7071 14.2929L11.4142 10L15.7071 5.70711C16.0976 5.31658 16.0976 4.68342 15.7071 4.29289C15.3166 3.90237 14.6834 3.90237 14.2929 4.29289L10 8.58579L5.70711 4.29289Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-cross-v4-6-0"; }
+  static get registryIs() { return "wpp-icon-cross-v4-7-0"; }
 };
 WppIconCross.style = wppIconCss$2;
 
@@ -233,7 +241,7 @@ const WppIconError = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-error", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M11.6205 2.68236L17.2903 8.25996C18.2258 9.18045 18.2377 10.6847 17.3183 11.6203L11.7398 17.2904C10.8194 18.2258 9.3149 18.238 8.37946 17.3176L2.70966 11.7396C1.77419 10.8192 1.76202 9.31476 2.68236 8.37933L8.26011 2.70963C9.18053 1.77418 10.6851 1.76203 11.6205 2.68236ZM10 5.33295C10.5198 5.33295 10.9412 5.75433 10.9412 6.27413V10.98C10.9412 11.4998 10.5198 11.9212 10 11.9212C9.4802 11.9212 9.05882 11.4998 9.05882 10.98V6.27413C9.05882 5.75433 9.4802 5.33295 10 5.33295ZM10.9412 13.7647C10.9412 14.2845 10.5198 14.7059 10 14.7059C9.4802 14.7059 9.05882 14.2845 9.05882 13.7647C9.05882 13.2449 9.4802 12.8235 10 12.8235C10.5198 12.8235 10.9412 13.2449 10.9412 13.7647Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-error-v4-6-0"; }
+  static get registryIs() { return "wpp-icon-error-v4-7-0"; }
 };
 WppIconError.style = wppIconCss$1;
 
@@ -250,7 +258,7 @@ const WppIconWarning = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-warning", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M8.83422 2.68592L1.77378 15.024C1.26617 15.9112 1.92884 17 2.97644 17H17.0978C18.1454 17 18.808 15.9112 18.3004 15.024L11.2395 2.68592C10.716 1.77136 9.35779 1.77136 8.83422 2.68592ZM10.0374 5.75C10.5552 5.74994 10.9749 6.16963 10.975 6.68739L10.9751 11.3746L9.10014 11.3749L9.09999 6.68761C9.09993 6.16984 9.51962 5.75006 10.0374 5.75ZM10.9751 11.3746C10.9751 11.8923 10.5554 12.3125 10.0376 12.3125C9.51985 12.3125 9.10013 11.8927 9.10014 11.3749L10.9751 11.3746ZM10.9746 14.1875C10.9746 14.7053 10.5549 15.125 10.0371 15.125C9.51934 15.125 9.09961 14.7053 9.09961 14.1875C9.09961 13.6697 9.51934 13.25 10.0371 13.25C10.5549 13.25 10.9746 13.6697 10.9746 14.1875Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-warning-v4-6-0"; }
+  static get registryIs() { return "wpp-icon-warning-v4-7-0"; }
 };
 WppIconWarning.style = wppIconCss;
 
@@ -282,10 +290,10 @@ const WppTooltip$1 = class {
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return h("wpp-icon-error-v4-6-0", { class: "left-icon", part: "icon-error" });
+        return h("wpp-icon-error-v4-7-0", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return h("wpp-icon-warning-v4-6-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return h("wpp-icon-warning-v4-7-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -311,7 +319,7 @@ const WppTooltip$1 = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), h("div", { class: "content-wrapper" }, !!this.header && (h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
-  static get registryIs() { return "wpp-internal-tooltip-v4-6-0"; }
+  static get registryIs() { return "wpp-internal-tooltip-v4-7-0"; }
   get host() { return getElement(this); }
 };
 WppTooltip$1.style = wppInternalTooltipCss;
@@ -347,7 +355,7 @@ const WppSpinner = class {
     const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
     return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null, exportparts: "circle" }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round", part: "circle" }))));
   }
-  static get registryIs() { return "wpp-spinner-v4-6-0"; }
+  static get registryIs() { return "wpp-spinner-v4-7-0"; }
 };
 WppSpinner.style = wppSpinnerCss;
 
@@ -383,102 +391,7 @@ const WppTooltip = class {
     registerInstance(this, hostRef);
     this.themeSubscription = themeSubscriptionController(() => (this.config.allowHTML ? this.customContentEl : this.contentEl), () => this.updateTippyProps({ arrow: this.arrowSVG() }));
     this.handleSlotChange = () => {
-      if (this.slotRef) {
-        // Get all assigned elements from the slot
-        const slot = this.slotRef;
-        const assignedElements = slot.assignedElements();
-        this.anchorRef = assignedElements[0];
-      }
-    };
-    this.updateTippyProps = (props) => {
-      this.tippyInstance?.setProps({ ...props });
-      this.tippyInstance?.popperInstance?.update();
-    };
-    this.arrowSVG = () => {
-      const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      arrowSVG.setAttribute('width', '8');
-      arrowSVG.setAttribute('height', '4');
-      const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      arrowPath.setAttribute('fill', this.getArrowBgColor());
-      arrowPath.setAttribute('fill-rule', 'evenodd');
-      arrowPath.setAttribute('clip-rule', 'evenodd');
-      arrowPath.setAttribute('d', 'M3.29289 0.707106C3.68342 0.316582 4.31658 0.316583 4.70711 0.707107L8 4L0 4L3.29289 0.707106Z');
-      arrowSVG.appendChild(arrowPath);
-      return arrowSVG;
-    };
-    this.createTippyInstance = () => {
-      if (this.disabled) {
-        return;
-      }
-      const content = this.config.allowHTML ? this.customContentEl : this.contentEl;
-      if (this.anchorRef && content) {
-        this.tippyInstance = menuListConfig({
-          anchor: this.anchorRef,
-          content,
-          triggerElementWidth: false,
-          arrow: this.arrowSVG(),
-          hideOnEsc: true,
-          aria: {
-            expanded: undefined,
-          },
-          ...defaultTooltipConfig,
-          ...this.config,
-          // Duration and Delay are not configurable,
-          duration: [150, 100],
-          delay: [500, 30],
-          onMount(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              referenceElement.ariaProps = {
-                ...referenceElement.ariaProps,
-                describedby: `tippy-${instance.id}`,
-              };
-            }
-            else {
-              referenceElement.setAttribute('aria-describedby', `tippy-${instance.id}`);
-            }
-          },
-          onHide(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              const { describedby, ...restProps } = referenceElement.ariaProps;
-              referenceElement.ariaProps = restProps;
-            }
-            else {
-              referenceElement.removeAttribute('aria-describedby');
-            }
-          },
-          onShow: (instance) => {
-            if (this.isFocusedWithPointer(instance.reference))
-              return false;
-            if (this.dropdownWidth !== 'auto') {
-              instance.popper.style.width = this.dropdownWidth;
-              instance.popper.style.maxWidth = this.dropdownWidth;
-            }
-            else {
-              instance.popper.style.maxWidth = '350px';
-            }
-            if (this.config.onShow) {
-              return this.config.onShow(instance);
-            }
-          },
-          popperOptions: {
-            strategy: 'fixed',
-            ...(this.config.popperOptions || {}),
-            modifiers: [
-              {
-                name: 'autoUpdate',
-                enabled: true,
-              },
-              ...(this.config.popperOptions?.modifiers || []),
-            ],
-          },
-        });
-      }
+      this.anchorRef = this.slotRef?.assignedElements()[0];
     };
     /**
      * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
@@ -522,7 +435,6 @@ const WppTooltip = class {
   }
   updateConfig(newConfig, oldConfig) {
     if (!isEqual_1(newConfig, oldConfig)) {
-      this.config = newConfig;
       this.tippyInstance?.setProps(newConfig);
     }
   }
@@ -541,25 +453,35 @@ const WppTooltip = class {
       });
     }
   }
+  updateAnchorDescription() {
+    this.describeAnchor();
+  }
   handleDisabledChange(newDisabled) {
     if (newDisabled) {
+      clearTimeout(this.creationTimer);
+      this.creationTimer = undefined;
       if (this.tippyInstance) {
         this.tippyInstance.destroy();
         this.tippyInstance = undefined;
       }
+      this.describeAnchor();
     }
-    else {
+    else if (this.host.isConnected) {
       this.createTippyInstance();
     }
   }
   componentDidLoad() {
     this.themeSubscription.start();
-    setTimeout(() => {
-      this.createTippyInstance();
-      this.hidden = false;
+    this.handleSlotChange();
+    const hostElement = this.host;
+    this.creationTimer = setTimeout(() => {
+      if (hostElement.isConnected) {
+        this.creationTimer = undefined;
+        this.createTippyInstance();
+      }
     }, 0);
     if (this.config.allowHTML) {
-      const content = this.host.querySelector('[slot="tooltip-content"]');
+      const content = hostElement.querySelector('[slot="tooltip-content"]');
       if (content && this.customContentEl) {
         this.customContentEl.appendChild(content);
       }
@@ -567,16 +489,122 @@ const WppTooltip = class {
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
-    this.tippyInstance?.destroy();
+    clearTimeout(this.creationTimer);
+    this.creationTimer = undefined;
+    if (this.tippyInstance) {
+      this.tippyInstance.destroy();
+      this.tippyInstance = undefined;
+    }
   }
   connectedCallback() {
     this.themeSubscription.start();
-    this.tippyInstance?.setProps({
-      arrow: this.arrowSVG(),
-    });
-    if (this.tippyInstance?.state.isDestroyed) {
+    if (this.tippyInstance && !this.tippyInstance.state?.isDestroyed) {
+      this.tippyInstance.setProps({
+        arrow: this.arrowSVG(),
+      });
+    }
+    if (!this.tippyInstance || this.tippyInstance.state?.isDestroyed) {
       this.createTippyInstance();
     }
+  }
+  updateTippyProps(props) {
+    this.tippyInstance?.setProps({ ...props });
+    this.tippyInstance?.popperInstance?.update();
+  }
+  arrowSVG() {
+    const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    arrowSVG.setAttribute('width', '8');
+    arrowSVG.setAttribute('height', '4');
+    const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    arrowPath.setAttribute('fill', this.getArrowBgColor());
+    arrowPath.setAttribute('fill-rule', 'evenodd');
+    arrowPath.setAttribute('clip-rule', 'evenodd');
+    arrowPath.setAttribute('d', 'M3.29289 0.707106C3.68342 0.316582 4.31658 0.316583 4.70711 0.707107L8 4L0 4L3.29289 0.707106Z');
+    arrowSVG.appendChild(arrowPath);
+    return arrowSVG;
+  }
+  createTippyInstance() {
+    if (!this.host.isConnected || this.disabled || (this.tippyInstance && !this.tippyInstance.state.isDestroyed)) {
+      return;
+    }
+    const config = this.config;
+    const content = config.allowHTML ? this.customContentEl : this.contentEl;
+    if (this.anchorRef && content) {
+      this.tippyInstance = menuListConfig({
+        anchor: this.anchorRef,
+        content,
+        triggerElementWidth: false,
+        arrow: this.arrowSVG(),
+        hideOnEsc: true,
+        aria: {
+          expanded: undefined,
+        },
+        ...defaultTooltipConfig,
+        ...config,
+        // Duration and Delay are not configurable,
+        duration: [150, 100],
+        delay: [500, 30],
+        onTrigger: (instance, event) => {
+          // A dev re-rendering the trigger's `ariaProps` replaces the description, so it is put back on every trigger
+          this.describeAnchor();
+          config.onTrigger?.(instance, event);
+        },
+        onShow: (instance) => {
+          if (this.isFocusedWithPointer(instance.reference))
+            return false;
+          if (this.dropdownWidth !== 'auto') {
+            instance.popper.style.width = this.dropdownWidth;
+            instance.popper.style.maxWidth = this.dropdownWidth;
+          }
+          else {
+            instance.popper.style.maxWidth = '350px';
+          }
+          if (config.onShow) {
+            return config.onShow(instance);
+          }
+        },
+        popperOptions: {
+          strategy: 'fixed',
+          ...(config.popperOptions || {}),
+          modifiers: [
+            {
+              name: 'autoUpdate',
+              enabled: true,
+            },
+            ...(config.popperOptions?.modifiers || []),
+          ],
+        },
+      });
+      this.hidden = false;
+      this.describeAnchor();
+    }
+  }
+  /**
+   * The trigger carries the tooltip's words as its description from the start, so a screen reader reads them as focus
+   * lands rather than after the show delay. It is a string rather than an `aria-describedby` to the popup: the popup
+   * only exists while it is shown, and an id never resolves from the control inside a `wpp-*` trigger's shadow root.
+   */
+  describeAnchor() {
+    const anchor = this.anchorRef;
+    if (!anchor)
+      return;
+    const description = this.tippyInstance && !this.disabled ? this.getDescription() : '';
+    if (isWppElement(anchor)) {
+      const { description: _previous, ...ariaProps } = anchor.ariaProps ?? {};
+      anchor.ariaProps = description ? { ...ariaProps, description } : ariaProps;
+    }
+    else if (description) {
+      anchor.setAttribute('aria-description', description);
+    }
+    else {
+      anchor.removeAttribute('aria-description');
+    }
+  }
+  getDescription() {
+    const text = this.config.allowHTML
+      ? this.customContentEl?.textContent
+      : [this.header, this.text, this.value].filter(Boolean).join(' ');
+    return (text ?? '').replace(/\s+/g, ' ').trim();
   }
   render() {
     // Use ariaProps.role if provided; otherwise for elements with aria-label,
@@ -584,16 +612,19 @@ const WppTooltip = class {
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-6-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    const config = this.config;
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !config.allowHTML ? (h("wpp-internal-tooltip-v4-7-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v4-6-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"],
     "theme": ["updateTheme"],
     "error": ["updateTheme"],
     "warning": ["updateTheme"],
-    "text": ["textChanged"],
+    "text": ["textChanged", "updateAnchorDescription"],
+    "header": ["updateAnchorDescription"],
+    "value": ["updateAnchorDescription"],
     "disabled": ["handleDisabledChange"]
   }; }
 };
@@ -618,7 +649,7 @@ const WppTypography = class {
     const TypographyTag = this.tag;
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-typography-v4-6-0"; }
+  static get registryIs() { return "wpp-typography-v4-7-0"; }
   get host() { return getElement(this); }
 };
 WppTypography.style = wppTypographyCss;

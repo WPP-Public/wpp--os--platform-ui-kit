@@ -49,7 +49,7 @@ describe('wpp-legacy-topbar', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppLegacyTopbar, WppLegacyTopbarItem],
-      template: () => h("wpp-legacy-topbar-v4-6-0", { navigation: navigation, value: "community" }),
+      template: () => h("wpp-legacy-topbar-v4-7-0", { navigation: navigation, value: "community" }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -59,11 +59,20 @@ describe('wpp-legacy-topbar', () => {
   it('renders component with application', async () => {
     const page = await newSpecPage({
       components: [WppLegacyTopbar, WppLegacyTopbarItem],
-      template: () => (h("wpp-legacy-topbar-v4-6-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v4-6-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
+      template: () => (h("wpp-legacy-topbar-v4-7-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v4-7-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+});
+describe('wpp-legacy-topbar-item role', () => {
+  it('does not put a tag name in the role attribute', async () => {
+    const page = await newSpecPage({
+      components: [WppLegacyTopbarItem],
+      template: () => (h("wpp-legacy-topbar-item-v4-7-0", { navigation: { label: 'Home', value: 'home', path: '/home' }, activeItems: [] })),
+    });
+    expect(page.root?.hasAttribute('role')).toBe(false);
   });
 });

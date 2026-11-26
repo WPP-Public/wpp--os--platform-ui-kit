@@ -31,7 +31,7 @@ export default {
 };
 export const Default = {
   render: args => html `
-    <wpp-legend-v4-6-0 .label="${args.label}" .color="${args.color}" .disabled="${args.disabled}"></wpp-legend-v4-6-0>
+    <wpp-legend-v4-7-0 .label="${args.label}" .color="${args.color}" .disabled="${args.disabled}"></wpp-legend-v4-7-0>
   `,
   args: {
     label: 'Label',

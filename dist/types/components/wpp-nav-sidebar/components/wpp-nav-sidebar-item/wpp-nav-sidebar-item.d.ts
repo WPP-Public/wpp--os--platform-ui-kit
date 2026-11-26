@@ -94,7 +94,7 @@ export declare class WppNavSidebarItem {
   private hostCssClasses;
   private get maxLabelLength();
   private get isLabelTruncated();
-  private accessibleNameProps;
+  private fullLabelProps;
   private item;
   private extendedItem;
   private linkItem;

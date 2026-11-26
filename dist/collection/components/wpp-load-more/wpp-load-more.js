@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
-import { PROGRESS_WIDTH, INCREASE_BY, ITEMS_LOADED, TOTAL_ITEMS } from './const';
+import { PROGRESS_WIDTH, INCREASE_BY, ITEMS_LOADED, TOTAL_ITEMS, LOCALES_DEFAULTS } from './const';
+import { mergeLocales } from '../../utils/utils';
 /**
  * @part container - Container element
  * @part progress-text - Progress text element
@@ -41,6 +42,7 @@ export class WppLoadMore {
     this.disabled = false;
     this.incrementBy = INCREASE_BY;
     this.ariaProps = {};
+    this.locales = {};
   }
   updateProgress() {
     this.progressPercentage =
@@ -63,14 +65,17 @@ export class WppLoadMore {
   componentWillLoad() {
     this.updateProgress();
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   isDisabled() {
     return this.disabled || this.itemsLoaded >= this.totalItems;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (h("div", { class: this.progressContainerCssClasses(), part: "container" }, h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), h("wpp-progress-indicator-v4-6-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), h("wpp-button-v4-6-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
+    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (h("div", { class: this.progressContainerCssClasses(), part: "container" }, h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text", "aria-live": "polite" }, this._locales.itemsProgress(Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), Math.max(0, this.totalItems))), h("wpp-progress-indicator-v4-7-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), h("wpp-button-v4-7-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, this._locales.loadMore)));
   }
   static get is() { return "wpp-load-more"; }
-  static get registryIs() { return "wpp-load-more-v4-6-0"; }
+  static get registryIs() { return "wpp-load-more-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -211,6 +216,32 @@ export class WppLoadMore {
         "docs": {
           "tags": [],
           "text": "Aria properties that will be applied on the button only."
+        },
+        "defaultValue": "{}"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<LoadMoreLocales>",
+          "resolved": "{ loadMore?: string | undefined; itemsProgress?: ((loaded: number, total: number) => string) | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "LoadMoreLocales": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-load-more/types.ts::LoadMoreLocales"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Localised strings for the button text and the progress text."
         },
         "defaultValue": "{}"
       }

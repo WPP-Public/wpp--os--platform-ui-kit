@@ -3,15 +3,15 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-964b5abf.js');
-const utils$1 = require('./utils-a3ab9816.js');
+const utils = require('./utils-a9e9b7c3.js');
+const utils$1 = require('./utils-8b2c3bc1.js');
 const menuListConfig = require('./menuListConfig-ebbec952.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./tippy.esm-9d703cd4.js');
 require('./theme-observer-4179316e.js');
 
-const wppColorPickerCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-s);width:220px;padding:4px 8px}:host .anchor:hover{background-color:var(--wpp-grey-color-200);cursor:pointer}:host .anchor:active{background-color:var(--wpp-grey-color-300)}:host .anchor .color-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .anchor .color-container .color-preview{-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-xs);width:24px;height:24px;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-400);margin-right:8px;overflow:hidden;position:relative}:host .anchor .color-container .color-preview .color-preview-box{position:absolute;left:0;top:0;width:100%;height:100%}:host .anchor .hex-opacity{--wpp-typography-color:var(--wpp-grey-color-800)}:host(.wpp-disabled) .anchor:hover{cursor:not-allowed;background-color:transparent}:host(.wpp-disabled) .anchor:active{background-color:transparent}:host(.wpp-disabled) .anchor .color-container .color-preview{opacity:0.4}:host(.wpp-active) .anchor{background-color:var(--wpp-grey-color-200)}";
+const wppColorPickerCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-s);width:220px;padding:4px 8px}:host .anchor:hover{background-color:var(--wpp-grey-color-200);cursor:pointer}:host .anchor:active{background-color:var(--wpp-grey-color-300)}:host .anchor .color-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .anchor .color-container .color-preview{-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-xs);width:24px;height:24px;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-400);margin-right:8px;overflow:hidden;position:relative}:host .anchor .color-container .color-preview .color-preview-box{position:absolute;left:0;top:0;width:100%;height:100%}:host(:focus-visible){border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-disabled) .anchor:hover{cursor:not-allowed;background-color:transparent}:host(.wpp-disabled) .anchor:active{background-color:transparent}:host(.wpp-disabled) .anchor .color-container .color-preview{opacity:0.4}:host(.wpp-active) .anchor{background-color:var(--wpp-grey-color-200)}";
 
 const WppColorPicker = class {
   constructor(hostRef) {
@@ -23,6 +23,8 @@ const WppColorPicker = class {
     this.wppChange = index.createEvent(this, "wppChange", 1);
     this.themeColorValues = [];
     this.isSavedColorPopoverOpen = false;
+    // Focus moves into the popup only when the keyboard opened it; a pointer user keeps focus where it was.
+    this.isOpenedWithKeyboard = false;
     this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.contentEl);
     this.checkInitialColorInList = () => {
       if (!this.initialColor)
@@ -76,6 +78,11 @@ const WppColorPicker = class {
         appendTo: utils$1.getHighestContainerInDOM(),
         ...utils.defaultDropdownConfig,
         ...this.dropdownConfig,
+        onShown: () => {
+          if (this.isOpenedWithKeyboard)
+            this.focusPopup();
+          this.isOpenedWithKeyboard = false;
+        },
         onShow: (instance) => {
           this.isDropdownVisible = true;
           if (this.dropdownConfig.onShow) {
@@ -126,6 +133,27 @@ const WppColorPicker = class {
       this.selectedCategory = colorCategory;
       this.getHsvValues();
     };
+    // Each theme section is an APG radio group: the arrow keys move to and select the previous or next swatch,
+    // wrapping at the ends, and Space selects the focused one.
+    this.handleThemeColorKeyDown = (event, colors, index, colorCategory) => {
+      if (event.key === ' ') {
+        event.preventDefault();
+        this.handleClickThemeColor(colors[index], colorCategory);
+        return;
+      }
+      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+      if (!step)
+        return;
+      event.preventDefault();
+      const nextIndex = (index + step + colors.length) % colors.length;
+      this.handleClickThemeColor(colors[nextIndex], colorCategory);
+      event.currentTarget
+        .closest('[role="radiogroup"]')
+        ?.querySelectorAll('[role="radio"]')[nextIndex]?.focus();
+    };
+    this.isThemeColorChecked = (color, colorCategory) => this.selectedCategory === colorCategory &&
+      this.hexColor === color.hexValue &&
+      this.internalOpacity === color.opacity;
     this.handleChangeTypeOfPicker = (event) => {
       const { value } = event.detail;
       this.internalType = value;
@@ -138,28 +166,47 @@ const WppColorPicker = class {
       const convertedColor = utils.hexToRGBA(hexWithOpacity);
       this.wppSaveColor.emit(convertedColor);
     };
+    this.getSavedColorValue = (savedColor) => utils.isValid6DigitHex(savedColor) ? { hexValue: savedColor, opacity: '100%' } : utils.rgbaToHex(savedColor);
     this.handleClickSavedColor = (savedColor) => {
-      if (utils.isValid6DigitHex(savedColor)) {
-        // Hex Color
-        this.hexColor = savedColor;
-        this.internalOpacity = '100%';
-      }
-      else {
-        // RGBA Color
-        const { hexValue, opacity } = utils.rgbaToHex(savedColor);
-        this.hexColor = hexValue;
-        this.internalOpacity = opacity;
-      }
+      const { hexValue, opacity } = this.getSavedColorValue(savedColor);
+      this.hexColor = hexValue;
+      this.internalOpacity = opacity;
       this.getHsvValues();
+    };
+    // Enter or Space applies a saved color, Delete removes it, and the context menu key or Shift+F10 opens the
+    // same menu as a right click.
+    this.handleSavedColorKeyDown = (event, savedColor) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.handleClickSavedColor(savedColor);
+      }
+      else if (event.key === 'Delete' || event.key === 'Backspace') {
+        event.preventDefault();
+        this.handleRemoveSavedColor(savedColor);
+      }
+      else if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
+        event.preventDefault();
+        this.openSavedColorMenu(event.currentTarget);
+      }
+    };
+    this.handleSaveColorKeyDown = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ')
+        return;
+      event.preventDefault();
+      this.handleSaveColor();
     };
     this.handleRightClick = (event) => {
       event.preventDefault();
-      const popoverElement = event.currentTarget.closest(utils$1.transformToVersionedTag('wpp-popover'));
+      this.openSavedColorMenu(event.currentTarget);
+    };
+    this.openSavedColorMenu = (savedColorEl) => {
+      const popoverElement = savedColorEl.closest(utils$1.transformToVersionedTag('wpp-popover'));
       if (popoverElement) {
         popoverElement.openPopover();
       }
     };
     this.handleRemoveSavedColor = (savedColor) => {
+      this.removedSavedColor = { color: savedColor, index: this.savedColors.indexOf(savedColor) };
       this.wppRemoveSavedColor.emit(savedColor);
       if (this.currentPopoverInstance) {
         this.currentPopoverInstance.hide();
@@ -204,6 +251,45 @@ const WppColorPicker = class {
         this.tippyInstance.show();
       }
     };
+    // The host is the trigger: a role="button" that opens the picker dialog with Enter, Space or ArrowDown, and
+    // closes it again with Escape.
+    this.handleHostKeyDown = (event) => {
+      if (this.disabled)
+        return;
+      if (event.key === 'Escape' && this.isDropdownVisible) {
+        event.preventDefault();
+        this.tippyInstance?.hide();
+        return;
+      }
+      if (!['Enter', ' ', 'ArrowDown'].includes(event.key) || this.isDropdownVisible)
+        return;
+      event.preventDefault();
+      this.isOpenedWithKeyboard = true;
+      this.tippyInstance?.show();
+    };
+    this.handlePopupKeyDown = (event) => {
+      if (event.key !== 'Escape' || this.selectTippyInstance || this.isSavedColorPopoverOpen)
+        return;
+      event.preventDefault();
+      event.stopPropagation();
+      this.closePopupToTrigger();
+    };
+    this.closePopupToTrigger = () => {
+      this.tippyInstance?.hide();
+      this.host.focus();
+    };
+    // The popup is portaled to the end of the document, so it is not next to the trigger in the tab order.
+    // Focus moves into it on keyboard open, and the sentinels at its edges close it again when Tab or Shift+Tab
+    // would leave it, handing focus back to the trigger.
+    this.focusPopup = () => {
+      const target = this.contentEl?.querySelector('[role="tab"][tabindex="0"]') ??
+        this.contentEl?.querySelector('[role="radio"][aria-checked="true"]') ??
+        this.contentEl?.querySelector('[role="radio"][tabindex="0"]') ??
+        this.contentEl
+          ?.querySelector(utils$1.transformToVersionedTag('wpp-saturation-picker'))
+          ?.shadowRoot?.querySelector('[role="slider"]');
+      target?.focus();
+    };
     this.onFocus = (event) => {
       this.isInComponent = true;
       this.wppFocus.emit(event);
@@ -213,6 +299,7 @@ const WppColorPicker = class {
         return;
       this.wppBlur.emit();
     };
+    this.getRgbInputLabel = (inputName) => ({ red: this._locales.redLabel, green: this._locales.greenLabel, blue: this._locales.blueLabel })[inputName];
     this.hostCssClasses = () => ({
       'wpp-color-picker': true,
       'wpp-disabled': this.disabled,
@@ -246,6 +333,7 @@ const WppColorPicker = class {
     this.savedColors = [];
     this.themeColors = undefined;
     this.disabled = false;
+    this.locales = {};
   }
   handleHueChange(event) {
     if (this.tippyInstance?.popper && utils$1.isEventTargetContained(this.tippyInstance.popper, event)) {
@@ -262,7 +350,8 @@ const WppColorPicker = class {
   }
   handleOpacityChange(event) {
     if (this.tippyInstance?.popper && utils$1.isEventTargetContained(this.tippyInstance.popper, event)) {
-      this.internalOpacity = `${parseInt(event.detail * 100 + '')}%`;
+      // Rounded, not truncated: 0.29 * 100 is 28.999…, which would pin a keyboard step to the value it left.
+      this.internalOpacity = `${Math.round(event.detail * 100)}%`;
     }
   }
   handleHexColorChange() {
@@ -316,6 +405,15 @@ const WppColorPicker = class {
     this.themeSubscription.start();
     this.createTippyInstance();
   }
+  componentDidRender() {
+    if (!this.removedSavedColor || this.savedColors.includes(this.removedSavedColor.color))
+      return;
+    const savedColorEls = this.contentEl?.querySelectorAll('.saved-color');
+    const target = savedColorEls?.[Math.min(this.removedSavedColor.index, savedColorEls.length - 1)] ??
+      this.contentEl?.querySelector('.save-color');
+    this.removedSavedColor = undefined;
+    target?.focus();
+  }
   connectedCallback() {
     this.themeSubscription.start();
     if (this.tippyInstance?.state.isDestroyed) {
@@ -326,8 +424,11 @@ const WppColorPicker = class {
     this.themeSubscription.stop();
     this.tippyInstance?.destroy();
   }
+  get _locales() {
+    return utils$1.mergeLocales(utils.LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    return (index.h(index.Host, { "aria-disabled": this.disabled, class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, tabindex: this.disabled ? -1 : 0 }, index.h("div", { onClick: this.handleAnchorClick, class: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, index.h("div", { class: "color-container" }, index.h("div", { class: "color-preview" }, index.h("div", { style: { backgroundColor: this.displayValue, opacity: this.type === 'hex' ? this.hexOpacity : '1' }, class: "color-preview-box" }), index.h("wpp-icon-swatch-v4-6-0", { size: "s" })), index.h("wpp-typography-v4-6-0", { type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.displayValue)), this.type === 'hex' && (index.h("wpp-typography-v4-6-0", { class: "hex-opacity", type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.hexOpacity))), index.h("div", { class: this.dropdownCssClasses(), ref: elRef => (this.contentEl = elRef) }, this.mode === 'theme and custom' && (index.h("wpp-segmented-control-v4-6-0", { width: "346px", hugContentOff: true, size: "s", value: this.activeSegment, onWppChange: this.handleSegmentChange }, index.h("wpp-segmented-control-item-v4-6-0", { variant: "text", value: "theme" }, "Theme"), index.h("wpp-segmented-control-item-v4-6-0", { variant: "text", value: "custom" }, "Custom"))), (this.mode === 'custom' || (this.mode === 'theme and custom' && this.activeSegment === 'custom')) && (index.h("div", { class: "wpp-custom-picker" }, index.h("wpp-saturation-picker-v4-6-0", { hue: this.hue, saturation: this.saturation, value: this.saturationValue }), index.h("div", { class: "wpp-bottom-pickers" }, index.h("div", { class: "wpp-sliders" }, index.h("wpp-hue-slider-v4-6-0", { hue: this.hue }), index.h("wpp-opacity-slider-v4-6-0", { hexColor: this.hexColor, opacity: parseInt(this.internalOpacity) / 100 })), index.h("div", { class: "wpp-color-preview" }, index.h("div", { class: "wpp-color", style: { backgroundColor: this.hexColor, opacity: this.internalOpacity } }), index.h("wpp-icon-swatch-v4-6-0", null))), index.h("div", { class: "wpp-controls" }, this.isDropdownVisible && (index.h("wpp-select-v4-6-0", { size: "s", required: true, type: "single", value: this.internalType, onWppChange: this.handleChangeTypeOfPicker, dropdownConfig: {
+    return (index.h(index.Host, { role: "button", "aria-label": this._locales.pickerLabel(this.type === 'hex' ? `${this.displayValue}, ${this.hexOpacity}` : this.displayValue), "aria-haspopup": "dialog", "aria-expanded": this.isDropdownVisible ? 'true' : 'false', "aria-disabled": this.disabled, class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.handleHostKeyDown, tabindex: this.disabled ? -1 : 0 }, index.h("div", { onClick: this.handleAnchorClick, class: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, index.h("div", { class: "color-container" }, index.h("div", { class: "color-preview" }, index.h("div", { style: { backgroundColor: this.displayValue, opacity: this.type === 'hex' ? this.hexOpacity : '1' }, class: "color-preview-box" }), index.h("wpp-icon-swatch-v4-7-0", { size: "s" })), index.h("wpp-typography-v4-7-0", { type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.displayValue)), this.type === 'hex' && (index.h("wpp-typography-v4-7-0", { class: "hex-opacity", type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-800)' }, this.hexOpacity))), index.h("div", { class: this.dropdownCssClasses(), ref: elRef => (this.contentEl = elRef), role: "dialog", "aria-label": this._locales.dialogLabel, onKeyDown: this.handlePopupKeyDown }, index.h("span", { class: "focus-sentinel", tabIndex: 0, onFocus: this.closePopupToTrigger }), this.mode === 'theme and custom' && (index.h("wpp-segmented-control-v4-7-0", { width: "346px", hugContentOff: true, size: "s", value: this.activeSegment, onWppChange: this.handleSegmentChange }, index.h("wpp-segmented-control-item-v4-7-0", { variant: "text", value: "theme" }, this._locales.themeTab), index.h("wpp-segmented-control-item-v4-7-0", { variant: "text", value: "custom" }, this._locales.customTab))), (this.mode === 'custom' || (this.mode === 'theme and custom' && this.activeSegment === 'custom')) && (index.h("div", { class: "wpp-custom-picker" }, index.h("wpp-saturation-picker-v4-7-0", { hue: this.hue, saturation: this.saturation, value: this.saturationValue, label: this._locales.saturationLabel, valueText: this._locales.saturationValueText(Math.round(this.saturation), Math.round(this.saturationValue)) }), index.h("div", { class: "wpp-bottom-pickers" }, index.h("div", { class: "wpp-sliders" }, index.h("wpp-hue-slider-v4-7-0", { hue: this.hue, label: this._locales.hueLabel }), index.h("wpp-opacity-slider-v4-7-0", { hexColor: this.hexColor, opacity: parseInt(this.internalOpacity) / 100, label: this._locales.opacityLabel })), index.h("div", { class: "wpp-color-preview" }, index.h("div", { class: "wpp-color", style: { backgroundColor: this.hexColor, opacity: this.internalOpacity } }), index.h("wpp-icon-swatch-v4-7-0", null))), index.h("div", { class: "wpp-controls" }, this.isDropdownVisible && (index.h("wpp-select-v4-7-0", { size: "s", required: true, type: "single", value: this.internalType, ariaProps: { label: this._locales.formatLabel }, onWppChange: this.handleChangeTypeOfPicker, dropdownConfig: {
         placement: 'bottom',
         onShow: (instance) => {
           this.selectTippyInstance = instance;
@@ -336,26 +437,35 @@ const WppColorPicker = class {
           this.selectTippyInstance = undefined;
         },
       }, list: [
-        { value: 'hex', label: 'Hex' },
-        { value: 'rgba', label: 'RGB' },
-      ] })), this.internalType === 'hex' ? (index.h("wpp-input-v4-6-0", { class: "hex-input", size: "s", name: "hexValue", value: this.hexColor.replace('#', ''), onBlur: this.handleInputHexChange })) : (index.h(index.Fragment, null, utils.RGB_INPUTS.map((inputName) => (index.h("wpp-input-v4-6-0", { key: inputName, class: `${inputName}-input`, size: "s", name: inputName, type: "text", value: String(this.rgbInputValues[inputName]), maskOptions: utils.RGB_INPUT_CONFIG, onBlur: this.handleInputRGBChange }))))), index.h("wpp-input-v4-6-0", { class: "opacity-input", size: "s", name: "opacity", type: "text", maskOptions: utils.OPACITY_INPUT_CONFIG, value: this.internalOpacity, onBlur: this.handleInputOpacityChange })), index.h("div", { class: "wpp-saved-colors" }, index.h("wpp-typography-v4-6-0", { class: "title", type: "s-strong" }, "Saved colors"), index.h("div", { class: "wpp-colors" }, this.savedColors.map((savedColor) => (index.h("wpp-popover-v4-6-0", { config: {
-        trigger: '',
-        onShow: instance => {
-          this.currentPopoverInstance = instance;
-          this.isSavedColorPopoverOpen = true;
-        },
-        onHide: () => {
-          this.isSavedColorPopoverOpen = false;
-          this.currentPopoverInstance = undefined;
-        },
-      } }, index.h("div", { onContextMenu: event => this.handleRightClick(event), slot: "trigger-element", class: "saved-color", key: savedColor, onClick: () => this.handleClickSavedColor(savedColor) }, index.h("div", { class: "saved-color-preview", style: { backgroundColor: savedColor } }), this.hasColorOpacity(savedColor) && index.h("wpp-icon-swatch-v4-6-0", { size: "s" })), index.h("div", { class: "popover-content" }, index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: () => this.handleRemoveSavedColor(savedColor) }, index.h("span", { slot: "label" }, "Remove color")))))), this.savedColors.length < utils.MAXIMUM_NUMBER_OF_SAVED_COLORS && (index.h("wpp-icon-plus-v4-6-0", { onClick: this.handleSaveColor })))))), (this.mode === 'theme' || (this.mode === 'theme and custom' && this.activeSegment === 'theme')) &&
-      this.themeColorValues.map((colorSection) => (index.h("div", { key: colorSection.title, class: "wpp-color-section" }, index.h("wpp-typography-v4-6-0", { class: "wpp-color-section-title", type: "s-strong" }, colorSection.title), colorSection.colors.map((colorSubsection) => (index.h("div", { class: "wpp-color-subsection" }, colorSubsection.map((color) => (index.h("div", { key: color.hexValue, class: this.colorBoxCssClasses(color), onClick: () => this.handleClickThemeColor(color, colorSection.title) }, index.h("div", { class: "wpp-color-box-preview", style: { backgroundColor: color.hexValue, opacity: color.opacity } }), color.opacity !== '100%' && index.h("wpp-icon-swatch-v4-6-0", { size: "s" }), this.selectedCategory === colorSection.title &&
-        this.hexColor === color.hexValue &&
-        this.internalOpacity === color.opacity && (index.h("wpp-icon-tick-v4-6-0", { color: utils.contrastWithWhite(this.hexColor) < 3
-          ? 'var(--wpp-grey-color-900)'
-          : 'var(--wpp-white-color)' }))))))))))))));
+        { value: 'hex', label: this._locales.hexFormat },
+        { value: 'rgba', label: this._locales.rgbFormat },
+      ] })), this.internalType === 'hex' ? (index.h("wpp-input-v4-7-0", { class: "hex-input", size: "s", name: "hexValue", ariaProps: { label: this._locales.hexLabel }, value: this.hexColor.replace('#', ''), onBlur: this.handleInputHexChange })) : (index.h(index.Fragment, null, utils.RGB_INPUTS.map((inputName) => (index.h("wpp-input-v4-7-0", { key: inputName, class: `${inputName}-input`, size: "s", name: inputName, type: "text", ariaProps: { label: this.getRgbInputLabel(inputName) }, value: String(this.rgbInputValues[inputName]), maskOptions: utils.RGB_INPUT_CONFIG, onBlur: this.handleInputRGBChange }))))), index.h("wpp-input-v4-7-0", { class: "opacity-input", size: "s", name: "opacity", type: "text", ariaProps: { label: this._locales.opacityLabel }, maskOptions: utils.OPACITY_INPUT_CONFIG, value: this.internalOpacity, onBlur: this.handleInputOpacityChange })), index.h("div", { class: "wpp-saved-colors" }, index.h("wpp-typography-v4-7-0", { class: "title", type: "s-strong" }, this._locales.savedColorsTitle), index.h("div", { class: "wpp-colors" }, this.savedColors.map((savedColor) => {
+      const { hexValue, opacity } = this.getSavedColorValue(savedColor);
+      return (index.h("wpp-popover-v4-7-0", { ariaProps: { role: 'dialog', label: this._locales.colorLabel(hexValue, opacity) }, config: {
+          trigger: '',
+          onShow: instance => {
+            this.currentPopoverInstance = instance;
+            this.isSavedColorPopoverOpen = true;
+          },
+          onHide: () => {
+            this.isSavedColorPopoverOpen = false;
+            this.currentPopoverInstance = undefined;
+          },
+        } }, index.h("div", { onContextMenu: event => this.handleRightClick(event), slot: "trigger-element", class: "saved-color", key: savedColor, tabIndex: 0, "aria-label": this._locales.colorLabel(hexValue, opacity), onClick: () => this.handleClickSavedColor(savedColor), onKeyDown: event => this.handleSavedColorKeyDown(event, savedColor) }, index.h("div", { class: "saved-color-preview", style: { backgroundColor: savedColor } }), this.hasColorOpacity(savedColor) && index.h("wpp-icon-swatch-v4-7-0", { size: "s" })), index.h("div", { class: "popover-content" }, index.h("wpp-list-item-v4-7-0", { onWppChangeListItem: () => this.handleRemoveSavedColor(savedColor) }, index.h("span", { slot: "label" }, this._locales.removeColorLabel)))));
+    }), this.savedColors.length < utils.MAXIMUM_NUMBER_OF_SAVED_COLORS && (index.h("wpp-icon-plus-v4-7-0", { class: "save-color", role: "button", tabIndex: 0, "aria-label": this._locales.saveColorLabel, onClick: this.handleSaveColor, onKeyDown: this.handleSaveColorKeyDown })))))), (this.mode === 'theme' || (this.mode === 'theme and custom' && this.activeSegment === 'theme')) &&
+      this.themeColorValues.map((colorSection) => {
+        const colors = [].concat(...colorSection.colors);
+        const hasCheckedColor = colors.some(color => this.isThemeColorChecked(color, colorSection.title));
+        return (index.h("div", { key: colorSection.title, class: "wpp-color-section", role: "radiogroup", "aria-label": colorSection.title }, index.h("wpp-typography-v4-7-0", { class: "wpp-color-section-title", type: "s-strong", "aria-hidden": "true" }, colorSection.title), colorSection.colors.map((colorSubsection) => (index.h("div", { class: "wpp-color-subsection" }, colorSubsection.map((color) => {
+          const index$1 = colors.indexOf(color);
+          const isChecked = this.isThemeColorChecked(color, colorSection.title);
+          return (index.h("div", { key: color.hexValue, class: this.colorBoxCssClasses(color), role: "radio", "aria-checked": isChecked ? 'true' : 'false', "aria-label": this._locales.colorLabel(color.hexValue, color.opacity), tabIndex: isChecked || (!hasCheckedColor && index$1 === 0) ? 0 : -1, onClick: () => this.handleClickThemeColor(color, colorSection.title), onKeyDown: event => this.handleThemeColorKeyDown(event, colors, index$1, colorSection.title) }, index.h("div", { class: "wpp-color-box-preview", style: { backgroundColor: color.hexValue, opacity: color.opacity } }), color.opacity !== '100%' && index.h("wpp-icon-swatch-v4-7-0", { size: "s" }), isChecked && (index.h("wpp-icon-tick-v4-7-0", { color: utils.contrastWithWhite(this.hexColor) < 3
+              ? 'var(--wpp-grey-color-900)'
+              : 'var(--wpp-white-color)' }))));
+        }))))));
+      }), index.h("span", { class: "focus-sentinel", tabIndex: 0, onFocus: this.closePopupToTrigger }))));
   }
-  static get registryIs() { return "wpp-color-picker-v4-6-0"; }
+  static get registryIs() { return "wpp-color-picker-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "hexColor": ["handleHexColorChange"],

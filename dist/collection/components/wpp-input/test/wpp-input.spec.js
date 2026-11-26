@@ -3,6 +3,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppInput } from '../wpp-input';
 import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
+import { WppSpinner } from '../../wpp-spinner/wpp-spinner';
 describe('wpp-input', () => {
   afterEach(() => {
     // Clear all created mocks
@@ -76,7 +77,7 @@ describe('wpp-input', () => {
       const componentWillLoadSpy = jest.spyOn(WppInput.prototype, 'componentWillLoad');
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-6-0", null),
+        template: () => h("wpp-input-v4-7-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -93,7 +94,7 @@ describe('wpp-input', () => {
     it('Testing componentDidLoad', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-6-0", null),
+        template: () => h("wpp-input-v4-7-0", null),
       });
       const inputEl = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(inputEl, 'createMaskForInput');
@@ -111,7 +112,7 @@ describe('wpp-input', () => {
     it('Testing initial value updating the value property with no mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-6-0", { value: "initial" }),
+        template: () => h("wpp-input-v4-7-0", { value: "initial" }),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -123,7 +124,7 @@ describe('wpp-input', () => {
     it('Testing initial value and updating the value property with mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => (h("wpp-input-v4-6-0", { value: "0722334455", maskOptions: {
+        template: () => (h("wpp-input-v4-7-0", { value: "0722334455", maskOptions: {
             telPatternOptions: {
               countryCode: 'RO',
             },
@@ -140,7 +141,7 @@ describe('wpp-input', () => {
     it('Testing updating locales', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-6-0", null),
+        template: () => h("wpp-input-v4-7-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -164,7 +165,7 @@ describe('wpp-input', () => {
     it('Testing updating maskOptions', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-6-0", null),
+        template: () => h("wpp-input-v4-7-0", null),
       });
       const componentInstance = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(componentInstance, 'createMaskForInput');
@@ -178,6 +179,21 @@ describe('wpp-input', () => {
       expect(destroyMaskSpy).toHaveBeenCalled();
       expect(createMaskForInputSpy).toHaveBeenCalled();
     });
+  });
+  it('should keep following the value prop after being detached and reattached', async () => {
+    // A popover detaches its content on close and reattaches it on open, as the color picker's opacity field is.
+    const page = await newSpecPage({
+      components: [WppInput],
+      template: () => (h("wpp-input-v4-7-0", { name: "opacity", value: "50%", maskOptions: { decimalPatternOptions: { min: 0, max: 100, maximumFractionDigits: 0, postfix: '%' } } })),
+    });
+    const host = page.root;
+    const parent = host.parentElement;
+    host.remove();
+    parent.appendChild(host);
+    await page.waitForChanges();
+    host.value = '30%';
+    await page.waitForChanges();
+    expect(host.shadowRoot?.querySelector('input')?.value).toBe('30%');
   });
   it('should render component', async () => {
     const page = await newSpecPage({
@@ -208,7 +224,7 @@ describe('wpp-input', () => {
     };
     const page = await newSpecPage({
       components: [WppInput, WppLabel, WppInternalLabel],
-      template: () => h("wpp-input-v4-6-0", { labelConfig: labelConfig, name: "text-input" }),
+      template: () => h("wpp-input-v4-7-0", { labelConfig: labelConfig, name: "text-input" }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -222,5 +238,89 @@ describe('wpp-input', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  describe('Testing accessibility', () => {
+    const getInput = (page) => page.root?.shadowRoot?.querySelector('input');
+    const describedByTexts = (page) => (getInput(page).getAttribute('aria-describedby') ?? '')
+      .split(' ')
+      .filter(Boolean)
+      .map(id => page.root?.shadowRoot?.getElementById(id)?.getAttribute('message'));
+    it('should describe the input with its help message', async () => {
+      const page = await newSpecPage({
+        components: [WppInput],
+        template: () => h("wpp-input-v4-7-0", { name: "first-name", message: "As shown on your passport" }),
+      });
+      expect(describedByTexts(page)).toEqual(['As shown on your passport']);
+    });
+    it('should describe an invalid input with its error message', async () => {
+      const page = await newSpecPage({
+        components: [WppInput],
+        template: () => h("wpp-input-v4-7-0", { name: "email", message: "Enter a valid email", messageType: "error" }),
+      });
+      expect(getInput(page).getAttribute('aria-invalid')).toBe('true');
+      expect(describedByTexts(page)).toEqual(['Enter a valid email']);
+    });
+    it('should describe the input with the length validation message as it appears', async () => {
+      const page = await newSpecPage({
+        components: [WppInput],
+        template: () => h("wpp-input-v4-7-0", { name: "code", minLength: 5 }),
+      });
+      expect(getInput(page).hasAttribute('aria-describedby')).toBe(false);
+      getInput(page).value = 'ab';
+      getInput(page).dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      expect(describedByTexts(page)).toEqual(['The input must have at least 5 characters']);
+    });
+    it('should not reference a description when there is no message', async () => {
+      const page = await newSpecPage({
+        components: [WppInput],
+        template: () => h("wpp-input-v4-7-0", { name: "plain" }),
+      });
+      expect(getInput(page).hasAttribute('aria-describedby')).toBe(false);
+    });
+    it('should keep a loading search input editable and expose its spinner as loading', async () => {
+      const page = await newSpecPage({
+        components: [WppInput, WppSpinner],
+        template: () => h("wpp-input-v4-7-0", { name: "search", type: "search", loading: true }),
+      });
+      const spinner = page.root?.shadowRoot?.querySelector('wpp-spinner');
+      expect(getInput(page).getAttribute('aria-disabled')).toBe('false');
+      expect(spinner.getAttribute('role')).toBe('status');
+      expect(spinner.getAttribute('aria-label')).toBe('Loading');
+      expect(spinner.hasAttribute('aria-hidden')).toBe(false);
+    });
+    it('should take the clear button and loading names from locales', async () => {
+      const page = await newSpecPage({
+        components: [WppInput, WppSpinner],
+        template: () => (h("wpp-input-v4-7-0", { name: "search", type: "search", loading: true, value: "query", locales: { clearInput: 'Effacer', loading: 'Chargement' } })),
+      });
+      getInput(page).dispatchEvent(new FocusEvent('focus'));
+      page.root?.dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+      const spinner = page.root?.shadowRoot?.querySelector('wpp-spinner');
+      const clearButton = page.root?.shadowRoot?.querySelector('[part="icon-cross"]');
+      expect(spinner.getAttribute('aria-label')).toBe('Chargement');
+      expect(clearButton?.getAttribute('aria-label')).toBe('Effacer');
+    });
+    describe('focus ring', () => {
+      const tabKeyUp = () => new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true });
+      const renderWithInfoIcon = () => newSpecPage({
+        components: [WppInput],
+        template: () => h("wpp-input-v4-7-0", { name: "email", labelConfig: { text: 'Email', description: 'Used for sign in' } }),
+      });
+      it('should not ring the input when Tab lands on the label info icon', async () => {
+        const page = await renderWithInfoIcon();
+        const label = page.root?.shadowRoot?.querySelector('wpp-label');
+        label.dispatchEvent(tabKeyUp());
+        await page.waitForChanges();
+        expect(getInput(page).classList.contains('tab-focus')).toBe(false);
+      });
+      it('should ring the input when Tab lands on it', async () => {
+        const page = await renderWithInfoIcon();
+        getInput(page).dispatchEvent(tabKeyUp());
+        await page.waitForChanges();
+        expect(getInput(page).classList.contains('tab-focus')).toBe(true);
+      });
+    });
   });
 });

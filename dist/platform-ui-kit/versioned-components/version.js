@@ -1,1 +1,1 @@
-const version = 'v4-6-0'export default version
+const version = 'v4-7-0'export default version

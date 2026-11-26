@@ -2,7 +2,7 @@ import { Host, h } from '@stencil/core';
 import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
 import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getSlotEmptyStates, mergeLocales } from '../../utils/utils';
 import { TimeoutManager } from '../../utils/timeout-manager';
-import { dialogFocusController, isFocusInsideDialog } from '../../utils/dialog-focus';
+import { dialogFocusController, focusDialogEdge, isFocusInsideDialog } from '../../utils/dialog-focus';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { FullScreenModalCloseReason, } from './types';
 import { LOCALES_DEFAULTS } from './const';
@@ -93,7 +93,7 @@ export class WppFullScreenModal {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-6-0", { variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-7-0", { variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -104,8 +104,8 @@ export class WppFullScreenModal {
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
-      // Idempotent: the sentinels, the open render and the transition all route through here, and
-      // pulling focus back to the container would undo whatever the user had reached inside.
+      // Idempotent: the open render and the transition both route through here, and pulling focus back to the
+      // container would undo whatever the user had reached inside.
       if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
@@ -242,10 +242,10 @@ export class WppFullScreenModal {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-6-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, h("wpp-icon-cross-v4-6-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-7-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'last') }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-7-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, h("wpp-icon-cross-v4-7-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'first') }))));
   }
   static get is() { return "wpp-full-screen-modal"; }
-  static get registryIs() { return "wpp-full-screen-modal-v4-6-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

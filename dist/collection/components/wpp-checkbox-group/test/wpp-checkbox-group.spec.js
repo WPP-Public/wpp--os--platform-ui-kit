@@ -46,7 +46,7 @@ describe('wpp-checkbox-group', () => {
   it('should render checkbox-group with 4 items', async () => {
     const page = await newSpecPage({
       components: [WppCheckboxGroup, WppCheckbox],
-      template: () => (h("wpp-checkbox-group-v4-6-0", null, h("wpp-checkbox-v4-6-0", { required: true, name: "email", value: "email", labelConfig: { text: 'Email' } }), h("wpp-checkbox-v4-6-0", { required: true, name: "mail", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-checkbox-v4-6-0", { required: true, name: "phone", value: "phone", labelConfig: { text: 'Phone' } }), h("wpp-checkbox-v4-6-0", { required: true, name: "fax", value: "fax", labelConfig: { text: 'Fax' } }))),
+      template: () => (h("wpp-checkbox-group-v4-7-0", null, h("wpp-checkbox-v4-7-0", { required: true, name: "email", value: "email", labelConfig: { text: 'Email' } }), h("wpp-checkbox-v4-7-0", { required: true, name: "mail", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-checkbox-v4-7-0", { required: true, name: "phone", value: "phone", labelConfig: { text: 'Phone' } }), h("wpp-checkbox-v4-7-0", { required: true, name: "fax", value: "fax", labelConfig: { text: 'Fax' } }))),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -116,5 +116,39 @@ describe('wpp-checkbox-group', () => {
     });
     const content = root.shadowRoot?.querySelector('.content');
     expect(content?.style.gap).toBe('12px');
+  });
+  describe('Testing accessibility', () => {
+    it('should not make every checkbox in the group required', async () => {
+      const page = await newSpecPage({
+        components: [WppCheckboxGroup, WppCheckbox],
+        template: () => (h("wpp-checkbox-group-v4-7-0", { labelConfig: { text: 'Notifications' } }, h("wpp-checkbox-v4-7-0", { class: "wpp-checkbox", name: "email", value: "email", labelConfig: { text: 'Email' } }), h("wpp-checkbox-v4-7-0", { class: "wpp-checkbox", name: "sms", value: "sms", labelConfig: { text: 'SMS' } }))),
+      });
+      await page.waitForChanges();
+      const inputs = Array.from(page.body.querySelectorAll('wpp-checkbox')).map(checkbox => checkbox.shadowRoot?.querySelector('input'));
+      expect(inputs).toHaveLength(2);
+      inputs.forEach(input => {
+        expect(input.hasAttribute('required')).toBe(false);
+        expect(input.getAttribute('aria-required')).toBe('false');
+      });
+    });
+    it('should name the group from ariaProps.label when custom ariaProps replace the default ids', async () => {
+      const { root } = await create({ ariaProps: { label: 'Extras' } });
+      const group = root.shadowRoot?.querySelector('[role="group"]');
+      expect(group?.getAttribute('aria-label')).toBe('Extras');
+    });
+    it('should keep the label and message linked when custom ariaProps omit the ids', async () => {
+      const { root } = await create({
+        labelConfig: { text: 'Notifications' },
+        message: 'Pick at least one',
+        ariaProps: { label: 'Notifications' },
+      });
+      const group = root.shadowRoot?.querySelector('[role="group"]');
+      const label = root.shadowRoot?.querySelector('wpp-label');
+      const message = root.shadowRoot?.querySelector('wpp-inline-message');
+      expect(group?.getAttribute('aria-labelledby')).toBe(label?.id);
+      expect(group?.getAttribute('aria-describedby')).toBe(message?.id);
+      expect(label?.id).toBeTruthy();
+      expect(message?.id).toBeTruthy();
+    });
   });
 });

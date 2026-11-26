@@ -4,10 +4,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const timeoutManager = require('./timeout-manager-5ad93b8f.js');
-const dialogFocus = require('./dialog-focus-adf102b7.js');
-const WrappedSlot = require('./WrappedSlot-669e1c73.js');
+const dialogFocus = require('./dialog-focus-43202cdc.js');
+const WrappedSlot = require('./WrappedSlot-1f8b2d26.js');
 const types = require('./types-05f8f988.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./theme-observer-4179316e.js');
@@ -97,7 +97,7 @@ const WppFullScreenModal = class {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (index.h("wpp-button-v4-6-0", { variant: variant, ...rest }, label));
+      return (index.h("wpp-button-v4-7-0", { variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -108,8 +108,8 @@ const WppFullScreenModal = class {
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
-      // Idempotent: the sentinels, the open render and the transition all route through here, and
-      // pulling focus back to the container would undo whatever the user had reached inside.
+      // Idempotent: the open render and the transition both route through here, and pulling focus back to the
+      // container would undo whatever the user had reached inside.
       if (dialogFocus.isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
@@ -246,9 +246,9 @@ const WppFullScreenModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, index.h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-6-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), index.h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, index.h("div", { class: this.headerContainerCssClasses() }, index.h(WrappedSlot.WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), index.h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, index.h("wpp-icon-cross-v4-6-0", { slot: "icon-start" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, index.h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-7-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => dialogFocus.focusDialogEdge(this.dialogRef, 'last') }), index.h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, index.h("div", { class: this.headerContainerCssClasses() }, index.h(WrappedSlot.WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), index.h("wpp-action-button-v4-7-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, index.h("wpp-icon-cross-v4-7-0", { slot: "icon-start" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => dialogFocus.focusDialogEdge(this.dialogRef, 'first') }))));
   }
-  static get registryIs() { return "wpp-full-screen-modal-v4-6-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeFullScreenModalStatus"]

@@ -96,6 +96,16 @@ export class WppRichtextView {
       editable: false,
       injectCSS: false,
     });
+    // ProseMirror marks its editing surface with role="textbox" even when the
+    // editor is read-only. This view is a static rendering, not a form field,
+    // so an unlabelled read-only textbox trips the AXE `aria-input-field-name`
+    // rule (WCAG 4.1.2). Strip the input semantics so the content is exposed
+    // as plain readable text.
+    const viewDom = this.tiptapEditor.view?.dom;
+    if (viewDom) {
+      viewDom.removeAttribute('role');
+      viewDom.removeAttribute('aria-multiline');
+    }
     if (this.styles) {
       try {
         const styles = JSON.parse(this.styles);
@@ -167,10 +177,10 @@ export class WppRichtextView {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-6-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-7-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
   static get is() { return "wpp-richtext-view"; }
-  static get registryIs() { return "wpp-richtext-view-v4-6-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-7-0"; }
   static get originalStyleUrls() {
     return {
       "$": ["wpp-richtext-view.scss"]

@@ -28,8 +28,8 @@ export declare class WppPaginationItem {
   disconnectedCallback(): void;
   private onBlur;
   private onMouseDown;
-  private onKeyUp;
   private onKeyDown;
+  private onKeyUp;
   private handleClick;
   private hostCssClasses;
   render(): any;

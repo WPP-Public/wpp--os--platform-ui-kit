@@ -1,6 +1,6 @@
-import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Fragment, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { y as mergeLocales, d as debounce } from './utils.js';
+import { z as mergeLocales, d as debounce } from './utils.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$a } from './wpp-action-button2.js';
 import { d as defineCustomElement$9 } from './wpp-icon-cross2.js';
@@ -17,7 +17,7 @@ const LOCALES_DEFAULTS = {
   close: 'Close inline message button',
 };
 
-const wppInlineMessageCss = ":host{--im-m-icon-gap:var(--wpp-inline-message-m-icon-gap, 4px);--im-l-icon-gap:var(--wpp-inline-message-l-icon-gap, 8px);--im-m-padding:var(--wpp-inline-message-m-padding, 5px 8px);--im-l-padding:var(--wpp-inline-message-l-padding, 12px 12px 12px 16px);--im-line-height:var(--wpp-inline-message-line-height, 22px);--im-border-radius:var(--wpp-inline-message-border-radius, var(--wpp-border-radius-s));--im-text-color:var(--wpp-inline-message-text-color, var(--wpp-grey-color-1000));--im-empty-type-text-color:var(--wpp-inline-message-empty-type-text-color, var(--wpp-grey-color-800));--im-warning-text-color:var(--wpp-inline-message-warning-text-color, var(--wpp-text-color-warning));--im-error-text-color:var(--wpp-inline-message-error-text-color, var(--wpp-text-color-danger));--im-information-text-color:var(--wpp-inline-message-information-text-color, var(--wpp-text-color-info));--im-success-text-color:var(--wpp-inline-message-success-text-color, var(--wpp-text-color-success));--im-warning-background-color:var(--wpp-inline-message-warning-background-color, var(--wpp-warning-color-200));--im-error-background-color:var(--wpp-inline-message-error-background-color, var(--wpp-danger-color-200));--im-information-background-color:var(--wpp-inline-message-information-background-color, var(--wpp-grey-color-300));--im-success-background-color:var(--wpp-inline-message-success-background-color, var(--wpp-success-color-200));--im-l-min-width:var(--wpp-l-inline-message-min-width, 376px);--im-l-action-btn-padding:var(--wpp-inline-message-l-action-btn-padding, 5px 6px);--im-l-action-btn-margin-right:var(--wpp-inline-message-l-action-btn-margin-right, 4px);--im-l-body-padding-left:var(--wpp-inline-message-l-body-padding-left, 30px);--im-l-header-gap:var(--wpp-inline-message-l-header-gap, 3px)}.inline-message-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:var(--im-width);color:var(--im-text-color)}.inline-message-wrapper.size-s{font-size:var(--wpp-typography-xs-midi-font-size, 12px);line-height:var(--wpp-typography-xs-midi-line-height, 20px);font-weight:var(--wpp-typography-xs-midi-font-weight, 500);color:var(--wpp-typography-xs-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-midi-letter-spacing, 0)}.inline-message-wrapper.size-s.warning-message{color:var(--im-warning-text-color)}.inline-message-wrapper.size-s.error-message{color:var(--im-error-text-color)}.inline-message-wrapper.size-s.information-message{color:var(--im-information-text-color)}.inline-message-wrapper.size-s.success-message{color:var(--im-success-text-color)}.inline-message-wrapper:not(.warning-message,.error-message,.information-message,.success-message){color:var(--im-empty-type-text-color)}.inline-message-wrapper.size-l,.inline-message-wrapper.size-m{padding:var(--im-m-padding);border-radius:var(--im-border-radius);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.inline-message-wrapper.size-l.warning-message,.inline-message-wrapper.size-m.warning-message{background-color:var(--im-warning-background-color)}.inline-message-wrapper.size-l.error-message,.inline-message-wrapper.size-m.error-message{background-color:var(--im-error-background-color)}.inline-message-wrapper.size-l.information-message,.inline-message-wrapper.size-m.information-message{background-color:var(--im-information-background-color);background-color:color-mix(in srgb, var(--im-information-background-color) 60%, transparent)}.inline-message-wrapper.size-l.success-message,.inline-message-wrapper.size-m.success-message{background-color:var(--im-success-background-color)}.inline-message-wrapper.size-l .message,.inline-message-wrapper.size-m .message{line-height:var(--im-line-height)}.inline-message-wrapper .left-icon{display:-ms-inline-flexbox;display:inline-flex}.inline-message-wrapper.size-m .message-block .wpp-icon{margin-top:1px}.inline-message-wrapper.size-l{padding:var(--im-l-padding);min-width:var(--im-l-min-width);-webkit-box-sizing:border-box;box-sizing:border-box}.inline-message-wrapper.size-l .container{display:-ms-flexbox;display:flex;gap:24px;-ms-flex-wrap:nowrap;flex-wrap:nowrap;width:100%}.inline-message-wrapper.size-l .container-content{display:-ms-flexbox;display:flex;width:100%;gap:var(--im-l-icon-gap);padding:4px 0}.inline-message-wrapper.size-l .container-content .wpp-icon{margin-top:2px}.inline-message-wrapper.size-l .container .title{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.inline-message-wrapper.size-l .container-actions{display:-ms-flexbox;display:flex;-ms-flex-item-align:start;align-self:flex-start}.inline-message-wrapper.size-l .container-actions .action-btn{width:-webkit-max-content;width:-moz-max-content;width:max-content;--wpp-action-button-padding:var(--im-l-action-btn-padding);margin-right:var(--im-l-action-btn-margin-right)}.inline-message-wrapper.size-l .container-actions .close-btn{--wpp-action-button-padding:6px}.inline-message-wrapper.size-l .container-body .tooltip:hover{cursor:pointer}.inline-message-wrapper.size-l .content-wrapper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:var(--im-l-header-gap);width:100%}.inline-message-wrapper.size-l .container-body{width:100%}.inline-message-wrapper .message-block{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;gap:var(--im-m-icon-gap);border-radius:var(--im-border-radius);outline:none}.inline-message-wrapper .message-block.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.inline-message-wrapper .message-block.tooltip-maxlength-auto{display:grid;grid-auto-flow:column;-ms-flex-pack:start;justify-content:flex-start;width:100%;gap:var(--im-m-icon-gap)}.inline-message-wrapper .message-block.tooltip-maxlength-auto .message{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.inline-message-wrapper .message-block.truncated{cursor:pointer}.inline-message-wrapper .message-block .message{width:100%;overflow-wrap:break-word}.inline-message-wrapper .message{border-radius:var(--im-border-radius);outline:none}.inline-message-wrapper .message.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-compact){--im-l-padding:var(--wpp-inline-message-l-padding, 4px 4px 4px 8px);--im-l-min-width:var(--wpp-l-inline-message-min-width, 100%);--im-line-height:var(--wpp-inline-message-line-height, var(--wpp-typography-xs-body-line-height))}:host(.wpp-compact) .inline-message-wrapper.size-l{font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0)}:host(.wpp-compact) .inline-message-wrapper .container{gap:16px}:host(.wpp-compact) .inline-message-wrapper .message{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere;min-width:0}:host(.wpp-information.wpp-size-l),:host(.wpp-information.wpp-size-m){background-color:white;border-radius:var(--im-border-radius)}:host(.wpp-information.wpp-size-l[data-wpp-theme=dark]) .inline-message-wrapper,:host(.wpp-information.wpp-size-m[data-wpp-theme=dark]) .inline-message-wrapper{background:var(--wpp-grey-color-300)}";
+const wppInlineMessageCss = ":host{--im-m-icon-gap:var(--wpp-inline-message-m-icon-gap, 4px);--im-l-icon-gap:var(--wpp-inline-message-l-icon-gap, 8px);--im-m-padding:var(--wpp-inline-message-m-padding, 5px 8px);--im-l-padding:var(--wpp-inline-message-l-padding, 12px 12px 12px 16px);--im-line-height:var(--wpp-inline-message-line-height, 22px);--im-border-radius:var(--wpp-inline-message-border-radius, var(--wpp-border-radius-s));--im-text-color:var(--wpp-inline-message-text-color, var(--wpp-grey-color-1000));--im-empty-type-text-color:var(--wpp-inline-message-empty-type-text-color, var(--wpp-grey-color-800));--im-warning-text-color:var(--wpp-inline-message-warning-text-color, var(--wpp-text-color-warning));--im-error-text-color:var(--wpp-inline-message-error-text-color, var(--wpp-text-color-danger));--im-information-text-color:var(--wpp-inline-message-information-text-color, var(--wpp-text-color-info));--im-success-text-color:var(--wpp-inline-message-success-text-color, var(--wpp-text-color-success));--im-warning-background-color:var(--wpp-inline-message-warning-background-color, var(--wpp-warning-color-200));--im-error-background-color:var(--wpp-inline-message-error-background-color, var(--wpp-danger-color-200));--im-information-background-color:var(--wpp-inline-message-information-background-color, var(--wpp-grey-color-300));--im-success-background-color:var(--wpp-inline-message-success-background-color, var(--wpp-success-color-200));--im-l-min-width:var(--wpp-l-inline-message-min-width, 376px);--im-l-action-btn-padding:var(--wpp-inline-message-l-action-btn-padding, 5px 6px);--im-l-action-btn-margin-right:var(--wpp-inline-message-l-action-btn-margin-right, 4px);--im-l-body-padding-left:var(--wpp-inline-message-l-body-padding-left, 30px);--im-l-header-gap:var(--wpp-inline-message-l-header-gap, 3px)}.inline-message-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:var(--im-width);color:var(--im-text-color)}.inline-message-wrapper.size-s{font-size:var(--wpp-typography-xs-midi-font-size, 12px);line-height:var(--wpp-typography-xs-midi-line-height, 20px);font-weight:var(--wpp-typography-xs-midi-font-weight, 500);color:var(--wpp-typography-xs-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-midi-letter-spacing, 0)}.inline-message-wrapper.size-s.warning-message{color:var(--im-warning-text-color)}.inline-message-wrapper.size-s.error-message{color:var(--im-error-text-color)}.inline-message-wrapper.size-s.information-message{color:var(--im-information-text-color)}.inline-message-wrapper.size-s.success-message{color:var(--im-success-text-color)}.inline-message-wrapper:not(.warning-message,.error-message,.information-message,.success-message){color:var(--im-empty-type-text-color)}.inline-message-wrapper.size-l,.inline-message-wrapper.size-m{padding:var(--im-m-padding);border-radius:var(--im-border-radius);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.inline-message-wrapper.size-l.warning-message,.inline-message-wrapper.size-m.warning-message{background-color:var(--im-warning-background-color)}.inline-message-wrapper.size-l.error-message,.inline-message-wrapper.size-m.error-message{background-color:var(--im-error-background-color)}.inline-message-wrapper.size-l.information-message,.inline-message-wrapper.size-m.information-message{background-color:var(--im-information-background-color);background-color:color-mix(in srgb, var(--im-information-background-color) 60%, transparent)}.inline-message-wrapper.size-l.success-message,.inline-message-wrapper.size-m.success-message{background-color:var(--im-success-background-color)}.inline-message-wrapper.size-l .message,.inline-message-wrapper.size-m .message{line-height:var(--im-line-height)}.inline-message-wrapper .left-icon{display:-ms-inline-flexbox;display:inline-flex}.inline-message-wrapper.size-m .message-block .wpp-icon{margin-top:1px}.inline-message-wrapper.size-l{padding:var(--im-l-padding);min-width:var(--im-l-min-width);-webkit-box-sizing:border-box;box-sizing:border-box}.inline-message-wrapper.size-l .container{display:-ms-flexbox;display:flex;gap:24px;-ms-flex-wrap:nowrap;flex-wrap:nowrap;width:100%}.inline-message-wrapper.size-l .container-content{display:-ms-flexbox;display:flex;width:100%;gap:var(--im-l-icon-gap);padding:4px 0}.inline-message-wrapper.size-l .container-content .wpp-icon{margin-top:2px}.inline-message-wrapper.size-l .container .title{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.inline-message-wrapper.size-l .container-actions{display:-ms-flexbox;display:flex;-ms-flex-item-align:start;align-self:flex-start}.inline-message-wrapper.size-l .container-actions .action-btn{width:-webkit-max-content;width:-moz-max-content;width:max-content;--wpp-action-button-padding:var(--im-l-action-btn-padding);margin-right:var(--im-l-action-btn-margin-right)}.inline-message-wrapper.size-l .container-actions .close-btn{--wpp-action-button-padding:6px}.inline-message-wrapper.size-l .container-body .tooltip:hover{cursor:pointer}.inline-message-wrapper.size-l .content-wrapper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:var(--im-l-header-gap);width:100%}.inline-message-wrapper.size-l .container-body{width:100%}.inline-message-wrapper .message-block{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;gap:var(--im-m-icon-gap);border-radius:var(--im-border-radius);outline:none}.inline-message-wrapper .message-block.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.inline-message-wrapper .message-block.tooltip-maxlength-auto{display:grid;grid-auto-flow:column;-ms-flex-pack:start;justify-content:flex-start;width:100%;gap:var(--im-m-icon-gap)}.inline-message-wrapper .message-block.tooltip-maxlength-auto .message{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.inline-message-wrapper .message-block.truncated{cursor:pointer}.inline-message-wrapper .message-block .message{width:100%;overflow-wrap:break-word}.inline-message-wrapper .message{border-radius:var(--im-border-radius);outline:none}.inline-message-wrapper .message.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-compact){--im-l-padding:var(--wpp-inline-message-l-padding, 4px 4px 4px 8px);--im-l-min-width:var(--wpp-l-inline-message-min-width, 100%);--im-line-height:var(--wpp-inline-message-line-height, var(--wpp-typography-xs-body-line-height))}:host(.wpp-compact) .inline-message-wrapper.size-l{font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0)}:host(.wpp-compact) .inline-message-wrapper .container{gap:16px}:host(.wpp-compact) .inline-message-wrapper .message{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere;min-width:0}:host(.wpp-information.wpp-size-l),:host(.wpp-information.wpp-size-m){background-color:white;border-radius:var(--im-border-radius)}:host(.wpp-information.wpp-size-l[data-wpp-theme=dark]) .inline-message-wrapper,:host(.wpp-information.wpp-size-m[data-wpp-theme=dark]) .inline-message-wrapper{background:var(--wpp-grey-color-300)}.sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}";
 
 const WppInlineMessage = /*@__PURE__*/ proxyCustomElement(class WppInlineMessage extends HTMLElement {
   constructor() {
@@ -69,13 +69,13 @@ const WppInlineMessage = /*@__PURE__*/ proxyCustomElement(class WppInlineMessage
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v4-6-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-warning-v4-7-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'error')
-        return h("wpp-icon-error-v4-6-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-error-v4-7-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'information')
-        return (h("wpp-icon-info-message-v4-6-0", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
+        return (h("wpp-icon-info-message-v4-7-0", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
       if (this.type === 'success')
-        return h("wpp-icon-success-v4-6-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-success-v4-7-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       return null;
     };
     this.handleClickClose = () => {
@@ -89,9 +89,12 @@ const WppInlineMessage = /*@__PURE__*/ proxyCustomElement(class WppInlineMessage
     this.handleClickActionBtn = () => {
       this.wppClickActionBtn.emit();
     };
+    // A message cut to `showTooltipFrom` characters only shows the rest in its tooltip, which assistive tech
+    // cannot reach from inside this shadow root, so the full text stays in the accessibility tree instead.
+    this.renderMessageText = (message) => message === this.message ? (message) : (h(Fragment, null, h("span", { "aria-hidden": "true" }, message), h("span", { class: "sr-only" }, this.message)));
     this.renderContent = () => {
       const message = this.getMessage();
-      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: "container-content" }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, this.titleText && (h("wpp-typography-v4-6-0", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText)), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v4-6-0", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, message))) : (h("span", { class: "message", part: "message" }, message))))), this.actionBtnText || !this.hideCloseBtn ? (h("div", { class: "container-actions" }, this.actionBtnText?.length > 0 && (h("wpp-action-button-v4-6-0", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v4-6-0", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v4-6-0", { color: "var(--ab-secondary-icon-color)", size: "m" }))))) : null)) : this.isTruncated ? (h("wpp-tooltip-v4-6-0", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)));
+      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: "container-content" }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, this.titleText && (h("wpp-typography-v4-7-0", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText)), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v4-7-0", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, this.renderMessageText(message)))) : (h("span", { class: "message", part: "message" }, this.renderMessageText(message)))))), this.actionBtnText || !this.hideCloseBtn ? (h("div", { class: "container-actions" }, this.actionBtnText?.length > 0 && (h("wpp-action-button-v4-7-0", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v4-7-0", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v4-7-0", { color: "var(--ab-secondary-icon-color)", size: "m" }))))) : null)) : this.isTruncated ? (h("wpp-tooltip-v4-7-0", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, this.renderMessageText(message))))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, this.renderMessageText(message))));
     };
     this.getExportParts = () => {
       let defaultParts = 'wrapper, message-icon, message';
@@ -186,14 +189,14 @@ const WppInlineMessage = /*@__PURE__*/ proxyCustomElement(class WppInlineMessage
   render() {
     return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onKeyUp: this.onKeyUp, exportparts: this.getExportParts() }, h("div", { class: this.inlineMessageWrapperCssClasses(), part: "wrapper" }, this.renderContent())));
   }
-  static get registryIs() { return "wpp-inline-message-v4-6-0"; }
+  static get registryIs() { return "wpp-inline-message-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "message": ["onMessageChange"],
     "showTooltipFrom": ["onMessageChange"]
   }; }
   static get style() { return wppInlineMessageCss; }
-}, [1, "wpp-inline-message", "wpp-inline-message-v4-6-0", {
+}, [1, "wpp-inline-message", "wpp-inline-message-v4-7-0", {
     "titleText": [1, "title-text"],
     "actionBtnText": [1, "action-btn-text"],
     "message": [1],
@@ -211,59 +214,59 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-inline-message-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-inline-message-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInlineMessage);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

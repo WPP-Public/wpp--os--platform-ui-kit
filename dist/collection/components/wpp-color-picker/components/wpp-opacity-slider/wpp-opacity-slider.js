@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { clamp } from 'lodash';
+import { getSliderKeyValue, getSliderMarkerLeft } from '../../utils';
 import { hexToRgb } from '../../utils';
 /**
  * @internal
@@ -31,11 +32,6 @@ export class OpacitySlider {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      const position = this.opacity * rect.width;
-      this.markerPosition = clamp(position, 8, rect.width - 8);
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       event.preventDefault();
@@ -56,32 +52,36 @@ export class OpacitySlider {
       const xClamped = clamp(xRaw, 0, rect.width);
       const newOpacity = xClamped / rect.width;
       this.opacityChanged.emit(newOpacity);
-      this.markerPosition = clamp(xClamped, 8, rect.width - 8);
+    };
+    this.handleKeyDown = (event) => {
+      const percent = getSliderKeyValue(event.key, Math.round(this.opacity * 100), 0, 100);
+      if (percent === undefined)
+        return;
+      event.preventDefault();
+      this.opacityChanged.emit(percent / 100);
     };
     this.hexColor = undefined;
     this.opacity = 1;
-    this.markerPosition = 8;
+    this.label = undefined;
   }
   onPropertyChange() {
-    this.updateMarkerPosition();
     this.drawOpacitySlider();
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawOpacitySlider();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-6-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
-        left: `${this.markerPosition}px`,
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-7-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": Math.round(this.opacity * 100), "aria-valuetext": `${Math.round(this.opacity * 100)}%`, onKeyDown: this.handleKeyDown, style: {
+        left: getSliderMarkerLeft(this.opacity),
       } }))));
   }
   static get is() { return "wpp-opacity-slider"; }
-  static get registryIs() { return "wpp-opacity-slider-v4-6-0"; }
+  static get registryIs() { return "wpp-opacity-slider-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -129,12 +129,24 @@ export class OpacitySlider {
         "attribute": "opacity",
         "reflect": false,
         "defaultValue": "1"
+      },
+      "label": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name of the slider, set by wpp-color-picker from its locales."
+        },
+        "attribute": "label",
+        "reflect": false
       }
-    };
-  }
-  static get states() {
-    return {
-      "markerPosition": {}
     };
   }
   static get events() {

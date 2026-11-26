@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants, VisibilityClasses } from './types';
+import { StickyBarButtonItem, StickyBarLocales, StickyBarTabItem, StickyBarVariants, VisibilityClasses } from './types';
 /**
  * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variant: 'medium'
  */
@@ -54,6 +54,10 @@ export declare class WppStickyBar {
    */
   readonly tabSize: 'm' | 's';
   /**
+   * Defines the component locale types.
+   */
+  readonly locales: Partial<StickyBarLocales>;
+  /**
    * Emitted when the back icon is clicked (icon on the left of the title).
    */
   readonly wppClickBackIcon: EventEmitter<void>;
@@ -82,6 +86,7 @@ export declare class WppStickyBar {
   private handleButtonClick;
   private handleTabClick;
   private getButtonItemIcons;
+  private get _locales();
   private hostCssClasses;
   render(): any;
 }

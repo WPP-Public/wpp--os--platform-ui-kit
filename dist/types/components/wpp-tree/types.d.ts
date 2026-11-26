@@ -71,6 +71,10 @@ export interface TreeLazyConfig {
 export interface TreeLocaleType {
   nothingFound: string;
   loadingTree: string;
+  /** Fallback name for the tree itself when the consumer passes no `label`. */
+  treeLabel: string;
+  /** Name for an item's actions menu. `{title}` is replaced with the item's title. */
+  itemActionsLabel: string;
 }
 export type TransformSearchQuery = (search: string) => string;
 export interface TreeItemSearchConfig {

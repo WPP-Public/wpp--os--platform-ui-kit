@@ -4,9 +4,9 @@ export function renderCaptionsComponent() {
     'captions-wrapper': true,
     'caption-enabled': this.isCaptionEnabled,
   });
-  return (h("div", { class: captionWrapperCssClasses(), role: "region", "aria-label": this._locales.videoCaptionsAriaLabel, "aria-live": this.isCaptionEnabled ? 'polite' : 'off' }, this.activeCues.map((cue, index) => {
+  return (h("div", { class: captionWrapperCssClasses(), lang: this.caption?.srclang, ...(!this.isCaptionEnabled ? { inert: true, 'aria-hidden': 'true' } : {}) }, this.activeCues.map((cue, index) => {
     const vttCue = cue;
     const cueText = vttCue.text;
-    return (h("div", { key: `cue-${index}`, class: "caption-cue", "aria-atomic": "true" }, cueText));
+    return (h("div", { key: `cue-${index}`, class: "caption-cue" }, cueText));
   })));
 }

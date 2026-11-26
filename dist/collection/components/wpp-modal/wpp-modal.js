@@ -6,7 +6,7 @@ import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason, } from './types';
 import { TOP_AND_BOTTOM_OFFSET } from './consts';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
-import { dialogFocusController, isFocusInsideDialog } from '../../utils/dialog-focus';
+import { dialogFocusController, focusDialogEdge, isFocusInsideDialog } from '../../utils/dialog-focus';
 /**
  * @slot header - Content that is displayed within the `.modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
@@ -107,7 +107,7 @@ export class WppModal {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-6-0", { size: "s", variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-7-0", { size: "s", variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -118,8 +118,8 @@ export class WppModal {
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
-      // Idempotent: the sentinels, the open render and the transition all route through here, and
-      // pulling focus back to the container would undo whatever the user had reached inside.
+      // Idempotent: the open render and the transition both route through here, and pulling focus back to the
+      // container would undo whatever the user had reached inside.
       if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
@@ -266,10 +266,10 @@ export class WppModal {
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--modal-scrollbar-gutter': `${getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-6-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-6-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-6-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-7-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'last') }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-7-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-7-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'first') }))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v4-6-0"; }
+  static get registryIs() { return "wpp-modal-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

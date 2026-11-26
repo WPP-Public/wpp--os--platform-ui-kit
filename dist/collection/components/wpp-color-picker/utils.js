@@ -447,3 +447,55 @@ export function hsvToHex(h, s, v) {
   const { r, g, b } = hsvToRgb(h, s, v);
   return rgbToHex(r, g, b);
 }
+export const LOCALES_DEFAULTS = {
+  pickerLabel: value => `Color, ${value}`,
+  dialogLabel: 'Choose a color',
+  themeTab: 'Theme',
+  customTab: 'Custom',
+  saturationLabel: 'Saturation and brightness',
+  saturationValueText: (saturation, brightness) => `Saturation ${saturation}%, brightness ${brightness}%`,
+  hueLabel: 'Hue',
+  opacityLabel: 'Opacity',
+  formatLabel: 'Color format',
+  hexFormat: 'Hex',
+  rgbFormat: 'RGB',
+  hexLabel: 'Hex value',
+  redLabel: 'Red',
+  greenLabel: 'Green',
+  blueLabel: 'Blue',
+  savedColorsTitle: 'Saved colors',
+  saveColorLabel: 'Save color',
+  removeColorLabel: 'Remove color',
+  colorLabel: (hexValue, opacity) => (opacity === '100%' ? hexValue : `${hexValue}, ${opacity} opacity`),
+};
+/**
+ * Left offset of a slider marker for a value ratio in [0, 1], kept 8px inside each end so the marker stays on the
+ * rounded track. Resolved by CSS against the track rather than measured, because the sliders first render inside the
+ * closed popover, where the canvas has no size yet.
+ */
+export const getSliderMarkerLeft = (ratio) => `clamp(8px, ${ratio * 100}%, calc(100% - 8px))`;
+/**
+ * Next value for a key press on a slider, following the W3C APG slider pattern: arrows move by `step`,
+ * Page Up/Down by `pageStep`, Home/End jump to the ends. Returns `undefined` for any other key.
+ */
+export const getSliderKeyValue = (key, value, min, max, step = 1, pageStep = 10) => {
+  const clampValue = (next) => Math.min(max, Math.max(min, next));
+  switch (key) {
+    case 'ArrowRight':
+    case 'ArrowUp':
+      return clampValue(value + step);
+    case 'ArrowLeft':
+    case 'ArrowDown':
+      return clampValue(value - step);
+    case 'PageUp':
+      return clampValue(value + pageStep);
+    case 'PageDown':
+      return clampValue(value - pageStep);
+    case 'Home':
+      return min;
+    case 'End':
+      return max;
+    default:
+      return undefined;
+  }
+};

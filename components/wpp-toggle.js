@@ -25,14 +25,23 @@ const WppToggle$1 = /*@__PURE__*/ proxyCustomElement(class WppToggle extends HTM
         return;
       event.preventDefault();
       this.setFocus();
-      if (!this.controlled) {
-        this.checked = !this.checked;
+      // A controlled toggle used to emit nothing, so its owner only ever heard about pointer clicks through the DOM
+      // click event; Space and Enter changed nothing and told nobody. Like wpp-checkbox, it now reports the
+      // requested state and leaves `checked` to its owner.
+      if (this.controlled) {
         this.wppChange.emit({
           value: this.value,
-          checked: this.checked,
+          checked: !this.checked,
           name: this.name,
         });
+        return;
       }
+      this.checked = !this.checked;
+      this.wppChange.emit({
+        value: this.value,
+        checked: this.checked,
+        name: this.name,
+      });
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -105,12 +114,12 @@ const WppToggle$1 = /*@__PURE__*/ proxyCustomElement(class WppToggle extends HTM
         ...(this.ariaProps.labelledby ? { 'aria-labelledby': this.ariaProps.labelledby } : {}),
       }
       : {};
-    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
+    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
   }
-  static get registryIs() { return "wpp-toggle-v4-6-0"; }
+  static get registryIs() { return "wpp-toggle-v4-7-0"; }
   get host() { return this; }
   static get style() { return wppToggleCss; }
-}, [1, "wpp-toggle", "wpp-toggle-v4-6-0", {
+}, [1, "wpp-toggle", "wpp-toggle-v4-7-0", {
     "name": [1],
     "value": [1032],
     "checked": [1540],
@@ -129,44 +138,44 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-toggle-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-toggle-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-toggle-v4-6-0":
+    case "wpp-toggle-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppToggle$1);
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

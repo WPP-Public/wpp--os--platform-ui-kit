@@ -38,8 +38,11 @@
   width: 100%;
   height: 100%;
 }
-:host .anchor .hex-opacity {
-  --wpp-typography-color: var(--wpp-grey-color-800);
+
+:host(:focus-visible) {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 
 :host(.wpp-disabled) .anchor:hover {

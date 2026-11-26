@@ -3,6 +3,7 @@
   * @prop --wpp-tag-padding:
   * @prop --wpp-tag-with-icon-padding:
   * @prop --wpp-tag-bg-opacity:
+  * @prop --wpp-tag-content-opacity:
   * @prop --wpp-tag-border-radius:
   * @prop --wpp-tag-icon-margin:
   * @prop --wpp-tag-icon-padding:
@@ -23,23 +24,24 @@
   --tag-height: var(--wpp-tag-height, 24px);
   --tag-padding: var(--wpp-tag-padding, 2px 8px);
   --tag-with-icon-padding: var(--wpp-tag-with-icon-padding, 2px 8px 2px 6px);
-  --tag-bg-opacity: var(--wpp-tag-bg-opacity, 1);
+  --tag-bg-opacity: var(--wpp-tag-bg-opacity, 0.6);
+  --tag-content-opacity: var(--wpp-tag-content-opacity, 0.8);
   --tag-border-radius: var(--wpp-tag-border-radius, var(--wpp-border-radius-xs));
   --tag-icon-margin: var(--wpp-tag-icon-margin, 0 4px 0 0);
   --tag-typography-color: var(--wpp-tag-typography-color, var(--wpp-grey-color-1000));
   --tag-icon-color: var(--wpp-tag-icon-color, var(--wpp-grey-color-900));
   --tag-neutral-color: var(--wpp-tag-neutral-color, var(--wpp-dataviz-color-seq-grey-600));
   --tag-neutral-bg-color: var(--wpp-tag-neutral-bg-color, var(--wpp-grey-color-300));
-  --tag-neutral-bg-opacity: var(--wpp-tag-neutral-bg-opacity, 0.25);
+  --tag-neutral-bg-opacity: var(--wpp-tag-neutral-bg-opacity, var(--tag-bg-opacity));
   --tag-warning-color: var(--wpp-tag-warning-color, var(--wpp-dataviz-color-seq-warning-600));
-  --tag-warning-bg-color: var(--wpp-tag-warning-bg-color, var(--wpp-warning-color-200));
-  --tag-warning-bg-opacity: var(--wpp-tag-warning-bg-opacity, 0.25);
+  --tag-warning-bg-color: var(--wpp-tag-warning-bg-color, var(--wpp-dataviz-color-seq-warning-300));
+  --tag-warning-bg-opacity: var(--wpp-tag-warning-bg-opacity, var(--tag-bg-opacity));
   --tag-positive-color: var(--wpp-tag-positive-color, var(--wpp-dataviz-color-seq-positive-600));
-  --tag-positive-bg-color: var(--wpp-tag-positive-bg-color, var(--wpp-success-color-200));
-  --tag-positive-bg-opacity: var(--wpp-tag-positive-bg-opacity, 0.25);
+  --tag-positive-bg-color: var(--wpp-tag-positive-bg-color, var(--wpp-dataviz-color-seq-positive-300));
+  --tag-positive-bg-opacity: var(--wpp-tag-positive-bg-opacity, var(--tag-bg-opacity));
   --tag-negative-color: var(--wpp-tag-negative-color, var(--wpp-dataviz-color-seq-negative-600));
-  --tag-negative-bg-color: var(--wpp-tag-negative-bg-color, var(--wpp-danger-color-200));
-  --tag-negative-bg-opacity: var(--wpp-tag-negative-bg-opacity, 0.25);
+  --tag-negative-bg-color: var(--wpp-tag-negative-bg-color, var(--wpp-dataviz-color-seq-negative-300));
+  --tag-negative-bg-opacity: var(--wpp-tag-negative-bg-opacity, var(--tag-bg-opacity));
   --tag-disabled-opacity: var(--wpp-tag-disabled-opacity, 0.4);
   display: inline-flex;
   align-items: center;
@@ -51,26 +53,32 @@
 }
 
 :host {
-  --wpp-typography-color: var(--tag-typography-color);
   --wpp-icon-color: var(--tag-icon-color);
   background-color: var(--wpp-white-color);
   position: relative;
 }
 :host .icon-start ::slotted(*) {
   color: var(--tag-icon-color);
-  mix-blend-mode: plus-darker;
+}
+
+:host(.wpp-neutral) .overlay {
+  background-color: var(--tag-neutral-bg-color);
+  opacity: var(--tag-neutral-bg-opacity);
 }
 
 :host(.wpp-warning) .overlay {
   background-color: var(--tag-warning-bg-color);
+  opacity: var(--tag-warning-bg-opacity);
 }
 
 :host(.wpp-positive) .overlay {
   background-color: var(--tag-positive-bg-color);
+  opacity: var(--tag-positive-bg-opacity);
 }
 
 :host(.wpp-negative) .overlay {
   background-color: var(--tag-negative-bg-color);
+  opacity: var(--tag-negative-bg-opacity);
 }
 
 :host(.wpp-Cat-1) .overlay {
@@ -124,7 +132,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  mix-blend-mode: plus-darker;
+  opacity: var(--tag-content-opacity);
   min-width: 0;
   max-width: 100%;
   flex: 1;
@@ -134,7 +142,6 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  mix-blend-mode: plus-darker;
   max-width: 100%;
 }
 .wpp-typography::part(inner) {
@@ -169,6 +176,9 @@
   max-width: 100%;
 }
 
+.icon-start {
+  opacity: var(--tag-content-opacity);
+}
 .icon-start.slot-hidden {
   display: none;
 }
@@ -181,15 +191,6 @@
   left: 0;
   border-radius: var(--tag-border-radius);
   opacity: var(--tag-bg-opacity);
-}
-
-.categorical-overlay {
-  opacity: 0.4;
-}
-
-:host(.wpp-neutral) .overlay {
-  background-color: var(--tag-neutral-bg-color);
-  opacity: 0.6;
 }
 
 :host(.wpp-disabled) {

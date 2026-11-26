@@ -230,6 +230,9 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private iconEndCssClasses;
   private inputId;
   private labelId;
+  private messageId;
+  private validationMessageId;
+  private getDescribedBy;
   private getInputType;
   private renderInput;
   private renderSearchIconOrSpinner;

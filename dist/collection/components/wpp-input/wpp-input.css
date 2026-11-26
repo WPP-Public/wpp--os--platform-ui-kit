@@ -247,6 +247,9 @@ input {
 input[type=search]::-webkit-search-cancel-button {
   display: none;
 }
+input[type=password]:not(:placeholder-shown) {
+  font-kerning: none;
+}
 input .loading {
   pointer-events: none;
 }

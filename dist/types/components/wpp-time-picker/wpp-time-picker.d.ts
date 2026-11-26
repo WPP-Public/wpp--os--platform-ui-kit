@@ -8,10 +8,12 @@ export declare class WppTimePicker {
   private previousInputValue;
   private readonly popupId;
   private readonly inputId;
+  private readonly messageId;
   private isDestroyed;
   private focusItemTimer?;
   private selectionFromKeyboard;
   private restoreFocusOnHidden;
+  private isFocusFromKeyboard;
   private scrollTimer?;
   private hasChangedHours;
   private hasChangedMinutes;

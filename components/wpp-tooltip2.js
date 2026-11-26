@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { m as menuListConfig, c as isEqual_1 } from './menuListConfig.js';
+import { c as isEqual_1, m as menuListConfig } from './menuListConfig.js';
 import { Z as Z_INDEX } from './consts.js';
-import { w as getHighestContainerInDOM, E as isWppElement } from './utils.js';
+import { x as getHighestContainerInDOM, G as isWppElement } from './utils.js';
 import { g as getDeepActiveElement } from './dialog-focus.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { t as themeObserver } from './theme-observer.js';
@@ -43,102 +43,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     this.__attachShadow();
     this.themeSubscription = themeSubscriptionController(() => (this.config.allowHTML ? this.customContentEl : this.contentEl), () => this.updateTippyProps({ arrow: this.arrowSVG() }));
     this.handleSlotChange = () => {
-      if (this.slotRef) {
-        // Get all assigned elements from the slot
-        const slot = this.slotRef;
-        const assignedElements = slot.assignedElements();
-        this.anchorRef = assignedElements[0];
-      }
-    };
-    this.updateTippyProps = (props) => {
-      this.tippyInstance?.setProps({ ...props });
-      this.tippyInstance?.popperInstance?.update();
-    };
-    this.arrowSVG = () => {
-      const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      arrowSVG.setAttribute('width', '8');
-      arrowSVG.setAttribute('height', '4');
-      const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      arrowPath.setAttribute('fill', this.getArrowBgColor());
-      arrowPath.setAttribute('fill-rule', 'evenodd');
-      arrowPath.setAttribute('clip-rule', 'evenodd');
-      arrowPath.setAttribute('d', 'M3.29289 0.707106C3.68342 0.316582 4.31658 0.316583 4.70711 0.707107L8 4L0 4L3.29289 0.707106Z');
-      arrowSVG.appendChild(arrowPath);
-      return arrowSVG;
-    };
-    this.createTippyInstance = () => {
-      if (this.disabled) {
-        return;
-      }
-      const content = this.config.allowHTML ? this.customContentEl : this.contentEl;
-      if (this.anchorRef && content) {
-        this.tippyInstance = menuListConfig({
-          anchor: this.anchorRef,
-          content,
-          triggerElementWidth: false,
-          arrow: this.arrowSVG(),
-          hideOnEsc: true,
-          aria: {
-            expanded: undefined,
-          },
-          ...defaultTooltipConfig,
-          ...this.config,
-          // Duration and Delay are not configurable,
-          duration: [150, 100],
-          delay: [500, 30],
-          onMount(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              referenceElement.ariaProps = {
-                ...referenceElement.ariaProps,
-                describedby: `tippy-${instance.id}`,
-              };
-            }
-            else {
-              referenceElement.setAttribute('aria-describedby', `tippy-${instance.id}`);
-            }
-          },
-          onHide(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              const { describedby, ...restProps } = referenceElement.ariaProps;
-              referenceElement.ariaProps = restProps;
-            }
-            else {
-              referenceElement.removeAttribute('aria-describedby');
-            }
-          },
-          onShow: (instance) => {
-            if (this.isFocusedWithPointer(instance.reference))
-              return false;
-            if (this.dropdownWidth !== 'auto') {
-              instance.popper.style.width = this.dropdownWidth;
-              instance.popper.style.maxWidth = this.dropdownWidth;
-            }
-            else {
-              instance.popper.style.maxWidth = '350px';
-            }
-            if (this.config.onShow) {
-              return this.config.onShow(instance);
-            }
-          },
-          popperOptions: {
-            strategy: 'fixed',
-            ...(this.config.popperOptions || {}),
-            modifiers: [
-              {
-                name: 'autoUpdate',
-                enabled: true,
-              },
-              ...(this.config.popperOptions?.modifiers || []),
-            ],
-          },
-        });
-      }
+      this.anchorRef = this.slotRef?.assignedElements()[0];
     };
     /**
      * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
@@ -182,7 +87,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
   }
   updateConfig(newConfig, oldConfig) {
     if (!isEqual_1(newConfig, oldConfig)) {
-      this.config = newConfig;
       this.tippyInstance?.setProps(newConfig);
     }
   }
@@ -201,25 +105,35 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
       });
     }
   }
+  updateAnchorDescription() {
+    this.describeAnchor();
+  }
   handleDisabledChange(newDisabled) {
     if (newDisabled) {
+      clearTimeout(this.creationTimer);
+      this.creationTimer = undefined;
       if (this.tippyInstance) {
         this.tippyInstance.destroy();
         this.tippyInstance = undefined;
       }
+      this.describeAnchor();
     }
-    else {
+    else if (this.host.isConnected) {
       this.createTippyInstance();
     }
   }
   componentDidLoad() {
     this.themeSubscription.start();
-    setTimeout(() => {
-      this.createTippyInstance();
-      this.hidden = false;
+    this.handleSlotChange();
+    const hostElement = this.host;
+    this.creationTimer = setTimeout(() => {
+      if (hostElement.isConnected) {
+        this.creationTimer = undefined;
+        this.createTippyInstance();
+      }
     }, 0);
     if (this.config.allowHTML) {
-      const content = this.host.querySelector('[slot="tooltip-content"]');
+      const content = hostElement.querySelector('[slot="tooltip-content"]');
       if (content && this.customContentEl) {
         this.customContentEl.appendChild(content);
       }
@@ -227,16 +141,122 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
-    this.tippyInstance?.destroy();
+    clearTimeout(this.creationTimer);
+    this.creationTimer = undefined;
+    if (this.tippyInstance) {
+      this.tippyInstance.destroy();
+      this.tippyInstance = undefined;
+    }
   }
   connectedCallback() {
     this.themeSubscription.start();
-    this.tippyInstance?.setProps({
-      arrow: this.arrowSVG(),
-    });
-    if (this.tippyInstance?.state.isDestroyed) {
+    if (this.tippyInstance && !this.tippyInstance.state?.isDestroyed) {
+      this.tippyInstance.setProps({
+        arrow: this.arrowSVG(),
+      });
+    }
+    if (!this.tippyInstance || this.tippyInstance.state?.isDestroyed) {
       this.createTippyInstance();
     }
+  }
+  updateTippyProps(props) {
+    this.tippyInstance?.setProps({ ...props });
+    this.tippyInstance?.popperInstance?.update();
+  }
+  arrowSVG() {
+    const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    arrowSVG.setAttribute('width', '8');
+    arrowSVG.setAttribute('height', '4');
+    const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    arrowPath.setAttribute('fill', this.getArrowBgColor());
+    arrowPath.setAttribute('fill-rule', 'evenodd');
+    arrowPath.setAttribute('clip-rule', 'evenodd');
+    arrowPath.setAttribute('d', 'M3.29289 0.707106C3.68342 0.316582 4.31658 0.316583 4.70711 0.707107L8 4L0 4L3.29289 0.707106Z');
+    arrowSVG.appendChild(arrowPath);
+    return arrowSVG;
+  }
+  createTippyInstance() {
+    if (!this.host.isConnected || this.disabled || (this.tippyInstance && !this.tippyInstance.state.isDestroyed)) {
+      return;
+    }
+    const config = this.config;
+    const content = config.allowHTML ? this.customContentEl : this.contentEl;
+    if (this.anchorRef && content) {
+      this.tippyInstance = menuListConfig({
+        anchor: this.anchorRef,
+        content,
+        triggerElementWidth: false,
+        arrow: this.arrowSVG(),
+        hideOnEsc: true,
+        aria: {
+          expanded: undefined,
+        },
+        ...defaultTooltipConfig,
+        ...config,
+        // Duration and Delay are not configurable,
+        duration: [150, 100],
+        delay: [500, 30],
+        onTrigger: (instance, event) => {
+          // A dev re-rendering the trigger's `ariaProps` replaces the description, so it is put back on every trigger
+          this.describeAnchor();
+          config.onTrigger?.(instance, event);
+        },
+        onShow: (instance) => {
+          if (this.isFocusedWithPointer(instance.reference))
+            return false;
+          if (this.dropdownWidth !== 'auto') {
+            instance.popper.style.width = this.dropdownWidth;
+            instance.popper.style.maxWidth = this.dropdownWidth;
+          }
+          else {
+            instance.popper.style.maxWidth = '350px';
+          }
+          if (config.onShow) {
+            return config.onShow(instance);
+          }
+        },
+        popperOptions: {
+          strategy: 'fixed',
+          ...(config.popperOptions || {}),
+          modifiers: [
+            {
+              name: 'autoUpdate',
+              enabled: true,
+            },
+            ...(config.popperOptions?.modifiers || []),
+          ],
+        },
+      });
+      this.hidden = false;
+      this.describeAnchor();
+    }
+  }
+  /**
+   * The trigger carries the tooltip's words as its description from the start, so a screen reader reads them as focus
+   * lands rather than after the show delay. It is a string rather than an `aria-describedby` to the popup: the popup
+   * only exists while it is shown, and an id never resolves from the control inside a `wpp-*` trigger's shadow root.
+   */
+  describeAnchor() {
+    const anchor = this.anchorRef;
+    if (!anchor)
+      return;
+    const description = this.tippyInstance && !this.disabled ? this.getDescription() : '';
+    if (isWppElement(anchor)) {
+      const { description: _previous, ...ariaProps } = anchor.ariaProps ?? {};
+      anchor.ariaProps = description ? { ...ariaProps, description } : ariaProps;
+    }
+    else if (description) {
+      anchor.setAttribute('aria-description', description);
+    }
+    else {
+      anchor.removeAttribute('aria-description');
+    }
+  }
+  getDescription() {
+    const text = this.config.allowHTML
+      ? this.customContentEl?.textContent
+      : [this.header, this.text, this.value].filter(Boolean).join(' ');
+    return (text ?? '').replace(/\s+/g, ' ').trim();
   }
   render() {
     // Use ariaProps.role if provided; otherwise for elements with aria-label,
@@ -244,20 +264,23 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-6-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    const config = this.config;
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !config.allowHTML ? (h("wpp-internal-tooltip-v4-7-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v4-6-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"],
     "theme": ["updateTheme"],
     "error": ["updateTheme"],
     "warning": ["updateTheme"],
-    "text": ["textChanged"],
+    "text": ["textChanged", "updateAnchorDescription"],
+    "header": ["updateAnchorDescription"],
+    "value": ["updateAnchorDescription"],
     "disabled": ["handleDisabledChange"]
   }; }
   static get style() { return wppTooltipCss; }
-}, [1, "wpp-tooltip", "wpp-tooltip-v4-6-0", {
+}, [1, "wpp-tooltip", "wpp-tooltip-v4-7-0", {
     "disabled": [4],
     "header": [1],
     "text": [1],
@@ -278,24 +301,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tooltip-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0"];
+  const components = ["wpp-tooltip-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

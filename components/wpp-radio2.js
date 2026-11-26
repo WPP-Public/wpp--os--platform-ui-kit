@@ -25,6 +25,10 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
     this.onClick = () => {
       if (this.disabled)
         return;
+      this.select();
+    };
+    // Shared by pointer clicks and Space/Enter, so the radio group hears about keyboard selection too.
+    this.select = () => {
       this.checked = true;
       this.wppChange.emit({
         value: this.value,
@@ -54,7 +58,9 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
         this.host.dispatchEvent(clickEvent);
         this.isPressed = true;
-        this.checked = true;
+        // The click above is dispatched on the host and never reaches the label's click handler, so the
+        // keyboard used to set `checked` here directly, without wppChange or wppClickRadio.
+        this.select();
       }
     };
     this.onKeyUp = (event) => {
@@ -100,6 +106,7 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
     this.internalState = '';
     this.index = 0;
     this.decorative = false;
+    this.isGroupItem = false;
   }
   /**
    * Method that sets focus on the native input.
@@ -123,9 +130,14 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
   }
   render() {
     if (this.decorative) {
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
     }
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
+    // Each radio's input sits in its own shadow root, so a required radio in a group is a one-option required group
+    // of its own: every unchecked one reports itself invalid even once a sibling is checked.
+    const isRequired = this.required && !this.isGroupItem;
+    // The label names the input through its id, so a radio without a name still needs one
+    const inputId = this.name || 'wpp-radio';
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: inputId, disabled: this.disabled, optional: !this.required && !this.isGroupItem, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
         ...{
           onCreate: (instance) => {
             this.tippyInstance = instance;
@@ -133,12 +145,12 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
           tabIndex: -1,
         },
         ...this.labelTooltipConfig,
-      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
+      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: isRequired, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-required": isRequired.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
   }
-  static get registryIs() { return "wpp-radio-v4-6-0"; }
+  static get registryIs() { return "wpp-radio-v4-7-0"; }
   get host() { return this; }
   static get style() { return wppRadioCss; }
-}, [1, "wpp-radio", "wpp-radio-v4-6-0", {
+}, [1, "wpp-radio", "wpp-radio-v4-7-0", {
     "name": [1],
     "value": [1032],
     "checked": [1540],
@@ -152,6 +164,7 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
     "internalState": [1, "internal-state"],
     "index": [2],
     "decorative": [4],
+    "isGroupItem": [4, "is-group-item"],
     "focusType": [32],
     "isPressed": [32],
     "setFocus": [64]
@@ -160,44 +173,44 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-radio-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-radio-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-radio-v4-6-0":
+    case "wpp-radio-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRadio);
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

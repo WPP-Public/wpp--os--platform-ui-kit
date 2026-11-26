@@ -31,8 +31,12 @@ const meta = {
       control: 'object',
       description: 'Configuration for the control panel',
       table: {
-        type: { summary: '{ autoplay: boolean, loop: boolean, mute: boolean, fullscreen: boolean }' },
-        defaultValue: { summary: '{ autoplay: false, loop: true, mute: false, fullscreen: false }' },
+        type: {
+          summary: '{ showFullscreenButton?: boolean, showVolumeButton?: boolean, autoplay?: boolean, loop?: boolean }',
+        },
+        defaultValue: {
+          summary: '{ showFullscreenButton: true, showVolumeButton: true, autoplay: false, loop: false }',
+        },
       },
     },
   },
@@ -40,12 +44,12 @@ const meta = {
 export default meta;
 export const Default = {
   render: args => html `
-    <wpp-video-player-v4-6-0
+    <wpp-video-player-v4-7-0
       .src=${args.src}
       .thumbnail=${args.thumbnail}
       .size=${args.size}
       .controlPanelConfig=${args.controlPanelConfig}
-    ></wpp-video-player-v4-6-0>
+    ></wpp-video-player-v4-7-0>
   `,
   args: {
     src: 'https://www.w3schools.com/html/mov_bbb.mp4',

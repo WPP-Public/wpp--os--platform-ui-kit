@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps, FOCUS_TYPE, InputMessageTypes, DropdownConfig } from '../../types/common';
-import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from './types';
+import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig, CounterLocales } from './types';
 /**
  * @part input - Counter input element
  * @part label - Label text element
@@ -17,6 +17,7 @@ export declare class WppCounter {
   formattedValue: string;
   focusType: FOCUS_TYPE;
   currentFocused: 'decrease' | 'input' | 'increase' | null;
+  valueAnnouncement: string;
   /**
    * Defines the counter name.
    */
@@ -72,6 +73,10 @@ export declare class WppCounter {
    */
   readonly ariaProps: AriaProps;
   /**
+   * Localised accessible names for the buttons and for the value field when it has no label.
+   */
+  readonly locales: Partial<CounterLocales>;
+  /**
    * Defines the counter format number.
    */
   readonly format: CounterFormat;
@@ -122,6 +127,9 @@ export declare class WppCounter {
   private addStepToValue;
   private increaseValue;
   private decreaseValue;
+  private get _locales();
+  private keepFocusAtLimit;
+  private announceValue;
   private counterWrapperCssClasses;
   private decreaseWrapperCssClasses;
   private increaseWrapperCssClasses;

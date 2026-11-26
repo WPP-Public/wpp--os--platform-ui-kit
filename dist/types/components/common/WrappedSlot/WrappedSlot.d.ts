@@ -8,6 +8,7 @@ interface Props extends JSXBase.SlotAttributes {
   tabIndex?: number;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  'aria-description'?: string;
   title?: string;
   onBlur?: (event: FocusEvent) => void;
   onKeyUp?: (event: KeyboardEvent) => void;

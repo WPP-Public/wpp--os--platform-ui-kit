@@ -337,6 +337,13 @@ export declare class WppChatInput {
   private scrollToAttachment;
   private displayToast;
   private handleSend;
+  /**
+   * Use this, not a plain assignment, whenever the new value doesn't come from the textarea itself (send, `textValue`, speech).
+   * The re-render waits a frame and Stencil only writes the textarea when the value differs from the last render,
+   * so a reset like typed "/mc" → '' before that frame leaves "/mc" on screen. `handleInput` reads the textarea and
+   * `componentWillLoad` runs before it exists, so a plain assignment is fine there.
+   */
+  private setInternalValue;
   private handleStop;
   private handlePaste;
   /**

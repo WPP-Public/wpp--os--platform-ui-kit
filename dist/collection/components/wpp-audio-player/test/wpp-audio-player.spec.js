@@ -1,6 +1,7 @@
 import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { FOCUS_TYPE } from '../../../types/common';
+import * as dialogFocus from '../../../utils/dialog-focus';
 import { WppAudioPlayer } from '../wpp-audio-player';
 import { AUDIO_SKIP_TIME_VALUE, DEFAULT_PLAYBACK_RATES, LOCALES_DEFAULTS, VOLUME_SKIP_VALUE } from '../const';
 const EVENT_NAMES = [
@@ -48,7 +49,7 @@ const createKeyEvent = (key, init = {}) => ({
 const flushPromises = () => new Promise(resolve => setTimeout(resolve, 0));
 const renderPlayer = (props = {}) => newSpecPage({
   components: [WppAudioPlayer],
-  template: () => h("wpp-audio-player-v4-6-0", { src: "track.mp3", ...props }),
+  template: () => h("wpp-audio-player-v4-7-0", { src: "track.mp3", ...props }),
 });
 const query = (page, selector) => page.root?.shadowRoot?.querySelector(selector);
 const queryAll = (page, selector) => Array.from(page.root?.shadowRoot?.querySelectorAll(selector) ?? []);
@@ -467,19 +468,57 @@ describe('wpp-audio-player', () => {
       expect(instance.isScrubbing).toBe(true);
       expect(removeListener).not.toHaveBeenCalled();
     });
-    it('applies a valid speed from the pills and closes the popover, ignoring anything else', () => {
+    it('applies a valid speed from the pills, ignoring anything else, without closing the popover', () => {
       const { player } = createPlayer();
       player.playbackRatePopoverRef = { closePopover: jest.fn() };
       player.handlePlaybackRateChange({ detail: { value: 1.5 } });
       expect(player.playbackRate).toBe(1.5);
-      expect(player.playbackRatePopoverRef.closePopover).toHaveBeenCalledTimes(1);
       player.handlePlaybackRateChange({ detail: { value: 'fast' } });
       expect(player.playbackRate).toBe(1.5);
-      expect(player.playbackRatePopoverRef.closePopover).toHaveBeenCalledTimes(1);
+      // Arrow keys change the speed too: the menu closes on a pick (click, Space / Enter), not on every change.
+      expect(player.playbackRatePopoverRef.closePopover).not.toHaveBeenCalled();
       // Still applied before the popover has rendered.
       player.playbackRatePopoverRef = undefined;
       player.handlePlaybackRateChange({ detail: { value: 2 } });
       expect(player.playbackRate).toBe(2);
+    });
+    it.each([
+      { key: ' ', isClosed: true },
+      { key: 'Enter', isClosed: true },
+      { key: 'ArrowRight', isClosed: false },
+      { key: 'ArrowLeft', isClosed: false },
+      { key: 'ArrowUp', isClosed: false },
+      { key: 'ArrowDown', isClosed: false },
+    ])('`$key` on the speed pills closes the popover: $isClosed', async ({ key, isClosed }) => {
+      const page = await renderPlayer();
+      page.rootInstance.playbackRatePopoverRef = { closePopover: jest.fn() };
+      query(page, 'wpp-pill-group').dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      expect(page.rootInstance.playbackRatePopoverRef.closePopover).toHaveBeenCalledTimes(isClosed ? 1 : 0);
+    });
+    it('a click on the speed pills closes the popover', async () => {
+      const page = await renderPlayer();
+      page.rootInstance.playbackRatePopoverRef = { closePopover: jest.fn() };
+      query(page, 'wpp-pill-group').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(page.rootInstance.playbackRatePopoverRef.closePopover).toHaveBeenCalledTimes(1);
+    });
+    describe('speed button tooltip', () => {
+      const tippyInstance = {};
+      const mockFocusedElement = (isFocusVisible) => jest
+        .spyOn(dialogFocus, 'getDeepActiveElement')
+        .mockReturnValue({ matches: (selector) => selector === ':focus-visible' && isFocusVisible });
+      it('opens for keyboard focus', () => {
+        const { player } = createPlayer();
+        mockFocusedElement(true);
+        player.speedTooltipConfig.onTrigger(tippyInstance, new FocusEvent('focus'));
+        expect(player.speedTooltipConfig.onShow(tippyInstance)).not.toBe(false);
+      });
+      it('does not open when focus is handed back after a mouse pick, but opens the next time', () => {
+        const { player } = createPlayer();
+        mockFocusedElement(false);
+        player.speedTooltipConfig.onTrigger(tippyInstance, new FocusEvent('focus'));
+        expect(player.speedTooltipConfig.onShow(tippyInstance)).toBe(false);
+        expect(player.speedTooltipConfig.onShow(tippyInstance)).not.toBe(false);
+      });
     });
     it('tracks the playback rate popover open state', async () => {
       const page = await renderPlayer();
@@ -782,8 +821,11 @@ describe('wpp-audio-player', () => {
     it('labels the times and hides the decorative layers', async () => {
       const page = await renderPlayer();
       const [current, total] = queryAll(page, '[role="timer"]');
-      expect(current.getAttribute('aria-label')).toBe(`${LOCALES_DEFAULTS.currentTimeAriaLabel} 00:00`);
-      expect(total.getAttribute('aria-label')).toBe(`${LOCALES_DEFAULTS.durationAriaLabel} 00:00`);
+      // The name identifies the timer; the time is its content, so the name does not change on
+      // every tick and the value is not announced twice. Matches wpp-video-player.
+      expect(current.getAttribute('aria-label')).toBe(LOCALES_DEFAULTS.currentTimeAriaLabel);
+      expect(total.getAttribute('aria-label')).toBe(LOCALES_DEFAULTS.durationAriaLabel);
+      expect(current.textContent).toBe('00:00');
       const decorative = ['.progress-rail', '.loading-progress'];
       decorative.forEach(selector => expect(query(page, selector).getAttribute('aria-hidden')).toBe('true'));
       queryAll(page, 'wpp-action-button [slot="icon-start"]').forEach(icon => expect(icon.getAttribute('aria-hidden')).toBe('true'));

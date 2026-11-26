@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
 import { n as normaliseProgress, d as getExtension, j as returnIconFromExtension, k as returnFileTypeLabel, L as LOCALES_DEFAULTS } from './utils3.js';
-import { y as mergeLocales } from './utils.js';
+import { z as mergeLocales } from './utils.js';
 import { d as defineCustomElement$k } from './wpp-action-button2.js';
 import { d as defineCustomElement$j } from './wpp-icon-cross2.js';
 import { d as defineCustomElement$i } from './wpp-icon-database2.js';
@@ -37,7 +37,7 @@ var maxSize;
   maxSize[maxSize["MB"] = 1000000000] = "MB";
 })(maxSize || (maxSize = {}));
 
-const wppFileUploadItemCss = ":host{--fu-item-bg-color:var(--wpp-file-upload-item-bg-color, var(--wpp-grey-color-200));--fu-item-height:var(--wpp-file-upload-item-height, 32px);--fu-item-padding:var(--wpp-file-upload-item-padding, 8px 10px 8px 8px);--fu-item-percentage-margin:var(--wpp-file-upload-item-percentage-margin, 0 8px 0 0);--fu-item-border-radius:var(--wpp-file-upload-item-border-radius, var(--wpp-border-radius-m));--fu-item-thumbnail-border-radius:var(--wpp-file-upload-item-thumbnail-border-radius, var(--wpp-border-radius-xs));--fu-item-icon-wrapper-width:var(--wpp-file-upload-item-icon-wrapper-width, 24px);--fu-item-icon-wrapper-height:var(--wpp-file-upload-item-icon-wrapper-height, 24px);--fu-item-thumbnail-margin:var(--wpp-file-upload-item-thumbnail-margin, 0 8px 0 0);--fu-item-item-icon-margin:var(--wpp-file-upload-item-icon-margin, 0 2px 0 0);--fu-item-item-color:var(--wpp-file-upload-item-color, var(--wpp-grey-color-700));--fu-item-item-name-color:var(--wpp-file-upload-item-name-color, var(--wpp-grey-color-900));--fu-item-close-icon-color-hover:var(--wpp-file-upload-item-close-icon-color-hover, var(--wpp-icon-color-hover));--fu-item-close-icon-active-color:var(--wpp-file-upload-item-close-icon-active-color, var(--wpp-icon-color-active));--fu-item-close-icon-first-border-color-focus:var(\n    --wpp-file-upload-item-close-icon-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--fu-item-close-icon-second-border-color-focus:var(\n    --wpp-file-upload-item-close-icon-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--fu-item-close-icon-border-radius-focus:var(\n    --wpp-file-upload-item-close-icon-border-radius-focus,\n    var(--wpp-border-radius-xs)\n  );--fu-item-loading-margin:var(--wpp-file-upload-item-loading-margin, 0px 10px 0px 0px);--fu-item-error-color:var(--wpp-file-upload-item-error-color, var(--wpp-text-color-danger));--fu-item-bg-color-disabled:var(--wpp-file-upload-item-bg-color-disabled, var(--wpp-grey-color-200));--fu-item-text-color-disabled:var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled));--fu-item-chat-max-width:var(--wpp-fu-item-chat-max-width, 720px);--fu-item-chat-bg-color:var(--wpp-file-upload-item-chat-bg-color, var(--wpp-grey-color-100));--fu-item-chat-padding:var(--wpp-file-upload-item-chat-padding, 8px);--fu-item-chat-gap:var(--wpp-file-upload-item-chat-gap, 12px);--fu-item-chat-border-radius:var(--wpp-file-upload-item-chat-border-radius, var(--wpp-border-radius-l));--fu-item-chat-min-height:var(--wpp-file-upload-item-chat-min-height, 56px);--fu-item-chat-name-color:var(--wpp-file-upload-item-chat-name-color, var(--wpp-grey-color-1000));--fu-item-chat-subtitle-color:var(--wpp-file-upload-item-chat-subtitle-color, var(--wpp-grey-color-800));--fu-item-chat-subtitle-error-color:var(\n    --wpp-file-upload-item-chat-subtitle-error-color,\n    var(--wpp-danger-color-500)\n  );--fu-item-thumbnail-size:var(--wpp-file-upload-item-thumbnail-size, 40px);--fu-item-thumbnail-bg-color:var(--wpp-file-upload-item-thumbnail-bg-color, var(--wpp-grey-color-300));--fu-item-thumbnail-radius:var(--wpp-file-upload-item-chat-thumbnail-border-radius, var(--wpp-border-radius-m));--fu-item-thumbnail-icon-color:var(--wpp-file-upload-item-thumbnail-icon-color, var(--wpp-grey-color-800));--fu-item-thumbnail-error-bg-color:var(--wpp-file-upload-item-thumbnail-error-bg-color, var(--wpp-grey-color-300))}:host .wpp-tooltip{width:100%;overflow:hidden}:host .wpp-tooltip.computed{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-tooltip::part(anchor){position:relative;width:100%}.thumbnail-preview{width:100%;height:100%;border-radius:var(--fu-item-thumbnail-border-radius);-o-object-fit:cover;object-fit:cover}.error-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:20px;width:100%;-ms-flex-pack:justify;justify-content:space-between}.item-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;-ms-flex-wrap:wrap;flex-wrap:wrap;max-width:var(--fu-item-max-width);min-height:var(--fu-item-height);background-color:var(--fu-item-bg-color);padding:var(--fu-item-padding);border-radius:var(--fu-item-border-radius);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.item-wrapper.disabled{background-color:var(--fu-item-bg-color-disabled);color:var(--fu-item-text-color-disabled);cursor:not-allowed}.item-wrapper.disabled .name,.item-wrapper.disabled .loading{--wpp-typography-color:var(--fu-item-text-color-disabled)}.item-wrapper.disabled .wpp-icon{color:var(--wpp-icon-color-disabled);pointer-events:none}.block{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px;overflow:hidden;width:100%;min-width:0}.block.block-error{gap:0}.icon-wrapper{width:100%;max-width:var(--fu-item-icon-wrapper-width);height:var(--fu-item-icon-wrapper-height);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.extension-icon{display:-ms-flexbox;display:flex;margin:var(--fu-item-item-icon-margin)}.controls-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.percentage{color:var(--fu-item-item-color)}.loading{white-space:nowrap;color:var(--fu-item-item-color)}.error-message{margin-left:8px;white-space:nowrap;color:var(--fu-item-item-color)}.name{--wpp-typography-color:var(--fu-item-item-name-color);width:100%;white-space:nowrap;-ms-flex:1 1 auto;flex:1 1 auto;min-width:0;overflow:hidden;display:block}.name::part(typography){text-overflow:initial}.measure{position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0;pointer-events:none}.error{-ms-flex:1;flex:1;margin:0}.content-wrapper{width:100%;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:20px;min-width:0}.cross-icon{cursor:pointer;-webkit-transition:width 0.2s ease-in-out, height 0.2s ease-in-out;transition:width 0.2s ease-in-out, height 0.2s ease-in-out}.cross-icon:hover,.cross-icon.tab-focus{color:var(--fu-item-close-icon-color-hover)}.cross-icon:active,.cross-icon.pressed{color:var(--fu-item-close-icon-active-color)}.cross-icon:focus{outline:0}.cross-icon:focus-visible{border-radius:var(--fu-item-close-icon-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-item-close-icon-first-border-color-focus), 0 0 0 3px var(--fu-item-close-icon-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-item-close-icon-first-border-color-focus), 0 0 0 3px var(--fu-item-close-icon-second-border-color-focus)}.inline-message-error::part(message-block){font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--fu-item-error-color)}:host(.variant-chat){display:block}:host(.variant-chat) .item-wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;gap:var(--fu-item-chat-gap);-webkit-box-sizing:border-box;box-sizing:border-box;min-height:var(--fu-item-chat-min-height);max-width:var(--fu-item-chat-max-width);padding:var(--fu-item-chat-padding);background-color:var(--fu-item-chat-bg-color);border-radius:var(--fu-item-chat-border-radius);font-size:var(--wpp-typography-xs-midi-font-size, 12px);line-height:var(--wpp-typography-xs-midi-line-height, 20px);font-weight:var(--wpp-typography-xs-midi-font-weight, 500);color:var(--wpp-typography-xs-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-midi-letter-spacing, 0)}:host(.variant-chat) .item-wrapper.disabled{background-color:var(--fu-item-bg-color-disabled)}:host(.variant-chat) .thumbnail{display:-ms-flexbox;display:flex;-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--fu-item-thumbnail-size);height:var(--fu-item-thumbnail-size);overflow:hidden;--wpp-icon-color:var(--fu-item-thumbnail-icon-color);color:var(--fu-item-thumbnail-icon-color);background-color:var(--fu-item-thumbnail-bg-color);border-radius:var(--fu-item-thumbnail-radius)}:host(.variant-chat) .thumbnail.error{background-color:var(--fu-item-thumbnail-error-bg-color)}:host(.variant-chat) .thumbnail-image{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}:host(.variant-chat) .details{display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-direction:column;flex-direction:column;min-width:0;overflow:hidden}:host(.variant-chat) .name{width:100%;overflow:hidden;white-space:nowrap}:host(.variant-chat) .name::part(typography){color:var(--fu-item-chat-name-color);text-overflow:ellipsis}:host(.variant-chat) .subtitle{width:100%;min-width:0;overflow:hidden;white-space:nowrap}:host(.variant-chat) .subtitle::part(typography){display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--fu-item-chat-subtitle-color)}:host(.variant-chat) .subtitle.subtitle-error::part(typography){color:var(--fu-item-chat-subtitle-error-color)}:host(.variant-chat) .cross-icon{-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-item-align:start;align-self:flex-start;opacity:0;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}:host(.variant-chat:hover) .cross-icon,:host(.variant-chat) .cross-icon:focus-visible{opacity:1}";
+const wppFileUploadItemCss = ":host{--fu-item-bg-color:var(--wpp-file-upload-item-bg-color, var(--wpp-grey-color-200));--fu-item-height:var(--wpp-file-upload-item-height, 32px);--fu-item-padding:var(--wpp-file-upload-item-padding, 8px 10px 8px 8px);--fu-item-percentage-margin:var(--wpp-file-upload-item-percentage-margin, 0 8px 0 0);--fu-item-border-radius:var(--wpp-file-upload-item-border-radius, var(--wpp-border-radius-m));--fu-item-thumbnail-border-radius:var(--wpp-file-upload-item-thumbnail-border-radius, var(--wpp-border-radius-xs));--fu-item-icon-wrapper-width:var(--wpp-file-upload-item-icon-wrapper-width, 24px);--fu-item-icon-wrapper-height:var(--wpp-file-upload-item-icon-wrapper-height, 24px);--fu-item-thumbnail-margin:var(--wpp-file-upload-item-thumbnail-margin, 0 8px 0 0);--fu-item-item-icon-margin:var(--wpp-file-upload-item-icon-margin, 0 2px 0 0);--fu-item-item-color:var(--wpp-file-upload-item-color, var(--wpp-grey-color-700));--fu-item-icon-color:var(--wpp-file-upload-item-icon-color, var(--wpp-grey-color-800));--fu-item-close-icon-color-hover:var(--wpp-file-upload-item-close-icon-color-hover, var(--wpp-icon-color-hover));--fu-item-close-icon-active-color:var(--wpp-file-upload-item-close-icon-active-color, var(--wpp-icon-color-active));--fu-item-close-icon-first-border-color-focus:var(\n    --wpp-file-upload-item-close-icon-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--fu-item-close-icon-second-border-color-focus:var(\n    --wpp-file-upload-item-close-icon-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--fu-item-close-icon-border-radius-focus:var(\n    --wpp-file-upload-item-close-icon-border-radius-focus,\n    var(--wpp-border-radius-xs)\n  );--fu-item-loading-margin:var(--wpp-file-upload-item-loading-margin, 0px 10px 0px 0px);--fu-item-error-color:var(--wpp-file-upload-item-error-color, var(--wpp-text-color-danger));--fu-item-bg-color-disabled:var(--wpp-file-upload-item-bg-color-disabled, var(--wpp-grey-color-200));--fu-item-text-color-disabled:var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled));--fu-item-chat-max-width:var(--wpp-fu-item-chat-max-width, 720px);--fu-item-chat-bg-color:var(--wpp-file-upload-item-chat-bg-color, var(--wpp-grey-color-100));--fu-item-chat-padding:var(--wpp-file-upload-item-chat-padding, 8px);--fu-item-chat-gap:var(--wpp-file-upload-item-chat-gap, 12px);--fu-item-chat-border-radius:var(--wpp-file-upload-item-chat-border-radius, var(--wpp-border-radius-l));--fu-item-chat-min-height:var(--wpp-file-upload-item-chat-min-height, 56px);--fu-item-chat-name-color:var(--wpp-file-upload-item-chat-name-color, var(--wpp-grey-color-1000));--fu-item-chat-subtitle-color:var(--wpp-file-upload-item-chat-subtitle-color, var(--wpp-grey-color-800));--fu-item-chat-subtitle-error-color:var(\n    --wpp-file-upload-item-chat-subtitle-error-color,\n    var(--wpp-danger-color-500)\n  );--fu-item-thumbnail-size:var(--wpp-file-upload-item-thumbnail-size, 40px);--fu-item-thumbnail-bg-color:var(--wpp-file-upload-item-thumbnail-bg-color, var(--wpp-grey-color-300));--fu-item-thumbnail-radius:var(--wpp-file-upload-item-chat-thumbnail-border-radius, var(--wpp-border-radius-m));--fu-item-thumbnail-icon-color:var(--wpp-file-upload-item-thumbnail-icon-color, var(--wpp-grey-color-800));--fu-item-thumbnail-error-bg-color:var(--wpp-file-upload-item-thumbnail-error-bg-color, var(--wpp-grey-color-300))}:host .wpp-tooltip{width:100%;overflow:hidden}:host .wpp-tooltip.computed{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-tooltip::part(anchor){position:relative;width:100%}.thumbnail-preview{width:100%;height:100%;border-radius:var(--fu-item-thumbnail-border-radius);-o-object-fit:cover;object-fit:cover}.error-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:20px;width:100%;-ms-flex-pack:justify;justify-content:space-between}.item-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;-ms-flex-wrap:wrap;flex-wrap:wrap;max-width:var(--fu-item-max-width);min-height:var(--fu-item-height);background-color:var(--fu-item-bg-color);padding:var(--fu-item-padding);border-radius:var(--fu-item-border-radius);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.item-wrapper.disabled{background-color:var(--fu-item-bg-color-disabled);color:var(--fu-item-text-color-disabled);cursor:not-allowed}.item-wrapper.disabled .loading{color:var(--fu-item-text-color-disabled)}.item-wrapper.disabled .wpp-icon{color:var(--wpp-icon-color-disabled);pointer-events:none}.block{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px;overflow:hidden;width:100%;min-width:0}.block.block-error{gap:0}.icon-wrapper{width:100%;max-width:var(--fu-item-icon-wrapper-width);height:var(--fu-item-icon-wrapper-height);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;--wpp-icon-color:var(--fu-item-icon-color)}.extension-icon{display:-ms-flexbox;display:flex;margin:var(--fu-item-item-icon-margin)}.controls-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.percentage{color:var(--fu-item-item-color)}.loading{white-space:nowrap;color:var(--fu-item-item-color)}.error-message{margin-left:8px;white-space:nowrap;color:var(--fu-item-item-color)}.name{width:100%;white-space:nowrap;-ms-flex:1 1 auto;flex:1 1 auto;min-width:0;overflow:hidden;display:block}.name::part(typography){text-overflow:initial}.measure{position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0;pointer-events:none}.error{-ms-flex:1;flex:1;margin:0}.content-wrapper{width:100%;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:20px;min-width:0}.cross-icon{cursor:pointer;-webkit-transition:width 0.2s ease-in-out, height 0.2s ease-in-out;transition:width 0.2s ease-in-out, height 0.2s ease-in-out}.cross-icon:hover,.cross-icon.tab-focus{color:var(--fu-item-close-icon-color-hover)}.cross-icon:active,.cross-icon.pressed{color:var(--fu-item-close-icon-active-color)}.cross-icon:focus{outline:0}.cross-icon:focus-visible{border-radius:var(--fu-item-close-icon-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-item-close-icon-first-border-color-focus), 0 0 0 3px var(--fu-item-close-icon-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-item-close-icon-first-border-color-focus), 0 0 0 3px var(--fu-item-close-icon-second-border-color-focus)}.inline-message-error::part(message-block){font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--fu-item-error-color)}:host(.variant-chat){display:block}:host(.variant-chat) .item-wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;gap:var(--fu-item-chat-gap);-webkit-box-sizing:border-box;box-sizing:border-box;min-height:var(--fu-item-chat-min-height);max-width:var(--fu-item-chat-max-width);padding:var(--fu-item-chat-padding);background-color:var(--fu-item-chat-bg-color);border-radius:var(--fu-item-chat-border-radius);font-size:var(--wpp-typography-xs-midi-font-size, 12px);line-height:var(--wpp-typography-xs-midi-line-height, 20px);font-weight:var(--wpp-typography-xs-midi-font-weight, 500);color:var(--wpp-typography-xs-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-midi-letter-spacing, 0)}:host(.variant-chat) .item-wrapper.disabled{background-color:var(--fu-item-bg-color-disabled)}:host(.variant-chat) .thumbnail{display:-ms-flexbox;display:flex;-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--fu-item-thumbnail-size);height:var(--fu-item-thumbnail-size);overflow:hidden;--wpp-icon-color:var(--fu-item-thumbnail-icon-color);color:var(--fu-item-thumbnail-icon-color);background-color:var(--fu-item-thumbnail-bg-color);border-radius:var(--fu-item-thumbnail-radius)}:host(.variant-chat) .thumbnail.error{background-color:var(--fu-item-thumbnail-error-bg-color)}:host(.variant-chat) .thumbnail-image{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}:host(.variant-chat) .details{display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-direction:column;flex-direction:column;min-width:0;overflow:hidden}:host(.variant-chat) .name{width:100%;overflow:hidden;white-space:nowrap}:host(.variant-chat) .name::part(typography){color:var(--fu-item-chat-name-color);text-overflow:ellipsis}:host(.variant-chat) .subtitle{width:100%;min-width:0;overflow:hidden;white-space:nowrap}:host(.variant-chat) .subtitle::part(typography){display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--fu-item-chat-subtitle-color)}:host(.variant-chat) .subtitle.subtitle-error::part(typography){color:var(--fu-item-chat-subtitle-error-color)}:host(.variant-chat) .cross-icon{-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-item-align:start;align-self:flex-start;opacity:0;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}:host(.variant-chat:hover) .cross-icon,:host(.variant-chat) .cross-icon:focus-visible{opacity:1}";
 
 const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadItem extends HTMLElement {
   constructor() {
@@ -212,7 +212,7 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     };
     this.setCurrentIcon = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-6-0", null);
+        return h("wpp-spinner-v4-7-0", null);
       const { name } = this.file;
       if (this.isFileWithError())
         return null;
@@ -234,7 +234,7 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     this.setCurrentError = () => {
       if (this.isFileWithError()) {
         const currentError = this.getErrorMessage();
-        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-6-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
+        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-7-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-7-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
       }
       return null;
     };
@@ -281,6 +281,9 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     this.fileNameCssClasses = () => ({
       name: true,
     });
+    this.fileNameColor = () => this.file.disabled
+      ? 'var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled))'
+      : 'var(--wpp-file-upload-item-name-color, var(--wpp-grey-color-900))';
     this.hostCssClasses = () => ({
       'wpp-file-upload-item': true,
       'file-upload-item': true,
@@ -302,9 +305,9 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     };
     this.renderThumbnail = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-6-0", null);
+        return h("wpp-spinner-v4-7-0", null);
       if (this.isFileWithError())
-        return h("wpp-icon-error-v4-6-0", { class: "thumbnail-error-icon", "aria-hidden": "true" });
+        return h("wpp-icon-error-v4-7-0", { class: "thumbnail-error-icon", "aria-hidden": "true" });
       const previewUrl = this.thumbnailUrl ?? this.getImagePreviewUrl();
       if (previewUrl)
         return h("img", { src: previewUrl, alt: "", class: "thumbnail-image" });
@@ -329,7 +332,7 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
       'aria-valuenow': `${this.getDisplayProgress()}`,
     });
     this.renderProgress = () => (h("span", { class: "percentage", part: "percentage", ...this.progressAriaProps() }, this.getDisplayProgress(), "%"));
-    this.renderDeleteIcon = () => this.file.deletable !== false && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }));
+    this.renderDeleteIcon = () => this.file.deletable !== false && (h("wpp-icon-cross-v4-7-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }));
     this.thumbnailUrl = null;
     this.percentage = 0;
     this.total = 0;
@@ -441,13 +444,13 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
   }
   renderChatVariant() {
     const subtitle = this.getChatSubtitle();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, thumbnail, content, file-name, subtitle, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, h("div", { class: { thumbnail: true, error: this.isFileWithError(), loading: this.isFileLoading() }, part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-tooltip-v4-6-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, thumbnail, content, file-name, subtitle, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, h("div", { class: { thumbnail: true, error: this.isFileWithError(), loading: this.isFileLoading() }, part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-tooltip-v4-7-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-6-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "xs-midi", part: "file-name", title: this.file.name }, this.file?.name)), h("wpp-tooltip-v4-6-0", { text: subtitle, config: {
+      }, part: "tooltip" }, h("wpp-typography-v4-7-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "xs-midi", part: "file-name", title: this.file.name }, this.file?.name)), h("wpp-tooltip-v4-7-0", { text: subtitle, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           // Recompute truncation on demand so the guard is never stale
@@ -456,23 +459,23 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
           if (!this.isSubtitleTruncated)
             return false;
         },
-      } }, h("wpp-typography-v4-6-0", { ref: ref => (this.subtitleRef = ref), type: "xs-body", class: { subtitle: true, 'subtitle-error': this.isFileWithError() }, part: "subtitle", ...(this.isFileLoading() ? this.progressAriaProps() : {}) }, subtitle))), this.renderDeleteIcon()), h("wpp-typography-v4-6-0", { ref: ref => (this.measureRef = ref), type: "xs-midi", class: "measure", "aria-hidden": "true", role: "presentation" }), h("wpp-typography-v4-6-0", { ref: ref => (this.subtitleMeasureRef = ref), type: "xs-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      } }, h("wpp-typography-v4-7-0", { ref: ref => (this.subtitleRef = ref), type: "xs-body", class: { subtitle: true, 'subtitle-error': this.isFileWithError() }, part: "subtitle", ...(this.isFileLoading() ? this.progressAriaProps() : {}) }, subtitle))), this.renderDeleteIcon()), h("wpp-typography-v4-7-0", { ref: ref => (this.measureRef = ref), type: "xs-midi", class: "measure", "aria-hidden": "true", role: "presentation" }), h("wpp-typography-v4-7-0", { ref: ref => (this.subtitleMeasureRef = ref), type: "xs-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
   render() {
     if (this.variant === 'chat')
       return this.renderChatVariant();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-6-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-7-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-6-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.total, " ", this.measurementUnit)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && this.renderProgress(), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-6-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      }, part: "tooltip" }, h("wpp-typography-v4-7-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", color: this.fileNameColor(), part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.total, " ", this.measurementUnit)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && this.renderProgress(), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-7-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-7-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
-  static get registryIs() { return "wpp-file-upload-item-v4-6-0"; }
+  static get registryIs() { return "wpp-file-upload-item-v4-7-0"; }
   get host() { return this; }
   static get style() { return wppFileUploadItemCss; }
-}, [1, "wpp-file-upload-item", "wpp-file-upload-item-v4-6-0", {
+}, [1, "wpp-file-upload-item", "wpp-file-upload-item-v4-7-0", {
     "fileName": [1, "file-name"],
     "file": [1040],
     "format": [1],
@@ -493,109 +496,109 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-file-upload-item-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-database-v4-6-0", "wpp-icon-document-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-file-v4-6-0", "wpp-icon-file-zip-v4-6-0", "wpp-icon-image-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-music-v4-6-0", "wpp-icon-pitch-v4-6-0", "wpp-icon-spreadsheet-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-video-clip-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-file-upload-item-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-database-v4-7-0", "wpp-icon-document-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-file-v4-7-0", "wpp-icon-file-zip-v4-7-0", "wpp-icon-image-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-music-v4-7-0", "wpp-icon-pitch-v4-7-0", "wpp-icon-spreadsheet-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-video-clip-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-file-upload-item-v4-6-0":
+    case "wpp-file-upload-item-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFileUploadItem);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-database-v4-6-0":
+    case "wpp-icon-database-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-document-v4-6-0":
+    case "wpp-icon-document-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-file-v4-6-0":
+    case "wpp-icon-file-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-file-zip-v4-6-0":
+    case "wpp-icon-file-zip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-image-v4-6-0":
+    case "wpp-icon-image-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-music-v4-6-0":
+    case "wpp-icon-music-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-pitch-v4-6-0":
+    case "wpp-icon-pitch-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-6-0":
+    case "wpp-icon-spreadsheet-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-video-clip-v4-6-0":
+    case "wpp-icon-video-clip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

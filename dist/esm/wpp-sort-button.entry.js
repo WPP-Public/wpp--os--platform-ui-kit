@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-a0877c3d.js';
-import { D as getAriaProps } from './utils-49ce8daf.js';
+import { E as getAriaProps } from './utils-711e1d1b.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import './consts-744c144f.js';
 
@@ -28,6 +28,14 @@ const WppSortButton = class {
     this.onBlur = () => {
       this.focusType = FOCUS_TYPE.NONE;
       this.isPressed = false;
+    };
+    // The ring is a stateful class rather than `:focus-visible`, and blur clears it. Focus moved here by
+    // script after a key press, or handed back by another window, never sees a Tab keyup, so take the
+    // ring from what the browser itself decided.
+    this.onFocus = () => {
+      if (typeof this.buttonRef?.matches === 'function' && this.buttonRef.matches(':focus-visible')) {
+        this.focusType = FOCUS_TYPE.TAB;
+      }
     };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
@@ -68,9 +76,9 @@ const WppSortButton = class {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-sort-v4-6-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", ...this.validAriaProps, part: "button" }, h("wpp-icon-sort-v4-7-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-sort-button-v4-6-0"; }
+  static get registryIs() { return "wpp-sort-button-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

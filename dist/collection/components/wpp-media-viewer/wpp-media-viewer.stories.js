@@ -42,13 +42,13 @@ const meta = {
 export default meta;
 export const Default = {
   render: args => html `
-    <wpp-media-viewer-v4-6-0
+    <wpp-media-viewer-v4-7-0
       .src=${args.src}
       .size=${args.size}
       .navigationMode=${args.navigationMode}
       .controlPanelConfig=${args.controlPanelConfig}
       .maxFileSize=${args.maxFileSize}
-    ></wpp-media-viewer-v4-6-0>
+    ></wpp-media-viewer-v4-7-0>
   `,
   args: {
     src: SAMPLE_MODEL,

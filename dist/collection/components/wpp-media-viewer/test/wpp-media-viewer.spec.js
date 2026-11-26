@@ -175,13 +175,13 @@ const resolveLoad = async (page, index = mockEngine.pendingLoads.length - 1, mai
   mockEngine.pendingLoads[index].callbacks.onModelFinished(loadResult(mainFile), {});
   await page.waitForChanges();
 };
-const renderViewer = async (template = () => h("wpp-media-viewer-v4-6-0", null)) => {
+const renderViewer = async (template = () => h("wpp-media-viewer-v4-7-0", null)) => {
   const page = await newSpecPage({ components: [WppMediaViewer], template });
   await flush(page);
   return page;
 };
 const loadedViewer = async () => {
-  const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/axes.glb" }));
+  const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/axes.glb" }));
   await resolveLoad(page);
   return page;
 };
@@ -287,7 +287,7 @@ describe('wpp-media-viewer', () => {
       expect(toolbar(page, LOCALES_DEFAULTS.uploadToolbarLabel).actionButtonsConfig[0].disabled).toBeFalsy();
     });
     it('stays empty from its first paint when it was given no source', async () => {
-      const page = await newSpecPage({ components: [WppMediaViewer], template: () => h("wpp-media-viewer-v4-6-0", null) });
+      const page = await newSpecPage({ components: [WppMediaViewer], template: () => h("wpp-media-viewer-v4-7-0", null) });
       expect(shadow(page).querySelector('wpp-skeleton')).toBeNull();
       expect(toolbars(page).length).toBe(3);
       await flush(page);
@@ -333,7 +333,7 @@ describe('wpp-media-viewer', () => {
       expect(zoomActions(page)[1].label).toBe('100%');
     });
     it('passes every URL of a multi-file model to the engine', async () => {
-      await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: ['/m/axes.gltf', '/m/axes.bin', '/m/checker.png'] }));
+      await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: ['/m/axes.gltf', '/m/axes.bin', '/m/checker.png'] }));
       expect(mockEngine.pendingLoads[0].inputFiles).toEqual(['/m/axes.gltf', '/m/axes.bin', '/m/checker.png']);
     });
     it('shows only the latest src when an earlier load finishes later', async () => {
@@ -580,7 +580,7 @@ describe('wpp-media-viewer', () => {
         .querySelector('.media-viewer')
         .dispatchEvent(new Event(inputEvent, { bubbles: true }));
       const failedViewer = async () => {
-        const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/axes.glb" }));
+        const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/axes.glb" }));
         mockEngine.pendingLoads[0].callbacks.onLoadError({ code: 2, message: null });
         await page.waitForChanges();
         return page;
@@ -808,7 +808,7 @@ describe('wpp-media-viewer', () => {
     it('reports the WebGL error when the browser has no WebGL, with nothing to retry', async () => {
       mockEngine.webglUnavailable = true;
       const onError = jest.fn();
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { onWppError: onError }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { onWppError: onError }));
       expect(onError.mock.calls[0][0].detail.reason).toBe('webgl-unavailable');
       expect(onError.mock.calls[0][0].detail.message).toBe(LOCALES_DEFAULTS.webglUnavailableError);
       expect(errorState(page).title).toBe(LOCALES_DEFAULTS.errorTitle);
@@ -835,7 +835,7 @@ describe('wpp-media-viewer', () => {
       [{ code: 3, message: 'Failed to load rhino3dm.' }, 'decoder-failed', LOCALES_DEFAULTS.decoderFailedError],
       [{ code: 3, message: 'Failed to load web-ifc.' }, 'decoder-failed', LOCALES_DEFAULTS.decoderFailedError],
     ])('maps engine error %o to %s with a localised message', async (importError, reason, message) => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/broken.glb" }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/broken.glb" }));
       const onError = jest.fn();
       page.root.addEventListener('wppError', onError);
       mockEngine.pendingLoads[0].callbacks.onLoadError(importError);
@@ -871,7 +871,7 @@ describe('wpp-media-viewer', () => {
       expect(description.getAttribute('color')).toBe('var(--wpp-grey-color-900)');
     });
     it('leaves upload reachable from the error state, so another file can be picked', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/broken.glb" }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/broken.glb" }));
       mockEngine.pendingLoads[0].callbacks.onLoadError({ code: 1, message: null });
       await page.waitForChanges();
       const upload = toolbar(page, LOCALES_DEFAULTS.uploadToolbarLabel).actionButtonsConfig[0];
@@ -882,7 +882,7 @@ describe('wpp-media-viewer', () => {
       expect(shadow(page).querySelector('.error-state')).toBeNull();
     });
     it('loads the same source again when Retry is pressed', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/axes.glb" }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/axes.glb" }));
       mockEngine.pendingLoads[0].callbacks.onLoadError({ code: 2, message: null });
       await page.waitForChanges();
       const loadsBefore = mockEngine.pendingLoads.length;
@@ -897,14 +897,14 @@ describe('wpp-media-viewer', () => {
     });
     it('translates the message it hands over with the error', async () => {
       const onError = jest.fn();
-      const page = await renderViewer(() => (h("wpp-media-viewer-v4-6-0", { src: "/models/broken.glb", locales: { failedToLoadError: 'Das Modell fehlt.' } })));
+      const page = await renderViewer(() => (h("wpp-media-viewer-v4-7-0", { src: "/models/broken.glb", locales: { failedToLoadError: 'Das Modell fehlt.' } })));
       page.root.addEventListener('wppError', onError);
       mockEngine.pendingLoads[0].callbacks.onLoadError({ code: 2, message: null });
       await page.waitForChanges();
       expect(onError.mock.calls[0][0].detail.message).toBe('Das Modell fehlt.');
     });
     it('renders every word of the error state from locales, the code wording included', async () => {
-      const page = await renderViewer(() => (h("wpp-media-viewer-v4-6-0", { src: "/models/broken.glb", locales: {
+      const page = await renderViewer(() => (h("wpp-media-viewer-v4-7-0", { src: "/models/broken.glb", locales: {
           errorTitle: 'Konnte nicht geladen werden',
           noImportableFileError: 'Dieser Dateityp kann nicht geöffnet werden.',
           errorWithCodeText: '{message} (Fehler {code})',
@@ -954,7 +954,7 @@ describe('wpp-media-viewer', () => {
       expect(liveRegion(page)).toBe('These files aren’t a supported type: notes.txt.');
     });
     it('rejects files over maxFileSize', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { maxFileSize: 0.000001 }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { maxFileSize: 0.000001 }));
       const onError = jest.fn();
       page.root.addEventListener('wppError', onError);
       await pickFiles(page, [new File(['a larger model'], 'big.glb')]);
@@ -975,19 +975,19 @@ describe('wpp-media-viewer', () => {
       expect(zoomActions(page).some(action => !action.disabled)).toBe(true);
     });
     it('limits the file picker to the accepted extensions', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { acceptedFileExtensions: ['glb', 'gltf'] }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { acceptedFileExtensions: ['glb', 'gltf'] }));
       expect(fileInput(page).getAttribute('accept')).toBe('.glb,.gltf');
       expect(fileInput(page).hasAttribute('multiple')).toBe(true);
     });
   });
   describe('control panel config', () => {
     it('hides the upload toolbar and file input', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { controlPanelConfig: { showUploadButton: false } }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { controlPanelConfig: { showUploadButton: false } }));
       expect(toolbar(page, LOCALES_DEFAULTS.uploadToolbarLabel)).toBeUndefined();
       expect(fileInput(page)).toBeNull();
     });
     it('renders no controls row when everything is hidden', async () => {
-      const page = await renderViewer(() => (h("wpp-media-viewer-v4-6-0", { controlPanelConfig: { showUploadButton: false, showZoomControls: false, showFullscreenButton: false } })));
+      const page = await renderViewer(() => (h("wpp-media-viewer-v4-7-0", { controlPanelConfig: { showUploadButton: false, showZoomControls: false, showFullscreenButton: false } })));
       expect(shadow(page).querySelector('.controls')).toBeNull();
     });
     it('hides the fullscreen toolbar where the browser does not allow fullscreen', async () => {
@@ -1023,16 +1023,16 @@ describe('wpp-media-viewer', () => {
       ]);
     });
     it('applies partial locale overrides only to those keys', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { locales: { zoomInButtonLabel: 'Agrandir' } }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { locales: { zoomInButtonLabel: 'Agrandir' } }));
       expect(zoomActions(page)[2].ariaProps.label).toBe('Agrandir');
       expect(zoomActions(page)[0].ariaProps.label).toBe(LOCALES_DEFAULTS.zoomOutButtonLabel);
     });
     it('lets ariaProps.label replace the 3D view name', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { ariaProps: { label: 'Chair model' } }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { ariaProps: { label: 'Chair model' } }));
       expect(viewport(page).getAttribute('aria-label')).toBe('Chair model');
     });
     it('keeps the toolbars, live region and messages outside the application role', async () => {
-      const page = await renderViewer(() => h("wpp-media-viewer-v4-6-0", { src: "/models/broken.glb" }));
+      const page = await renderViewer(() => h("wpp-media-viewer-v4-7-0", { src: "/models/broken.glb" }));
       mockEngine.pendingLoads[0].callbacks.onLoadError({ code: 1, message: null });
       await page.waitForChanges();
       const outside = [...toolbars(page), shadow(page).querySelector('[aria-live="polite"]')];

@@ -34,7 +34,7 @@ export default {
 export const Single = (args) => {
   const container = document.createElement('div');
   render(html `
-      <wpp-slider-v4-6-0
+      <wpp-slider-v4-7-0
         type="single"
         .name=${args.name}
         .value=${args.value}
@@ -49,7 +49,7 @@ export const Single = (args) => {
         .withValue=${args.withValue}
         .size=${args.size}
         .labelConfig=${args.labelConfig}
-      ></wpp-slider-v4-6-0>
+      ></wpp-slider-v4-7-0>
     `, container);
   return container;
 };
@@ -89,7 +89,7 @@ Single.args = {
   ],
   labelConfig: {
     icon: '',
-    text: '',
+    text: 'Single slider',
     description: '',
     locales: {
       optional: 'Optional',
@@ -98,7 +98,7 @@ Single.args = {
 };
 export const Range = (args) => {
   const container = document.createElement('div');
-  render(html `<wpp-slider-v4-6-0
+  render(html `<wpp-slider-v4-7-0
       type="range"
       .name=${args.name}
       .value=${args.value}
@@ -113,7 +113,7 @@ export const Range = (args) => {
       .withValue=${args.withValue}
       .size=${args.size}
       .labelConfig=${args.labelConfig}
-    ></wpp-slider-v4-6-0> `, container);
+    ></wpp-slider-v4-7-0> `, container);
   return container;
 };
 Range.args = {
@@ -131,14 +131,14 @@ Range.args = {
   size: 'm',
   labelConfig: {
     icon: '',
-    text: '',
+    text: 'Range slider',
     description: '',
     locales: {
       optional: 'Optional',
     },
   },
 };
-export const RangeWithInputsAndMask = (args) => html `<wpp-slider-v4-6-0
+export const RangeWithInputsAndMask = (args) => html `<wpp-slider-v4-7-0
     type="range"
     .name=${args.name}
     .value=${args.value}
@@ -155,7 +155,7 @@ export const RangeWithInputsAndMask = (args) => html `<wpp-slider-v4-6-0
     .size=${args.size}
     .labelConfig=${args.labelConfig}
     .maskOptions=${args.maskOptions}
-  ></wpp-slider-v4-6-0> `;
+  ></wpp-slider-v4-7-0> `;
 RangeWithInputsAndMask.args = {
   name: 'slider-range',
   value: [3, 5],
@@ -198,7 +198,7 @@ RangeWithInputsAndMask.args = {
 RangeWithInputsAndMask.parameters = {
   controls: { exclude: ['withInput', 'continuous', 'withValue'] },
 };
-export const MiddleRange = (args) => html `<wpp-slider-v4-6-0
+export const MiddleRange = (args) => html `<wpp-slider-v4-7-0
     type="middle-range"
     .name=${args.name}
     .value=${args.value}
@@ -212,7 +212,7 @@ export const MiddleRange = (args) => html `<wpp-slider-v4-6-0
     .size=${args.size}
     .labelConfig=${args.labelConfig}
     .maskOptions=${args.maskOptions}
-  ></wpp-slider-v4-6-0> `;
+  ></wpp-slider-v4-7-0> `;
 MiddleRange.args = {
   name: 'slider-range',
   value: 3,
@@ -242,7 +242,7 @@ MiddleRange.args = {
 MiddleRange.parameters = {
   controls: { exclude: ['inputWidth', 'continuous', 'withInput'] },
 };
-export const MiddleRangeContinuous = (args) => html `<wpp-slider-v4-6-0
+export const MiddleRangeContinuous = (args) => html `<wpp-slider-v4-7-0
     type="middle-range"
     .name=${args.name}
     .value=${args.value}
@@ -258,7 +258,7 @@ export const MiddleRangeContinuous = (args) => html `<wpp-slider-v4-6-0
     .size=${args.size}
     .labelConfig=${args.labelConfig}
     .maskOptions=${args.maskOptions}
-  ></wpp-slider-v4-6-0> `;
+  ></wpp-slider-v4-7-0> `;
 MiddleRangeContinuous.args = {
   name: 'slider-range',
   value: 3,

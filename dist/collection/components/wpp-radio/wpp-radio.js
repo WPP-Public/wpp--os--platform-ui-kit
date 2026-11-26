@@ -13,6 +13,10 @@ export class WppRadio {
     this.onClick = () => {
       if (this.disabled)
         return;
+      this.select();
+    };
+    // Shared by pointer clicks and Space/Enter, so the radio group hears about keyboard selection too.
+    this.select = () => {
       this.checked = true;
       this.wppChange.emit({
         value: this.value,
@@ -42,7 +46,9 @@ export class WppRadio {
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
         this.host.dispatchEvent(clickEvent);
         this.isPressed = true;
-        this.checked = true;
+        // The click above is dispatched on the host and never reaches the label's click handler, so the
+        // keyboard used to set `checked` here directly, without wppChange or wppClickRadio.
+        this.select();
       }
     };
     this.onKeyUp = (event) => {
@@ -88,6 +94,7 @@ export class WppRadio {
     this.internalState = '';
     this.index = 0;
     this.decorative = false;
+    this.isGroupItem = false;
   }
   /**
    * Method that sets focus on the native input.
@@ -111,9 +118,14 @@ export class WppRadio {
   }
   render() {
     if (this.decorative) {
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
     }
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
+    // Each radio's input sits in its own shadow root, so a required radio in a group is a one-option required group
+    // of its own: every unchecked one reports itself invalid even once a sibling is checked.
+    const isRequired = this.required && !this.isGroupItem;
+    // The label names the input through its id, so a radio without a name still needs one
+    const inputId = this.name || 'wpp-radio';
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: inputId, disabled: this.disabled, optional: !this.required && !this.isGroupItem, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
         ...{
           onCreate: (instance) => {
             this.tippyInstance = instance;
@@ -121,10 +133,10 @@ export class WppRadio {
           tabIndex: -1,
         },
         ...this.labelTooltipConfig,
-      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
+      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: isRequired, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-required": isRequired.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
   }
   static get is() { return "wpp-radio"; }
-  static get registryIs() { return "wpp-radio-v4-6-0"; }
+  static get registryIs() { return "wpp-radio-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -393,6 +405,27 @@ export class WppRadio {
           "text": "Create a component with role presentation"
         },
         "attribute": "decorative",
+        "reflect": false,
+        "defaultValue": "false"
+      },
+      "isGroupItem": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This prop is controlled by Radio Group"
+            }],
+          "text": "Hides the \"(Optional)\" marker because the surrounding group's label already carries it, and keeps `required`\noff the native input because the group, not each radio, is what is required."
+        },
+        "attribute": "is-group-item",
         "reflect": false,
         "defaultValue": "false"
       }

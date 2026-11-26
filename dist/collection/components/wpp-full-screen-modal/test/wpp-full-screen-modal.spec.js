@@ -3,6 +3,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppFullScreenModal } from '../wpp-full-screen-modal';
 import * as utils from '../../../utils/utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
+import * as dialogFocus from '../../../utils/dialog-focus';
 describe('wpp-full-screen-modal', () => {
   it('Should render default modal', async () => {
     const page = await newSpecPage({
@@ -35,7 +36,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -43,7 +44,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -58,7 +59,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -97,7 +98,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     it('Should render only 1 button in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppFullScreenModal],
-        template: () => (h("wpp-full-screen-modal-v4-6-0", { actionsConfig: {
+        template: () => (h("wpp-full-screen-modal-v4-7-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -112,7 +113,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     it('Should render 2 buttons in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppFullScreenModal],
-        template: () => (h("wpp-full-screen-modal-v4-6-0", { actionsConfig: {
+        template: () => (h("wpp-full-screen-modal-v4-7-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -131,11 +132,31 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     it('Should render the `actions` slot when there is no `actionsConfig` provided', async () => {
       const page = await newSpecPage({
         components: [WppFullScreenModal],
-        template: () => h("wpp-full-screen-modal-v4-6-0", null),
+        template: () => h("wpp-full-screen-modal-v4-7-0", null),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
     });
+  });
+});
+describe('wpp-full-screen-modal focus trap', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  it('wraps Tab around the dialog: the end sentinel focuses its first control and the start sentinel its last', async () => {
+    const focusDialogEdge = jest.spyOn(dialogFocus, 'focusDialogEdge').mockImplementation(() => { });
+    const page = await newSpecPage({
+      components: [WppFullScreenModal],
+      html: `<wpp-full-screen-modal open></wpp-full-screen-modal>`,
+    });
+    await page.waitForChanges();
+    const shadowRoot = page.root.shadowRoot;
+    const [startSentinel, endSentinel] = Array.from(shadowRoot.querySelectorAll('.focus-sentinel'));
+    const dialog = shadowRoot.querySelector('.full-screen-modal');
+    endSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'first');
+    startSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'last');
   });
 });

@@ -13,6 +13,7 @@ export default {
 export const LoadMore = () => 
 // TODO: src will be replaced with our own react dev environment soon
 html `<iframe
+    title="AG Grid table with load more"
     width="100%"
     allow="clipboard-write; clipboard-read"
     height="2000px"

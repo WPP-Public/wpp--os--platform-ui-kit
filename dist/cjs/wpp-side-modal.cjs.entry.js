@@ -3,10 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const timeoutManager = require('./timeout-manager-5ad93b8f.js');
-const dialogFocus = require('./dialog-focus-adf102b7.js');
-const WrappedSlot = require('./WrappedSlot-669e1c73.js');
+const dialogFocus = require('./dialog-focus-43202cdc.js');
+const WrappedSlot = require('./WrappedSlot-1f8b2d26.js');
 const types = require('./types-2185a602.js');
 const consts = require('./consts-d8f5ef98.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
@@ -135,7 +135,7 @@ const WppSideModal = class {
       if (!this.leftButtonConfig)
         return index.h("div", { class: "left-button-container" });
       const { label, icon, ...rest } = this.leftButtonConfig;
-      return (index.h("div", { class: "left-button-container" }, index.h("wpp-action-button-v4-6-0", { ...rest }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
+      return (index.h("div", { class: "left-button-container" }, index.h("wpp-action-button-v4-7-0", { ...rest }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
     };
     this.renderRightButtons = () => {
       // Render right buttons based on config.
@@ -143,14 +143,14 @@ const WppSideModal = class {
         return;
       return (index.h("div", { class: "right-button-container" }, this.rightButtonsConfig.map((rightButtonConfigItem) => {
         const { label, ...rest } = rightButtonConfigItem;
-        return (index.h("wpp-button-v4-6-0", { size: "m", ...rest }, label));
+        return (index.h("wpp-button-v4-7-0", { size: "m", ...rest }, label));
       })));
     };
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
-      // Idempotent: the sentinels, the open render and the transition all route through here, and
-      // pulling focus back to the container would undo whatever the user had reached inside.
+      // Idempotent: the open render and the transition both route through here, and pulling focus back to the
+      // container would undo whatever the user had reached inside.
       if (dialogFocus.isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
@@ -192,11 +192,11 @@ const WppSideModal = class {
       // `ariaLabel` has to be mapped onto `ariaProps`: wpp-action-button has no `ariaLabel`
       // prop, so spreading it left these icon-only buttons with no accessible name.
       const { icon, ariaLabel, ...rest } = button;
-      return (index.h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label: ariaLabel }, ...rest }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' })));
+      return (index.h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label: ariaLabel }, ...rest }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' })));
     })));
     this.renderBody = () => {
       const Tag = this.formConfig ? 'form' : 'div';
-      return (index.h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, index.h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, this.withBackButton ? (index.h("div", { class: "header-with-back-button", part: "header-with-back-button" }, index.h("wpp-action-button-v4-6-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, index.h("wpp-icon-chevron-v4-6-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })), index.h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), index.h("wpp-action-button-v4-6-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, index.h("wpp-icon-cross-v4-6-0", { slot: "icon-start", part: "icon-cross" })))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (index.h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
+      return (index.h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, index.h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, this.withBackButton ? (index.h("div", { class: "header-with-back-button", part: "header-with-back-button" }, index.h("wpp-action-button-v4-7-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, index.h("wpp-icon-chevron-v4-7-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })), index.h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), index.h("wpp-action-button-v4-7-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, index.h("wpp-icon-cross-v4-7-0", { slot: "icon-start", part: "icon-cross" })))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (index.h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
     };
     this.isShowContent = undefined;
     this.isReady = undefined;
@@ -346,9 +346,9 @@ const WppSideModal = class {
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--side-modal-scrollbar-gutter': `${utils.getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, this.backdropVisible && (index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-6-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, this.backdropVisible && (index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-7-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => dialogFocus.focusDialogEdge(this.dialogRef, 'last') }), this.renderBody(), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => dialogFocus.focusDialogEdge(this.dialogRef, 'first') }))), !this.backdropVisible && this.renderBody()));
   }
-  static get registryIs() { return "wpp-side-modal-v4-6-0"; }
+  static get registryIs() { return "wpp-side-modal-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"],

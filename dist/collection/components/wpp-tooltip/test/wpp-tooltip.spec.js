@@ -1,10 +1,51 @@
+import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppTooltip } from '../wpp-tooltip';
+import { WppTooltip as WppInternalTooltip } from '../components/wpp-internal-tooltip/wpp-internal-tooltip';
 import * as tooltipConfigModule from '../../../common/menuListConfig';
-import * as utils from '../../../utils/utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
 import * as dialogFocus from '../../../utils/dialog-focus';
+const createTooltipInstance = (reference = document.createElement('button'), id = 1) => ({
+  clearDelayTimeouts: jest.fn(),
+  destroy: jest.fn(),
+  disable: jest.fn(),
+  enable: jest.fn(),
+  hide: jest.fn(),
+  hideWithInteractivity: jest.fn(),
+  id,
+  plugins: [],
+  popper: document.createElement('div'),
+  popperInstance: null,
+  props: { ...jest.requireActual('tippy.js').default.defaultProps },
+  reference,
+  setContent: jest.fn(),
+  setProps: jest.fn(),
+  show: jest.fn(),
+  state: { isEnabled: true, isVisible: false, isDestroyed: false, isMounted: false, isShown: false },
+  unmount: jest.fn(),
+});
 describe('wpp-tooltip', () => {
+  it('does not nest a second tooltip role inside the tippy box for standard content', async () => {
+    const page = await newSpecPage({
+      components: [WppTooltip, WppInternalTooltip],
+      html: `<wpp-tooltip text="Tooltip"></wpp-tooltip>`,
+    });
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await page.waitForChanges();
+    // tippy already sets role="tooltip" on .tippy-box, which wraps this content
+    expect(page.root?.shadowRoot?.querySelector('wpp-internal-tooltip')?.hasAttribute('role')).toBe(false);
+  });
+  it('does not nest a second tooltip role inside the tippy box for custom content', async () => {
+    const page = await newSpecPage({
+      components: [WppTooltip],
+      html: `<wpp-tooltip></wpp-tooltip>`,
+    });
+    page.rootInstance.config = { allowHTML: true };
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('.tooltip-custom-content')?.hasAttribute('role')).toBe(false);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await page.waitForChanges();
+  });
   it('should render component', async () => {
     const page = await newSpecPage({
       components: [WppTooltip],
@@ -40,6 +81,86 @@ describe('wpp-tooltip', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  it.each([false, true])('keeps content hidden until instance creation with allowHTML=%s', async (allowHTML) => {
+    const factory = tooltipConfigModule.menuListConfig;
+    let hiddenDuringCreation;
+    const createTooltip = jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation(options => {
+      hiddenDuringCreation = page.rootInstance.hidden;
+      return Object.assign(factory(options), { destroy: jest.fn() });
+    });
+    const page = await newSpecPage({
+      components: [WppTooltip],
+      html: `<wpp-tooltip text="Tooltip"><button>Anchor</button></wpp-tooltip>`,
+    });
+    try {
+      if (!page.root) {
+        throw new Error('Expected tooltip host');
+      }
+      page.root.config = { allowHTML };
+      await page.waitForChanges();
+      expect(page.rootInstance.hidden).toBe(true);
+      expect(page.root.shadowRoot?.querySelector('.content-wrapper')?.classList.contains('hidden')).toBe(true);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(createTooltip).toHaveBeenCalledTimes(1);
+      expect(hiddenDuringCreation).toBe(true);
+      expect(page.rootInstance.hidden).toBe(false);
+      expect(page.root.shadowRoot?.querySelector('.content-wrapper')?.classList.contains('hidden')).toBe(false);
+      page.rootInstance.disconnectedCallback();
+    }
+    finally {
+      createTooltip.mockRestore();
+    }
+  });
+  it('uses the disabled prop for initial rendering and skips tooltip creation', async () => {
+    const createTooltip = jest.spyOn(tooltipConfigModule, 'menuListConfig');
+    try {
+      const page = await newSpecPage({
+        components: [WppTooltip],
+        html: `<wpp-tooltip disabled><button>Anchor</button></wpp-tooltip>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(page.root?.shadowRoot?.querySelector('.content-wrapper')?.classList.contains('hidden')).toBe(true);
+      expect(createTooltip).not.toHaveBeenCalled();
+    }
+    finally {
+      createTooltip.mockRestore();
+    }
+  });
+  it('cancels pending creation on disconnect and recreates once on reconnect', async () => {
+    const tooltipInstance = createTooltipInstance();
+    const createTooltip = jest.spyOn(tooltipConfigModule, 'menuListConfig').mockReturnValue(tooltipInstance);
+    try {
+      const page = await newSpecPage({
+        components: [WppTooltip],
+        html: `<wpp-tooltip><button>Anchor</button></wpp-tooltip>`,
+      });
+      page.rootInstance.disconnectedCallback();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(createTooltip).not.toHaveBeenCalled();
+      page.rootInstance.connectedCallback();
+      expect(createTooltip).toHaveBeenCalledTimes(1);
+      page.rootInstance.connectedCallback();
+      expect(createTooltip).toHaveBeenCalledTimes(1);
+      page.rootInstance.disconnectedCallback();
+    }
+    finally {
+      createTooltip.mockRestore();
+    }
+  });
+  it('reads custom HTML content as plain text', async () => {
+    const configSpy = jest
+      .spyOn(tooltipConfigModule, 'menuListConfig')
+      .mockImplementation(() => ({ destroy: jest.fn(), setProps: jest.fn(), state: { isDestroyed: false } }));
+    const page = await newSpecPage({
+      components: [WppTooltip],
+      template: () => (h("wpp-tooltip-v4-7-0", { config: { allowHTML: true } }, h("button", null, "Plan"), h("div", { slot: "tooltip-content" }, h("strong", null, "Bold"), " and ", h("em", null, "more")))),
+    });
+    // The instance is created on the next task, after the custom content has moved into the tooltip
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(page.body.querySelector('button')?.getAttribute('aria-description')).toBe('Bold and more');
+    configSpy.mockRestore();
   });
 });
 describe('wpp-tooltip full coverage', () => {
@@ -130,7 +251,7 @@ describe('wpp-tooltip full coverage', () => {
     instance['handleSlotChange']();
     expect(instance.anchorRef).toBeDefined();
   });
-  it('runs componentDidLoad and unhides tooltip', async () => {
+  it('runs componentDidLoad and keeps content hidden when no instance is created', async () => {
     const page = await newSpecPage({
       components: [WppTooltip],
       html: `<wpp-tooltip></wpp-tooltip>`,
@@ -140,7 +261,7 @@ describe('wpp-tooltip full coverage', () => {
     instance.componentDidLoad();
     jest.runAllTimers();
     expect(instance.createTippyInstance).toHaveBeenCalled();
-    expect(instance.hidden).toBe(false);
+    expect(instance.hidden).toBe(true);
   });
   it('recreates tooltip on connectedCallback if destroyed', async () => {
     const page = await newSpecPage({
@@ -191,92 +312,51 @@ describe('wpp-tooltip full coverage', () => {
     instance.createTippyInstance();
     expect(popper.style.maxWidth).toBe('350px');
   });
-  it('sets aria-describedby on mount and removes on hide', async () => {
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
-    });
-    const instance = page.rootInstance;
-    instance.anchorRef = document.createElement('div');
-    instance.customContentEl = document.createElement('div');
-    const ref = { ariaProps: {} };
-    jest.spyOn(utils, 'isWppElement').mockReturnValue(true);
-    jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation((config) => {
-      const fakeInstance = {
-        popper: {
-          style: {},
-        },
+  describe('describing the trigger', () => {
+    let configSpy;
+    // Renders a tooltip around `trigger` with tippy stubbed, so only the component's own wiring is under test
+    const renderTooltip = async (attrs, trigger) => {
+      configSpy = jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation(() => ({
         destroy: jest.fn(),
-        enable: jest.fn(),
-        disable: jest.fn(),
-        clearDelayTimeouts: jest.fn(),
+        setProps: jest.fn(),
         state: { isDestroyed: false },
-      };
-      config.onMount?.({ reference: ref, id: '123' });
-      config.onHide?.({ reference: ref });
-      return fakeInstance;
-    });
-    instance.createTippyInstance();
-    expect(ref.ariaProps.describedby).toBeUndefined();
-  });
-  it('handles onMount and onHide when reference is WPP element', async () => {
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
-    });
-    const instance = page.rootInstance;
-    const ref = {
-      ariaProps: {},
+      }));
+      const page = await newSpecPage({
+        components: [WppTooltip, WppInternalTooltip],
+        html: `<wpp-tooltip ${attrs}>${trigger}</wpp-tooltip>`,
+      });
+      await page.waitForChanges();
+      return page;
     };
-    jest.spyOn(utils, 'isWppElement').mockReturnValue(true);
-    jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation((config) => {
-      const fakeInstance = {
-        popper: {
-          style: {},
-        },
-        destroy: jest.fn(),
-        enable: jest.fn(),
-        disable: jest.fn(),
-        clearDelayTimeouts: jest.fn(),
-        state: { isDestroyed: false },
-      };
-      config.onMount?.({ reference: ref, id: '123' });
-      config.onHide?.({ reference: ref });
-      return fakeInstance;
+    afterEach(() => {
+      configSpy.mockRestore();
     });
-    instance.anchorRef = document.createElement('div');
-    instance.customContentEl = document.createElement('div');
-    instance.createTippyInstance();
-    expect(ref.ariaProps.describedby).toBeUndefined();
-  });
-  it('handles onMount and onHide when reference is NOT a WPP element', async () => {
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
+    it('gives a plain trigger the tooltip text as its description before the tooltip is shown', async () => {
+      const page = await renderTooltip('header="Price" text="Monthly total" value="$100"', '<button>Plan</button>');
+      const trigger = page.body.querySelector('button');
+      expect(trigger?.getAttribute('aria-description')).toBe('Price Monthly total $100');
+      expect(trigger?.hasAttribute('aria-describedby')).toBe(false);
     });
-    const instance = page.rootInstance;
-    const element = document.createElement('div');
-    const ref = document.createElement('div');
-    jest.spyOn(utils, 'isWppElement').mockReturnValue(false);
-    jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation((config) => {
-      const fakeInstance = {
-        popper: {
-          style: {},
-        },
-        destroy: jest.fn(),
-        enable: jest.fn(),
-        disable: jest.fn(),
-        clearDelayTimeouts: jest.fn(),
-        state: { isDestroyed: false },
-      };
-      config.onMount?.({ reference: ref, id: '123' });
-      config.onHide?.({ reference: ref });
-      return fakeInstance;
+    it('passes the description to a wpp trigger through ariaProps, keeping its other aria props', async () => {
+      const page = await renderTooltip('text="Deletes the file"', '<wpp-button-v4-7-0></wpp-button-v4-7-0>');
+      const trigger = page.body.querySelector('wpp-button-v4-7-0');
+      trigger.ariaProps = { label: 'Delete' };
+      page.rootInstance.updateAnchorDescription();
+      expect(trigger.ariaProps).toEqual({ label: 'Delete', description: 'Deletes the file' });
+      expect(trigger.hasAttribute('aria-describedby')).toBe(false);
     });
-    instance.anchorRef = document.createElement('div');
-    instance.customContentEl = document.createElement('div');
-    instance.createTippyInstance();
-    expect(element.getAttribute('aria-describedby')).toBe(null);
+    it('follows a text change', async () => {
+      const page = await renderTooltip('text="Before"', '<button>Plan</button>');
+      page.root?.setAttribute('text', 'After');
+      await page.waitForChanges();
+      expect(page.body.querySelector('button')?.getAttribute('aria-description')).toBe('After');
+    });
+    it('removes the description when the tooltip is disabled', async () => {
+      const page = await renderTooltip('text="Hint"', '<button>Plan</button>');
+      page.root?.setAttribute('disabled', '');
+      await page.waitForChanges();
+      expect(page.body.querySelector('button')?.hasAttribute('aria-description')).toBe(false);
+    });
   });
   it('calls config.onShow when provided', async () => {
     const onShow = jest.fn();

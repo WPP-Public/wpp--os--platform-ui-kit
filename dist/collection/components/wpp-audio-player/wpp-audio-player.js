@@ -1,10 +1,29 @@
 import { h, Host, } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
 import { mergeLocales } from '../../utils/utils';
+import { getDeepActiveElement } from '../../utils/dialog-focus';
 import { placeVolumeSlider, renderVolumeBarComponent } from '../wpp-video-player/components/wpp-volume-bar';
 import { AUDIO_SKIP_TIME_VALUE, DEFAULT_PLAYBACK_RATES, LOCALES_DEFAULTS, SECONDS_IN_HOUR, SECONDS_IN_MINUTE, SPACE_ACTIVATED_ROLES, VOLUME_SKIP_VALUE, } from './const';
 export class WppAudioPlayer {
   constructor() {
+    // When a speed is picked with the mouse, the popover hands focus back to the speed button. That focus is not keyboard
+    // focus (`:focus-visible`), so the button's tooltip must not open; hover and keyboard focus still open it.
+    this.isSpeedTooltipPointerFocus = false;
+    this.speedTooltipConfig = {
+      placement: 'bottom',
+      onTrigger: (_instance, event) => {
+        this.isSpeedTooltipPointerFocus = event.type === 'focus' && !getDeepActiveElement()?.matches(':focus-visible');
+      },
+      onUntrigger: () => {
+        this.isSpeedTooltipPointerFocus = false;
+      },
+      onShow: () => {
+        const isPointerFocus = this.isSpeedTooltipPointerFocus;
+        this.isSpeedTooltipPointerFocus = false;
+        if (isPointerFocus)
+          return false;
+      },
+    };
     /** Restored when the track is unmuted, so the volume lands back where the listener left it. */
     this.savedVolume = 1;
     /** While the seek bar's thumb is dragged, it shows where the listener is heading, not the playback position. */
@@ -153,12 +172,20 @@ export class WppAudioPlayer {
       this.handleSliderShow();
       this.handleSliderHide(delay);
     };
+    /**
+     * The speed is applied on every change, but the menu only closes on a pick: a click, or Space / Enter. Arrow keys move
+     * the selection (radio group) and keep the menu open, so keyboard users can keep browsing the speeds (SC 3.2.2).
+     */
+    this.closePlaybackRateMenuOnPick = (event) => {
+      if ('key' in event && event.key !== ' ' && event.key !== 'Enter')
+        return;
+      this.playbackRatePopoverRef?.closePopover();
+    };
     this.handlePlaybackRateChange = (event) => {
       const rate = Number(event.detail.value);
       if (!Number.isFinite(rate))
         return;
       this.playbackRate = rate;
-      this.playbackRatePopoverRef?.closePopover();
     };
     /** Controls that Space activates natively: real buttons and ARIA toggles such as the speed pills. */
     this.isActivatedBySpace = (event) => event
@@ -200,7 +227,7 @@ export class WppAudioPlayer {
       return this.timeFormat === 'extended' ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
     };
     this.renderAudioTag = () => (h("audio", { ref: ref => (this.audioRef = ref), class: "audio-element", controls: false, preload: this.preload, loop: this.loop, onLoadedMetaData: this.handleMetadataLoaded, onDurationChange: this.syncDuration, onTimeUpdate: this.handleTimeUpdate, onProgress: this.handleLoadProgress, onPlay: this.handlePlay, onPause: this.handlePause, onEnded: this.handleEnded }, this.sourceElements, this._locales.notSupportedPlayer));
-    this.renderTime = (time, label) => (h("wpp-typography-v4-6-0", { type: "xs-midi", class: "audio-time" }, h("span", { role: "timer", "aria-label": `${label} ${this.formatTime(time)}` }, this.formatTime(time))));
+    this.renderTime = (time, label) => (h("wpp-typography-v4-7-0", { type: "xs-midi", class: "audio-time" }, h("span", { role: "timer", "aria-label": label }, this.formatTime(time))));
     /**
      * The rail and the buffered bar sit under the input, which carries the played portion and the
      * thumb. The input's own track is transparent past the played portion, so both layers below
@@ -211,7 +238,7 @@ export class WppAudioPlayer {
      * shared `handleKeyDown` flow moves the position by `AUDIO_SKIP_TIME_VALUE` itself.
      */
     this.renderSeekBar = () => (h("div", { class: "progress-container" }, h("div", { class: "progress-rail", "aria-hidden": "true" }), h("div", { class: "loading-progress", style: { width: `${this.loadedPercentage}%` }, "aria-hidden": "true" }), h("input", { class: "progress-bar seek-bar", style: { '--progress-bar-progress': `${this.seekProgress}%` }, type: "range", min: 0, max: this.overallAudioTime || 0, step: "any", value: this.currentAudioTime, onInput: this.handleSeek, onPointerDown: this.startScrubbing, "aria-label": this._locales.progressAriaLabel, "aria-valuemin": "0", "aria-valuemax": this.overallAudioTime, "aria-valuenow": this.currentAudioTime, "aria-valuetext": this.formatTime(this.currentAudioTime), autocomplete: "off" })));
-    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (h("wpp-tooltip-v4-6-0", { text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
+    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (h("wpp-tooltip-v4-7-0", { text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-7-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
     /**
      * The volume bar is the video player's, rendered with this player as its host: the slider opens
      * on hover and on focus, a click on the button mutes. Only here the button also carries a tooltip.
@@ -220,7 +247,7 @@ export class WppAudioPlayer {
     this.renderPlaybackRateControl = () => {
       const currentRate = this.formatPlaybackRate(this.playbackRate);
       const label = `${this._locales.playbackRateButtonAriaLabel} ${currentRate}`;
-      return (h("wpp-popover-v4-6-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
+      return (h("wpp-popover-v4-7-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
           placement: 'top-start',
           onShow: () => {
             this.isPlaybackRateOpen = true;
@@ -228,7 +255,7 @@ export class WppAudioPlayer {
           onHide: () => {
             this.isPlaybackRateOpen = false;
           },
-        } }, h("div", { slot: "trigger-element" }, h("wpp-tooltip-v4-6-0", { text: this._locales.playbackRateButtonAriaLabel, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), h("div", { style: { padding: '8px' } }, h("wpp-pill-group-v4-6-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (h("wpp-pill-v4-6-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
+        } }, h("div", { slot: "trigger-element" }, h("wpp-tooltip-v4-7-0", { text: this._locales.playbackRateButtonAriaLabel, config: this.speedTooltipConfig }, h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), h("div", { style: { padding: '8px' }, onClick: this.closePlaybackRateMenuOnPick, onKeyDown: this.closePlaybackRateMenuOnPick }, h("wpp-pill-group-v4-7-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (h("wpp-pill-v4-7-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
     };
     this.audioPlayerState = 'idle';
     this.currentAudioTime = 0;
@@ -392,20 +419,20 @@ export class WppAudioPlayer {
     const playPauseLabel = isPlaying ? this._locales.pauseButtonAriaLabel : this._locales.playButtonAriaLabel;
     return (h(Host, null, h("div", { class: { 'audio-player-container': true, 'tab-focus': this.focusType === FOCUS_TYPE.TAB }, role: this.ariaProps.role || 'group', "aria-label": this.ariaProps.label || this._locales.hostAriaLabel, tabIndex: 0, onMouseDown: this.handleContainerMouseDown, onKeyUp: this.handleContainerKeyUp, onBlur: this.handleContainerBlur }, this.renderAudioTag(), h("div", { class: "controls" }, h("div", { class: "timeline" }, this.renderTime(this.currentAudioTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderTime(this.overallAudioTime, this._locales.durationAriaLabel)), h("div", { class: "buttons" }, h("div", { class: "secondary-buttons" }, this.renderPlaybackRateControl()), h("div", { class: "playback-buttons" }, this.renderIconButton({
       label: this._locales.skipBackwardButtonAriaLabel,
-      icon: h("wpp-icon-rewind-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: h("wpp-icon-rewind-v4-7-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(-AUDIO_SKIP_TIME_VALUE),
     }), this.renderIconButton({
       label: playPauseLabel,
-      icon: isPlaying ? (h("wpp-icon-pause-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })),
+      icon: isPlaying ? (h("wpp-icon-pause-v4-7-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-v4-7-0", { slot: "icon-start", "aria-hidden": "true" })),
       onClick: this.togglePlay,
     }), this.renderIconButton({
       label: this._locales.skipForwardButtonAriaLabel,
-      icon: h("wpp-icon-fast-forward-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: h("wpp-icon-fast-forward-v4-7-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(AUDIO_SKIP_TIME_VALUE),
     })), h("div", { class: "volume-controls" }, this.renderVolumeBar()))))));
   }
   static get is() { return "wpp-audio-player"; }
-  static get registryIs() { return "wpp-audio-player-v4-6-0"; }
+  static get registryIs() { return "wpp-audio-player-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

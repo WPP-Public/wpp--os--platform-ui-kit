@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { n as autoFocusElement } from './utils.js';
+import { o as autoFocusElement } from './utils.js';
 import { d as defineCustomElement$g } from './wpp-action-button2.js';
 import { d as defineCustomElement$f } from './wpp-icon-cross2.js';
 import { d as defineCustomElement$e } from './wpp-icon-error2.js';
@@ -248,19 +248,21 @@ const WppLegacyCounter$1 = /*@__PURE__*/ proxyCustomElement(class WppLegacyCount
     autoFocusElement(this.autoFocus, this.inputRef);
   }
   render() {
-    const messageId = this.message ? `${this.name}-message` : undefined;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v4-6-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, placeholder: this.placeholder, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
+    // The label names the input through its id, so a counter without a name still needs one
+    const inputId = this.name || 'wpp-legacy-counter';
+    const messageId = this.message ? `${inputId}-message` : undefined;
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", htmlFor: inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v4-7-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: inputId, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, placeholder: this.placeholder, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
         this.onElementFocus(e);
         this.onFocus(e);
-      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v4-6-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v4-6-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
+      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v4-7-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v4-7-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
-  static get registryIs() { return "wpp-legacy-counter-v4-6-0"; }
+  static get registryIs() { return "wpp-legacy-counter-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["updateFormattedValue"]
   }; }
   static get style() { return wppLegacyCounterCss; }
-}, [1, "wpp-legacy-counter", "wpp-legacy-counter-v4-6-0", {
+}, [1, "wpp-legacy-counter", "wpp-legacy-counter-v4-7-0", {
     "name": [1],
     "value": [1026],
     "min": [2],
@@ -289,84 +291,84 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-legacy-counter-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-plus-v4-6-0", "wpp-icon-remove-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-legacy-counter-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-plus-v4-7-0", "wpp-icon-remove-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-legacy-counter-v4-6-0":
+    case "wpp-legacy-counter-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLegacyCounter$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-plus-v4-6-0":
+    case "wpp-icon-plus-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-remove-v4-6-0":
+    case "wpp-icon-remove-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

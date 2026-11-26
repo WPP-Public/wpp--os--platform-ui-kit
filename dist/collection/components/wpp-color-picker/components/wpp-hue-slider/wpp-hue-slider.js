@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { clamp } from 'lodash';
+import { getSliderKeyValue, getSliderMarkerLeft } from '../../utils';
 /**
  * @internal
  */
@@ -33,11 +34,6 @@ export class HueSlider {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, this.canvas.width / this.devicePixelRatio, this.canvas.height / this.devicePixelRatio);
     };
-    this.updateMarkerPosition = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      const position = (this.hue / 360) * rect.width;
-      this.markerPosition = clamp(position, 8, rect.width - 8);
-    };
     this.handleMouseDown = (event) => {
       this.isDragging = true;
       event.preventDefault();
@@ -58,30 +54,32 @@ export class HueSlider {
       const xClamped = clamp(xRaw, 0, rect.width);
       const hueValue = Math.round((xClamped / rect.width) * 360);
       this.hueChanged.emit(hueValue);
-      this.markerPosition = clamp(xClamped, 8, rect.width - 8);
+    };
+    this.handleKeyDown = (event) => {
+      const hueValue = getSliderKeyValue(event.key, Math.round(this.hue), 0, 360);
+      if (hueValue === undefined)
+        return;
+      event.preventDefault();
+      this.hueChanged.emit(hueValue);
     };
     this.hue = 0;
-    this.markerPosition = 8;
-  }
-  updateHue() {
-    this.updateMarkerPosition();
+    this.label = undefined;
   }
   componentDidLoad() {
     this.canvas = this.host.shadowRoot?.querySelector('canvas');
     this.setupCanvas();
     this.drawHueSlider();
-    this.updateMarkerPosition();
     this.canvas.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-hue-slider" }, h("div", { class: "slider-container" }, h("canvas", null), h("div", { class: "marker", style: {
-        left: `${this.markerPosition}px`,
+    return (h(Host, { class: "wpp-hue-slider" }, h("div", { class: "slider-container" }, h("canvas", null), h("div", { class: "marker", role: "slider", tabIndex: 0, "aria-label": this.label, "aria-valuemin": 0, "aria-valuemax": 360, "aria-valuenow": Math.round(this.hue), onKeyDown: this.handleKeyDown, style: {
+        left: getSliderMarkerLeft(this.hue / 360),
       } }))));
   }
   static get is() { return "wpp-hue-slider"; }
-  static get registryIs() { return "wpp-hue-slider-v4-6-0"; }
+  static get registryIs() { return "wpp-hue-slider-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -112,12 +110,24 @@ export class HueSlider {
         "attribute": "hue",
         "reflect": false,
         "defaultValue": "0"
+      },
+      "label": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name of the slider, set by wpp-color-picker from its locales."
+        },
+        "attribute": "label",
+        "reflect": false
       }
-    };
-  }
-  static get states() {
-    return {
-      "markerPosition": {}
     };
   }
   static get events() {
@@ -139,10 +149,4 @@ export class HueSlider {
       }];
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "hue",
-        "methodName": "updateHue"
-      }];
-  }
 }

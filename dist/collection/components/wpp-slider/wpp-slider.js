@@ -1,7 +1,7 @@
 import { Host, h } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
-import { DEFAULT_INPUT_WIDTH, getDefaultMaskOptions, getMaskOptionsForInput, parseMaskedInput } from './const';
-import { transformToVersionedTag } from '../../utils/utils';
+import { DEFAULT_INPUT_WIDTH, LOCALES_DEFAULTS, getDefaultMaskOptions, getMaskOptionsForInput, parseMaskedInput, } from './const';
+import { getLabelledbyText, mergeLocales, transformToVersionedTag } from '../../utils/utils';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 const getInitFocusInfo = () => ({
   min: FOCUS_TYPE.NONE,
@@ -38,6 +38,66 @@ export class WppSlider {
      * Tracks whether the component currently has focus
      */
     this.isFocused = false;
+    // Returns undefined — never an empty or part-built string — when there is nothing to name the
+    // control with, so the attribute is omitted rather than rendered as e.g. "undefined, minimum",
+    // which assistive tech and axe would both accept as a real name.
+    this.getThumbLabel = (thumb) => {
+      const explicit = getLabelledbyText(this.host, this.getThumbLabelledBy(thumb)) || this.ariaProps[thumb]?.label;
+      if (explicit)
+        return explicit;
+      const base = this.accessibleNameBase;
+      if (!base)
+        return undefined;
+      // Only `range` has two thumbs; single and middle-range render one, which needs no qualifier.
+      if (this.type !== 'range')
+        return base;
+      const qualifier = thumb === 'min' ? this._locales.minimum : this._locales.maximum;
+      return qualifier ? `${base}, ${qualifier}` : base;
+    };
+    // IDREFs cannot leave this shadow root, so `labelledby` is resolved to text and used as the
+    // aria-label. The flat key would give both range thumbs the same name, so only single-thumb
+    // types use it.
+    this.getThumbLabelledBy = (thumb) => {
+      const explicit = this.ariaProps[thumb]?.labelledby;
+      if (explicit)
+        return explicit;
+      return this.type === 'range' ? undefined : this.ariaProps.labelledby;
+    };
+    // Only a mark labelled with words is worth announcing — a numeric label adds nothing over
+    // aria-valuenow. Matching on the rendered string is not enough: MIDDLE_RANGE_MARKS_NUMBERS labels
+    // the value -5 as '5', which is not character-identical yet is still just the number, and
+    // substituting it reported a band of -5..0 as "5 to 0".
+    this.getMarkLabelAt = (value) => {
+      const mark = this.displayMarks.find(item => item.value === value);
+      if (mark?.label === undefined || mark.label === '')
+        return undefined;
+      return Number.isFinite(Number(mark.label)) ? undefined : mark.label;
+    };
+    // What the thumb should announce instead of the bare number. `undefined` clears the attribute, so
+    // moving off a marked value never leaves a stale valuetext behind.
+    this.getValueText = () => {
+      if (this.type === 'middle-range') {
+        const value = this.value;
+        // Same order the value wrapper renders, lower end first.
+        const [from, to] = this.isMiddlePointHigher() ? [value, this.middleValue] : [this.middleValue, value];
+        const [fromLabel, toLabel] = [this.getMarkLabelAt(from) ?? from, this.getMarkLabelAt(to) ?? to];
+        // The thumb sitting on the centre is a zero-width band; announcing "Medium to Medium" is worse
+        // than announcing the one value it actually is.
+        if (from === to)
+          return String(fromLabel);
+        return this._locales.valueRange?.replace('{from}', String(fromLabel)).replace('{to}', String(toLabel));
+      }
+      const label = this.getMarkLabelAt(this.value);
+      return label === undefined ? undefined : String(label);
+    };
+    // The per-thumb valuetext for a `range` slider, where each thumb announces its own end.
+    this.getRangeValueText = (thumb) => {
+      if (this.type !== 'range')
+        return undefined;
+      const value = this.value[thumb === 'min' ? 0 : 1];
+      const label = this.getMarkLabelAt(value);
+      return label === undefined ? undefined : String(label);
+    };
     this.getMidValueRespectingStep = () => {
       const range = this.max - this.min;
       const half = range / 2;
@@ -449,17 +509,17 @@ export class WppSlider {
     });
     this.calculateProgressBar = (value) => (value - this.min) * (1 / (this.max - this.min)) * 100 + '%';
     this.renderControl = () => {
-      const label = this.labelConfig?.text && (h("wpp-label-v4-6-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
+      const label = this.labelConfig?.text && (h("wpp-label-v4-7-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
       if (this.withValue && !this.withInput) {
         return (h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label || h("div", null), this.handleType({
-          single: value => (h("wpp-typography-v4-6-0", { type: "s-midi", part: "value" }, value)),
-          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-6-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v4-6-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-6-0", { type: "s-midi", part: "value" }, value[1]))),
-          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-6-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v4-6-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-6-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
+          single: value => (h("wpp-typography-v4-7-0", { type: "s-midi", part: "value" }, value)),
+          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-7-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v4-7-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-7-0", { type: "s-midi", part: "value" }, value[1]))),
+          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-7-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v4-7-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-7-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
         })));
       }
       return label;
     };
-    this.renderSingleInput = () => (h("wpp-input-v4-6-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
+    this.renderSingleInput = () => (h("wpp-input-v4-7-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-number", ariaProps: { label: this.getThumbLabel('max') }, onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
         decimalPatternOptions: this.maskOptions
           ? {
             ...getDefaultMaskOptions(this.step),
@@ -469,14 +529,14 @@ export class WppSlider {
       } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
-      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v4-6-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
+      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v4-7-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-min", ariaProps: { label: this.getThumbLabel('min') }, onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[0]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
             : getDefaultMaskOptions(this.step),
-        } }), h("wpp-divider-v4-6-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v4-6-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
+        } }), h("wpp-divider-v4-7-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v4-7-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-max", ariaProps: { label: this.getThumbLabel('max') }, onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
@@ -507,22 +567,22 @@ export class WppSlider {
           const isTruncated = !!this.tooltipTexts[mark.value];
           const labelText = mark.label !== null && mark.label !== undefined ? String(mark.label) : '';
           const tooltipPlacement = 'bottom';
-          const labelContent = (h("wpp-typography-v4-6-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
-          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v4-6-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
+          const labelContent = (h("wpp-typography-v4-7-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
+          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v4-7-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
         });
       }
     };
-    this.renderRangeSliders = (style, value) => (h("div", { class: this.rangeSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`min-range-${this.focusType.min}`]: true }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[0], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-min", style: style, onInput: this.handleRangeSliderChange('min'), onBlur: () => this.handleInputBlur('min'), onMouseDown: () => this.handleInputMouseDown('min'), onKeyUp: (event) => this.handleInputKeyUp(event, 'min'), onClick: event => {
+    this.renderRangeSliders = (style, value) => (h("div", { class: this.rangeSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`min-range-${this.focusType.min}`]: true }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[0], required: this.required, disabled: this.disabled, "aria-label": this.getThumbLabel('min'), "aria-valuetext": this.getRangeValueText('min'), part: "input-slider-min", style: style, onInput: this.handleRangeSliderChange('min'), onBlur: () => this.handleInputBlur('min'), onMouseDown: () => this.handleInputMouseDown('min'), onKeyUp: (event) => this.handleInputKeyUp(event, 'min'), onClick: event => {
         event.preventDefault();
         event.stopPropagation();
       }, title: "" }), h("input", { class: {
         slider: true,
         [`max-range-${this.focusType.max}`]: true,
-      }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[1], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleRangeSliderChange('max'), onBlur: () => this.handleInputBlur('max'), onMouseDown: () => this.handleInputMouseDown('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onClick: event => {
+      }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[1], required: this.required, disabled: this.disabled, "aria-label": this.getThumbLabel('max'), "aria-valuetext": this.getRangeValueText('max'), part: "input-slider-max", onInput: this.handleRangeSliderChange('max'), onBlur: () => this.handleInputBlur('max'), onMouseDown: () => this.handleInputMouseDown('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onClick: event => {
         event.preventDefault();
         event.stopPropagation();
       }, title: "" })));
-    this.renderSingleSlider = (style, value) => (h("div", { class: this.singleSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`max-range-${this.focusType.max}`]: true }, type: "range", name: this.name, id: this.name, min: this.min, max: this.max, step: this.step, value: value, required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleSingleSliderChange, onBlur: () => this.handleInputBlur('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onMouseDown: () => this.handleInputMouseDown('max'), style: style, title: "" })));
+    this.renderSingleSlider = (style, value) => (h("div", { class: this.singleSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`max-range-${this.focusType.max}`]: true }, type: "range", name: this.name, id: this.name, min: this.min, max: this.max, step: this.step, value: value, required: this.required, disabled: this.disabled, "aria-label": this.getThumbLabel('max'), "aria-valuetext": this.getValueText(), part: "input-slider-max", onInput: this.handleSingleSliderChange, onBlur: () => this.handleInputBlur('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onMouseDown: () => this.handleInputMouseDown('max'), style: style, title: "" })));
     // This function is used only in the middle-range slider type
     this.isMiddlePointHigher = () => this.middleValue > this.value;
     this.tooltipTexts = {};
@@ -543,6 +603,7 @@ export class WppSlider {
     this.withInput = false;
     this.withValue = false;
     this.ariaProps = {};
+    this.locales = {};
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
@@ -642,6 +703,18 @@ export class WppSlider {
     this.host.removeEventListener('focusout', this.handleHostFocusOut);
     document.removeEventListener('mousedown', this.handleDocumentMouseDown);
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
+  /**
+   * Accessibility helpers.
+   *
+   * The visible label lives inside wpp-label's shadow root and the range input inside this one, so
+   * `for`/`id` can never associate them. The name is built here instead and set as `aria-label`.
+   */
+  get accessibleNameBase() {
+    return this.ariaProps.label ?? this.labelConfig?.text;
+  }
   render() {
     const style = this.handleType({
       single: value => ({
@@ -663,7 +736,7 @@ export class WppSlider {
     }), this.marks && (h("div", { ref: el => (this.marksListRef = el), class: this.marksListCssClasses(), part: "marks-list" }, this.renderMarks()))), this.withInput && this.continuous && (h("div", { class: this.inputColumnCssClasses() }, this.renderEditableInput())))));
   }
   static get is() { return "wpp-slider"; }
-  static get registryIs() { return "wpp-slider-v4-6-0"; }
+  static get registryIs() { return "wpp-slider-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -937,13 +1010,13 @@ export class WppSlider {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
+          "original": "WppSliderAriaProps",
+          "resolved": "AriaProps & { label?: string | undefined; min?: Pick<AriaProps, \"label\" | \"labelledby\"> | undefined; max?: Pick<AriaProps, \"label\" | \"labelledby\"> | undefined; }",
           "references": {
-            "AriaProps": {
+            "WppSliderAriaProps": {
               "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
+              "path": "./types",
+              "id": "src/components/wpp-slider/types.tsx::WppSliderAriaProps"
             }
           }
         },
@@ -951,7 +1024,33 @@ export class WppSlider {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Contains the slider `aria-` props."
+          "text": "Contains the slider `aria-` props.\n\n`label` names the control, and is deprecated for `range` sliders because it names BOTH thumbs,\nleaving them indistinguishable \u2014 set `min` and `max` there instead. The deprecation is on that\none key, not on this prop."
+        },
+        "defaultValue": "{}"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<SliderLocales>",
+          "resolved": "{ minimum?: string | undefined; maximum?: string | undefined; valueRange?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "SliderLocales": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-slider/types.tsx::SliderLocales"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Translations for the strings this component generates itself \u2014 the thumb qualifiers and the\nspoken value of a `middle-range` band. The field's own label comes from `labelConfig`."
         },
         "defaultValue": "{}"
       },

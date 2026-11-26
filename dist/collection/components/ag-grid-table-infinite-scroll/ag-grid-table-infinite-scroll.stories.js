@@ -13,6 +13,7 @@ export default {
 export const InfiniteScroll = () => 
 // TODO: src will be replaced with our own react dev environment soon
 html `<iframe
+    title="AG Grid table with infinite scroll"
     width="100%"
     allow="clipboard-write; clipboard-read"
     height="800px"

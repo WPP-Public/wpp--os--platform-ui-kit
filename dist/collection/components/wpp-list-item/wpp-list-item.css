@@ -468,13 +468,13 @@
 }
 
 :host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox])),
-:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
+:host(:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
 .non-interactive)) {
   outline: none;
   box-shadow: none;
 }
 :host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox])) .item,
-:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
+:host(:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
 .non-interactive)) .item {
   outline: none;
   box-shadow: none;

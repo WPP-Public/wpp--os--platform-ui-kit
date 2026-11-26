@@ -1,4 +1,29 @@
-import { hideOnPopperBlur, isWithinPopperTree } from '../tippy-plugins';
+import { hideOnEsc, hideOnPopperBlur, isWithinPopperTree } from '../tippy-plugins';
+describe('hideOnEsc', () => {
+  const createInstance = () => {
+    const instance = {
+      state: { isVisible: true },
+      hide: jest.fn(),
+    };
+    return instance;
+  };
+  it('hides the tooltip when Escape is pressed while it is visible', () => {
+    const instance = createInstance();
+    const hooks = hideOnEsc.fn(instance);
+    hooks.onShow();
+    document.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape', key: 'Escape' }));
+    expect(instance.hide).toHaveBeenCalledTimes(1);
+    hooks.onHide();
+  });
+  it('ignores Escape when the tooltip is hidden', () => {
+    const instance = createInstance();
+    const hooks = hideOnEsc.fn(instance);
+    instance.state.isVisible = false;
+    hooks.onShow();
+    document.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape', key: 'Escape' }));
+    expect(instance.hide).not.toHaveBeenCalled();
+  });
+});
 describe('hideOnPopperBlur', () => {
   const createInstance = (popper) => {
     const instance = {

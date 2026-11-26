@@ -5,7 +5,7 @@
   * @prop --wpp-file-upload-bg-color-disabled:
   * @prop --wpp-file-upload-border-color:
   * @prop --wpp-file-upload-border-color-hover:
-  * @prop --wpp-file-upload-border-style:
+  * @prop --wpp-file-upload-border-dasharray:
   * @prop --wpp-file-upload-border-error-style:
   * @prop --wpp-file-upload-border-error-color:
   * @prop --wpp-file-upload-border-width:
@@ -22,18 +22,22 @@
   * @prop --wpp-file-upload-label-color-active:
   * @prop --wpp-file-upload-item-max-width:
   * @prop --wpp-file-upload-icon-margin:
+  * @prop --wpp-file-upload-icon-color:
   * @prop --wpp-file-upload-icon-color-disabled:
+  * @prop --wpp-file-upload-icon-bg-color:
+  * @prop --wpp-file-upload-icon-bg-color-hover:
+  * @prop --wpp-file-upload-icon-bg-color-disabled:
   * @prop --wpp-file-upload-item-gradient:
   * @prop --wpp-file-upload-item-gradient-height:
 */
 :host {
   --fu-width: var(--wpp-file-upload-width, 100%);
   --fu-bg-color: var(--wpp-file-upload-bg-color, var(--wpp-grey-color-000));
-  --fu-bg-color-hover: var(--wpp-file-upload-bg-color-hover, var(--wpp-grey-color-200));
+  --fu-bg-color-hover: var(--wpp-file-upload-bg-color-hover, var(--wpp-grey-color-100));
   --fu-bg-color-disabled: var(--wpp-file-upload-bg-color-disabled, var(--wpp-grey-color-200));
   --fu-border-color: var(--wpp-file-upload-border-color, var(--wpp-grey-color-500));
   --fu-border-color-hover: var(--wpp-file-upload-border-color-hover, var(--wpp-grey-color-600));
-  --fu-border-style: var(--wpp-file-upload-border-style, dashed);
+  --fu-border-dasharray: var(--wpp-file-upload-border-dasharray, 4px);
   --fu-border-error-style: var(--wpp-file-upload-border-error-style, solid);
   --fu-border-error-color: var(--wpp-file-upload-border-error-color, var(--wpp-danger-color-500));
   --fu-border-width: var(--wpp-file-upload-border-width, 1px);
@@ -47,7 +51,9 @@
   --fu-label-color-hover: var(--wpp-file-upload-label-color-hover, var(--wpp-primary-color-400));
   --fu-label-color-active: var(--wpp-file-upload-label-color-active, var(--wpp-primary-color-600));
   --fu-icon-margin: var(--wpp-file-upload-icon-margin, 0 0 12px 0);
-  --fu-icon-color-disabled: var(--wpp-file-upload-icon-color-disabled, var(--wpp-grey-color-400));
+  --fu-icon-color: var(--wpp-file-upload-icon-color, var(--wpp-grey-color-800));
+  --fu-icon-color-disabled: var(--wpp-file-upload-icon-color-disabled, var(--wpp-grey-color-600));
+  --fu-icon-bg-color: var(--wpp-file-upload-icon-bg-color, var(--wpp-grey-color-200));
   --fu-icon-bg-color-disabled: var(--wpp-file-upload-icon-bg-color-disabled, var(--wpp-grey-color-300));
   --fu-icon-bg-color-hover: var(--wpp-file-upload-icon-bg-color-hover, var(--wpp-grey-color-300));
   --fu-item-max-width: var(--wpp-file-upload-item-max-width, 100%);
@@ -79,7 +85,7 @@
   justify-content: center;
   align-items: center;
   width: var(--fu-width);
-  border: var(--fu-border-width) var(--fu-border-style) var(--fu-border-color);
+  border: var(--fu-border-width) solid transparent;
   border-radius: var(--fu-border-radius);
   background-color: var(--fu-bg-color);
   transition: 0.2s ease-in-out;
@@ -90,7 +96,27 @@
   outline: none;
   box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);
 }
+.upload-wrapper .dashed-border {
+  position: absolute;
+  top: calc(var(--fu-border-width) / -2);
+  left: calc(var(--fu-border-width) / -2);
+  width: calc(100% + var(--fu-border-width));
+  height: calc(100% + var(--fu-border-width));
+  overflow: visible;
+  pointer-events: none;
+}
+.upload-wrapper .dashed-border rect {
+  fill: none;
+  stroke: var(--fu-border-color);
+  stroke-width: var(--fu-border-width);
+  stroke-dasharray: var(--fu-border-dasharray);
+  rx: calc(var(--fu-border-radius) - var(--fu-border-width) / 2);
+  transition: stroke 0.2s ease-in-out;
+}
 .upload-wrapper .icon-file {
+  --wpp-avatar-icon-bg-color: var(--fu-icon-bg-color);
+  --wpp-avatar-icon-color: var(--fu-icon-color);
+  --wpp-avatar-icon-tint-opacity: 0;
   margin: var(--fu-icon-margin);
 }
 .upload-wrapper .icon-file::part(content) {
@@ -98,10 +124,12 @@
 }
 .upload-wrapper:hover, .upload-wrapper.label-hovered, .upload-wrapper.tab-focus {
   background-color: var(--fu-bg-color-hover);
-  border-color: var(--fu-border-color-hover);
 }
-.upload-wrapper:hover .icon-file::part(content), .upload-wrapper.label-hovered .icon-file::part(content), .upload-wrapper.tab-focus .icon-file::part(content) {
-  background-color: var(--fu-icon-bg-color-hover);
+.upload-wrapper:hover .dashed-border rect, .upload-wrapper.label-hovered .dashed-border rect, .upload-wrapper.tab-focus .dashed-border rect {
+  stroke: var(--fu-border-color-hover);
+}
+.upload-wrapper:hover .icon-file, .upload-wrapper.label-hovered .icon-file, .upload-wrapper.tab-focus .icon-file {
+  --wpp-avatar-icon-bg-color: var(--fu-icon-bg-color-hover);
 }
 .upload-wrapper.message {
   margin-bottom: 8px;
@@ -114,16 +142,20 @@
   outline: none;
   box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);
 }
+.upload-wrapper.error .dashed-border {
+  display: none;
+}
 .upload-wrapper.disabled {
   pointer-events: none;
   background-color: var(--fu-bg-color-disabled);
   border: none;
 }
-.upload-wrapper.disabled .icon-file {
-  color: var(--fu-icon-color-disabled);
+.upload-wrapper.disabled .dashed-border {
+  display: none;
 }
-.upload-wrapper.disabled .icon-file::part(content) {
-  background-color: var(--fu-icon-bg-color-disabled);
+.upload-wrapper.disabled .icon-file {
+  --wpp-avatar-icon-bg-color: var(--fu-icon-bg-color-disabled);
+  --wpp-avatar-icon-color: var(--fu-icon-color-disabled);
 }
 .upload-wrapper.disabled .label {
   color: var(--fu-text-color-disabled);
@@ -138,8 +170,8 @@
 .upload-wrapper.file-drag {
   background-color: var(--fu-bg-color-hover);
 }
-.upload-wrapper.file-drag:not(.error) {
-  border-color: var(--fu-border-color-hover);
+.upload-wrapper.file-drag .dashed-border rect {
+  stroke: var(--fu-border-color-hover);
 }
 
 .wpp-inline-message {

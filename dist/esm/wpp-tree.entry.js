@@ -1,11 +1,11 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
-import { k as transformToVersionedTag, u as uuidv4, d as debounce, y as mergeLocales } from './utils-49ce8daf.js';
-import { T as TREE_ITEM_HEIGHT, a as TREE_PADDING_TOP, D as DEFAULT_TREE_HEIGHT, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, b as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, d as findItemById, h as findTreeItemById, j as getSiblings, k as findParentOfItem, L as LOCALES_DEFAULTS, l as DEFAULT_OVERSCAN } from './utils-00cd5dc1.js';
+import { k as transformToVersionedTag, d as debounce, z as mergeLocales } from './utils-711e1d1b.js';
+import { T as TREE_ITEM_HEIGHT, a as TREE_PADDING_TOP, D as DEFAULT_TREE_HEIGHT, f as findItemById, r as recalculateIndeterminateTreeState, u as updateTreeByIds, b as findSelectedItems, c as convertToOriginalItems, d as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, h as findTreeItemById, j as getSiblings, k as findParentOfItem, L as LOCALES_DEFAULTS, l as DEFAULT_OVERSCAN } from './utils-a165afa5.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './consts-744c144f.js';
 import './theme-observer-b7886d19.js';
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container-wrapper{width:100%}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}:host(.wpp-virtualised-tree) .container-wrapper{overflow:hidden auto;scrollbar-gutter:12px;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-virtualised-tree) .container-wrapper .container{position:relative;width:100%}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item{width:100%;position:absolute}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item){width:100%}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container-wrapper{width:100%}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}[data-item-id]:has(.menu-trigger[aria-expanded=true],.menu-trigger:focus-visible)::part(tree-item-action-button){opacity:1}.menu-trigger{border-radius:var(--wpp-border-radius-s)}.menu-trigger:focus{outline:none}.menu-trigger:focus-visible{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}:host(.wpp-virtualised-tree) .container-wrapper{overflow:hidden auto;scrollbar-gutter:12px;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-virtualised-tree) .container-wrapper .container{position:relative;width:100%}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item{width:100%;position:absolute}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item){width:100%}";
 
 const WppTree = class {
   constructor(hostRef) {
@@ -117,14 +117,14 @@ const WppTree = class {
       if (!treeItemEl)
         return;
       const menuContextTag = transformToVersionedTag('wpp-menu-context');
+      const iconEnd = this.getOwnSlotted(treeItemEl, 'icon-end')[0];
       // iconsEnd case: the icon-end slot contains a wpp-menu-context with a trigger element
-      const trigger = treeItemEl.querySelector(`[slot="icon-end"] ${menuContextTag} [slot="trigger-element"]`);
+      const trigger = iconEnd?.querySelector(`${menuContextTag} [slot="trigger-element"]`);
       if (trigger) {
         trigger.click();
         return;
       }
       // Simple iconEnd case: the icon-end slot is the icon itself with an onclick handler
-      const iconEnd = treeItemEl.querySelector('[slot="icon-end"]');
       if (iconEnd) {
         iconEnd.click();
       }
@@ -133,8 +133,10 @@ const WppTree = class {
      * Focuses a resolved focusable element using the correct strategy:
      * - If the element is the inner <button> of a wpp-action-button (detected via
      *   getRootNode()), calls setFocus() on the action-button host for proper focus ring.
+     * - A wpp-avatar is focused through its setFocus(), as a tooltip avatar's focusable element is
+     *   inside it rather than the host.
      * - Otherwise, calls .focus() + synthetic keyup Tab to trigger the component's
-     *   built-in tab-focus CSS class (wpp-avatar, menu triggers, etc.).
+     *   built-in tab-focus CSS class (menu triggers, etc.).
      */
     this.focusActionElement = (focusableEl) => {
       const actionButtonTag = transformToVersionedTag('wpp-action-button').toUpperCase();
@@ -147,7 +149,11 @@ const WppTree = class {
           return;
         }
       }
-      // For avatars, menu triggers, and other elements
+      if (focusableEl.tagName === transformToVersionedTag('wpp-avatar').toUpperCase()) {
+        focusableEl.setFocus();
+        return;
+      }
+      // For menu triggers and other elements
       focusableEl.focus();
       focusableEl.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
     };
@@ -166,6 +172,11 @@ const WppTree = class {
       if (!treeItemEl) {
         return [];
       }
+      // A disabled item's controls are only pointer-events:none, which stops a mouse but not the
+      // keyboard. Action mode skips them so they cannot be entered and activated from the tree.
+      if (findItemById(this.currentTreeData, itemId)?.disabled) {
+        return [];
+      }
       const actions = [];
       const shadowRoot = treeItemEl.shadowRoot;
       const actionButtonTag = transformToVersionedTag('wpp-action-button');
@@ -176,11 +187,12 @@ const WppTree = class {
         if (actionButton)
           actions.push(actionButton);
       }
-      // 2. icon-start menu-contexts live outside the action-button (in the slot wrapper).
-      //    These are separate interactive elements that Tab should also reach.
+      // 2. Slotted menu-contexts live outside the action-button, in the light DOM. icon-end ones are
+      //    no longer wrapped in an action-button at all (that nesting put a command inside a command),
+      //    so this is the only way action mode can reach them.
       const menuContextTag = transformToVersionedTag('wpp-menu-context');
-      const startSlotMenus = Array.from(treeItemEl.querySelectorAll(`[slot="icon-start"] ${menuContextTag}`));
-      actions.push(...startSlotMenus);
+      const slotMenus = this.getOwnSlotted(treeItemEl, 'icon-start', 'icon-end').flatMap(slotted => Array.from(slotted.querySelectorAll(menuContextTag)));
+      actions.push(...slotMenus);
       // 3. endContent elements: avatar and avatar-group are interactive and focusable.
       //    These are rendered inside the tree-item's shadow DOM.
       if (shadowRoot) {
@@ -195,6 +207,11 @@ const WppTree = class {
       }
       return actions;
     };
+    /**
+     * Returns the elements a tree item holds in the given slots. Only its direct children count: an open
+     * item renders its children inside it too, and their icon slots are not this item's actions.
+     */
+    this.getOwnSlotted = (treeItemEl, ...slots) => Array.from(treeItemEl.children).filter(child => slots.includes(child.getAttribute('slot') ?? ''));
     /**
      * Resolves each action component to the actual focusable DOM element.
      *
@@ -405,16 +422,31 @@ const WppTree = class {
       'wpp-tree': true,
       'wpp-virtualised-tree': !!this.withVirtualisation,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-6-0", { dropdownConfig: {
+    /** Resolves an item's actions-control name from locales. `{title}` is the item's title. */
+    this.itemActionsLabelFor = (item) => this._locales.itemActionsLabel.replace('{title}', String(item.title ?? ''));
+    this.renderIconsList = (item, icons, place = 'end') => (
+    // A stable key keeps the same menu across renders; a fresh one replaced it, and its focused
+    // trigger, on every render, so focus fell to the document as soon as action mode re-rendered.
+    h("div", { slot: `icon-${place}`, key: `${item.id}-${place}` }, h("wpp-menu-context-v4-7-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-6-0", { class: {
+      } }, h("wpp-icon-more-v4-7-0", { "aria-label": this.itemActionsLabelFor(item), "aria-disabled": item.disabled ? 'true' : undefined,
+      // Action mode (F2) focuses the trigger itself, so it must be focusable; -1 keeps it out of
+      // the Tab order, which only ever stops on the tree once.
+      tabIndex: -1, class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-6-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
-    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-6-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (
+    // wppChangeListItem rather than click: it is what both a click and keyboard activation emit
+    // (wpp-menu-context activates a menu item by dispatching it, not by clicking)
+    h("wpp-list-item-v4-7-0", { key: name, value: name, onWppChangeListItem: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+    this.renderTreeItem = (item, level, setSize, posInSet, layoutIndex, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-7-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`,
+      // `layoutIndex` is the row's offset in the flattened list and drives position only.
+      // `posInSet` describes the item's place among its siblings; the two are not the same
+      // number once the tree is virtualised.
+      style: { top: `${(layoutIndex - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, itemActionsLabel: this.itemActionsLabelFor(item), level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
       h(transformToVersionedTag(item.iconStart.icon), {
         slot: 'icon-start',
         part: 'icon-start',
@@ -433,15 +465,19 @@ const WppTree = class {
           : null)))));
     this.renderTree = (treeData, level = 1) => {
       const visibleItems = treeData.filter(item => !item.hidden);
-      const setSize = this.withVirtualisation ? this.visibleItemsList.length : visibleItems.length;
       return visibleItems.map((item, index) => {
         const extraProps = extractExtraProps(item);
         const isParent = !!item.hasChildren || !!(item.children && item.children.length);
         // For lists without virtualisation, bufferStart will always be 0. Otherwise, it will represent the starting index of the virtualised window
-        const posInSet = this.bufferStart + index + 1;
+        const layoutIndex = (item.virtualIndex ?? this.bufferStart + index) + 1;
+        // Virtualisation hands this method a flat window of the tree, so the sibling set comes from
+        // the values stamped during flattening rather than from the rows that happen to be rendered.
+        // Without this every item reported its position in the whole list - "4 of 252".
+        const setSize = this.withVirtualisation ? (item.ariaSetSize ?? visibleItems.length) : visibleItems.length;
+        const posInSet = this.withVirtualisation ? (item.ariaPosInSet ?? index + 1) : index + 1;
         // Only show focus ring during keyboard navigation (suppress when action mode is active)
         const isFocused = this.isKeyboardNavigating && this.focusedItemId === item.id && !this.isFocusOnAction;
-        return this.renderTreeItem(item, level, setSize, posInSet, isFocused, extraProps, isParent);
+        return this.renderTreeItem(item, level, setSize, posInSet, layoutIndex, isFocused, extraProps, isParent);
       });
     };
     this.handleContainerFocus = (event) => {
@@ -511,15 +547,8 @@ const WppTree = class {
     this.getActiveDescendantId = () => {
       if (this.focusedItemId === null)
         return undefined;
-      // The reference has to resolve to an element that exists. Virtualisation renders only a
-      // window of the list, so once the focused item scrolls out of that window there is nothing
-      // for the tree to point at.
-      if (this.withVirtualisation) {
-        const { start, end } = this.getVirtualisedRange(this.visibleItemsList.length);
-        const index = this.visibleItemsList.findIndex(item => item.id === this.focusedItemId);
-        if (index < start || index >= end)
-          return undefined;
-      }
+      // The reference always resolves now: a focused row outside the virtualisation window is kept
+      // rendered by `getVirtualisedNodes`, rather than the reference being dropped to keep axe quiet.
       return `tree-item-${this.focusedItemId}`;
     };
     this.handleScroll = (event) => {
@@ -565,7 +594,7 @@ const WppTree = class {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-6-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-7-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -1253,13 +1282,25 @@ const WppTree = class {
     const { start, end } = this.getVirtualisedRange(flatNodes.length);
     // We need to keep `bufferStart` value in a state to compute the `top` position of each tree-item
     this.bufferStart = start;
-    return flatNodes.slice(start, end);
+    // Each row carries its own index, so its position no longer depends on where it happens to sit
+    // in the slice. That is what lets the focused row be rendered from outside the window below.
+    const windowed = flatNodes.slice(start, end).map((item, index) => ({ ...item, virtualIndex: start + index }));
+    if (this.focusedItemId === null)
+      return windowed;
+    const focusedIndex = flatNodes.findIndex(item => item.id === this.focusedItemId);
+    // Scrolling the focused row out of the window used to leave `aria-activedescendant` pointing at
+    // an element that no longer existed, so the tree quietly lost its active item. Keep that one
+    // row rendered, at its real offset, and the reference stays resolvable.
+    if (focusedIndex !== -1 && (focusedIndex < start || focusedIndex >= end)) {
+      windowed.push({ ...flatNodes[focusedIndex], virtualIndex: focusedIndex });
+    }
+    return windowed;
   }
   render() {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.handleTreeRender(hasVisibleContent)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound))))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, hasVisibleContent && (h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label || this._locales.treeLabel, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: "0", onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, this.handleTreeRender(hasVisibleContent))), h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, !hasVisibleContent && this._locales.nothingFound))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-6-0"; }
+  static get registryIs() { return "wpp-tree-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],

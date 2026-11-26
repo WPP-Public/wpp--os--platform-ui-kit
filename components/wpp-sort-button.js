@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { D as getAriaProps } from './utils.js';
+import { E as getAriaProps } from './utils.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { d as defineCustomElement$2 } from './wpp-icon-sort2.js';
 
@@ -30,6 +30,14 @@ const WppSortButton$1 = /*@__PURE__*/ proxyCustomElement(class WppSortButton ext
     this.onBlur = () => {
       this.focusType = FOCUS_TYPE.NONE;
       this.isPressed = false;
+    };
+    // The ring is a stateful class rather than `:focus-visible`, and blur clears it. Focus moved here by
+    // script after a key press, or handed back by another window, never sees a Tab keyup, so take the
+    // ring from what the browser itself decided.
+    this.onFocus = () => {
+      if (typeof this.buttonRef?.matches === 'function' && this.buttonRef.matches(':focus-visible')) {
+        this.focusType = FOCUS_TYPE.TAB;
+      }
     };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
@@ -70,15 +78,15 @@ const WppSortButton$1 = /*@__PURE__*/ proxyCustomElement(class WppSortButton ext
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-sort-v4-6-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", ...this.validAriaProps, part: "button" }, h("wpp-icon-sort-v4-7-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-sort-button-v4-6-0"; }
+  static get registryIs() { return "wpp-sort-button-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppSortButtonCss; }
-}, [1, "wpp-sort-button", "wpp-sort-button-v4-6-0", {
+}, [1, "wpp-sort-button", "wpp-sort-button-v4-7-0", {
     "name": [1],
     "ariaProps": [16],
     "disabled": [516],
@@ -92,14 +100,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-sort-button-v4-6-0", "wpp-icon-sort-v4-6-0"];
+  const components = ["wpp-sort-button-v4-7-0", "wpp-icon-sort-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-sort-button-v4-6-0":
+    case "wpp-sort-button-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSortButton$1);
       }
       break;
-    case "wpp-icon-sort-v4-6-0":
+    case "wpp-icon-sort-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

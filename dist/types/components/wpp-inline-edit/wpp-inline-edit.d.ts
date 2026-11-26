@@ -11,6 +11,12 @@ export declare class WppInlineEdit {
   private inputRef?;
   private popoverRef?;
   private triggerContainerRef?;
+  private readTriggerRef?;
+  private contentRef?;
+  private confirmButtonRef?;
+  private cancelButtonRef?;
+  private isClosingPopover;
+  private restoreFocusOnRead;
   private lastValueWithError?;
   host: HTMLWppInlineEditElement;
   initialValue: string;
@@ -69,6 +75,7 @@ export declare class WppInlineEdit {
   editModeChangeHandler(): void;
   onValueChange(): void;
   componentWillLoad(): void;
+  componentDidRender(): void;
   componentDidLoad(): void;
   private handleAnchorResize;
   disconnectedCallback(): void;
@@ -83,7 +90,11 @@ export declare class WppInlineEdit {
   private handleClose;
   private inlineEditCssClasses;
   private inlineEditPopoverCssClasses;
+  private cancelEdit;
+  private getFieldTabStops;
   private onKeyDownFormEl;
+  private onKeyDownButtons;
+  private onKeyDownReadTrigger;
   private viewTextCssClasses;
   private renderViewText;
   private renderViewContent;

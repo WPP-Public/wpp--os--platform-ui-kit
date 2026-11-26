@@ -116,9 +116,9 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
    */
   select(): Promise<void>;
   /**
-   * Method that sets focus on the native input.
+   * Method that sets focus on the native input. Pass `isOutlined` to show the keyboard focus ring.
    */
-  setFocus(): Promise<void>;
+  setFocus(isOutlined?: boolean): Promise<void>;
   /**
    * Method that sets input value.
    */

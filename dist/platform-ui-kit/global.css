@@ -1085,7 +1085,6 @@
   width: 100%;
 }
 .wpp-select-portal .nothing-found {
-  --wpp-typography-color: var(--wpp-grey-color-700);
   padding: 5px 8px;
 }
 .wpp-select-portal .wpp-divider {
@@ -2171,6 +2170,14 @@
   overflow-y: auto;
   user-select: none;
 }
+.wpp-color-picker-dropdown .focus-sentinel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  outline: none;
+}
 .wpp-color-picker-dropdown .wpp-segmented-control {
   margin-bottom: 16px;
 }
@@ -2239,6 +2246,11 @@
 .wpp-color-picker-dropdown .wpp-custom-picker .wpp-saved-colors .wpp-colors .wpp-icon:hover {
   cursor: pointer;
 }
+.wpp-color-picker-dropdown .wpp-custom-picker .wpp-saved-colors .wpp-colors .save-color:focus-visible {
+  border-radius: 2px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
 .wpp-color-picker-dropdown .wpp-custom-picker .wpp-saved-colors .wpp-colors .saved-color {
   width: 26px;
   height: 26px;
@@ -2255,6 +2267,11 @@
 }
 .wpp-color-picker-dropdown .wpp-custom-picker .wpp-saved-colors .wpp-colors .saved-color:hover {
   cursor: pointer;
+}
+.wpp-color-picker-dropdown .wpp-custom-picker .wpp-saved-colors .wpp-colors .saved-color:focus-visible {
+  border-radius: 2px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 .wpp-color-picker-dropdown::-webkit-scrollbar {
   width: 8px;
@@ -2303,6 +2320,11 @@
 }
 .wpp-color-picker-dropdown .wpp-color-section .wpp-color-subsection .wpp-color-box:hover {
   cursor: pointer;
+}
+.wpp-color-picker-dropdown .wpp-color-section .wpp-color-subsection .wpp-color-box:focus-visible {
+  border-radius: 2px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 .wpp-color-picker-dropdown .wpp-color-section .wpp-color-subsection .wpp-color-box:last-child {
   margin-right: 0;

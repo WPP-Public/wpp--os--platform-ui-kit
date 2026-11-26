@@ -4,6 +4,8 @@ import { AudioPlayerLocales, AudioPlayerRateEventDetail, AudioPlayerStates, Audi
 export declare class WppAudioPlayer {
   private audioRef?;
   private playbackRatePopoverRef?;
+  private isSpeedTooltipPointerFocus;
+  private speedTooltipConfig;
   volumeBarRef: HTMLInputElement | undefined;
   volumeButtonRef: HTMLWppActionButtonElement | undefined;
   volumeContainerRef: HTMLDivElement | undefined;
@@ -189,6 +191,11 @@ export declare class WppAudioPlayer {
    */
   private revealVolumeSlider;
   private showAndHideVolumeSlider;
+  /**
+   * The speed is applied on every change, but the menu only closes on a pick: a click, or Space / Enter. Arrow keys move
+   * the selection (radio group) and keep the menu open, so keyboard users can keep browsing the speeds (SC 3.2.2).
+   */
+  private closePlaybackRateMenuOnPick;
   private handlePlaybackRateChange;
   /** Controls that Space activates natively: real buttons and ARIA toggles such as the speed pills. */
   private isActivatedBySpace;

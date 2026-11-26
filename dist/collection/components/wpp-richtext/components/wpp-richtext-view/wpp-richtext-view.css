@@ -711,6 +711,10 @@
   font-size: 14px;
   color: var(--richtext-button-inactive-color, var(--wpp-grey-color-600));
   transition: color 0.15s;
+  /* Keyboard traversal (roving tabindex) is the equivalent of a mouse hover:
+     show the hover tint plus the DS focus ring the font-size trigger and the
+     editor already draw, so keyboard users can see which control is focused
+     (WCAG 2.4.7). Reserve the active/click tint for real Enter/Space activation. */
 }
 .ql-toolbar.ql-wpp button:hover {
   color: var(--richtext-button-inactive-hover-color, var(--wpp-grey-color-700));
@@ -719,14 +723,24 @@
   color: var(--richtext-button-inactive-click-color, var(--wpp-grey-color-800));
   outline: none;
 }
+.ql-toolbar.ql-wpp button:focus-visible {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--richtext-toolbar-outline-color, var(--wpp-brand-color));
+  color: var(--richtext-button-inactive-hover-color, var(--wpp-grey-color-700));
+}
 .ql-toolbar.ql-wpp button.ql-active {
   color: var(--richtext-button-active-color, var(--wpp-primary-color-500));
+  /* Keep the active (pressed) tint while focused; only add the ring. */
 }
 .ql-toolbar.ql-wpp button.ql-active:hover {
   color: var(--richtext-button-active-hover-color, var(--wpp-primary-color-400));
 }
 .ql-toolbar.ql-wpp button.ql-active:active {
   color: var(--richtext-button-active-click-color, var(--wpp-primary-color-600));
+}
+.ql-toolbar.ql-wpp button.ql-active:focus-visible {
+  color: var(--richtext-button-active-hover-color, var(--wpp-primary-color-400));
 }
 .ql-toolbar.ql-wpp button:disabled {
   cursor: not-allowed;

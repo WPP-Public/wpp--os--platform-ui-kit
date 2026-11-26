@@ -541,10 +541,10 @@ export class WppMediaViewer {
       return h("div", { key: "drop-overlay", class: "drop-overlay" });
     }
     if (this.status === 'loading') {
-      return (h("wpp-skeleton-v4-6-0", { key: "loading-skeleton", class: "loading-skeleton", variant: "rectangle", width: "100%", height: "100%" }));
+      return (h("wpp-skeleton-v4-7-0", { key: "loading-skeleton", class: "loading-skeleton", variant: "rectangle", width: "100%", height: "100%" }));
     }
     if (this.status === 'error') {
-      return (h("div", { key: "error-state", class: "overlay error-state", part: "error-state" }, h("div", { class: "error-text" }, h("wpp-typography-v4-6-0", { class: "error-line", type: "s-strong", tag: "p" }, this._locales.errorTitle), h("wpp-typography-v4-6-0", { class: "error-line", type: "s-body", tag: "p", color: "var(--wpp-grey-color-900)" }, this.errorText())), this.canRetry && (h("wpp-button-v4-6-0", { ref: el => (this.retryButtonRef = el), variant: "secondary", size: "s", onClick: this.onRetryClick }, h("wpp-icon-refresh-v4-6-0", { slot: "icon-start" }), this._locales.retryButtonLabel))));
+      return (h("div", { key: "error-state", class: "overlay error-state", part: "error-state" }, h("div", { class: "error-text" }, h("wpp-typography-v4-7-0", { class: "error-line", type: "s-strong", tag: "p" }, this._locales.errorTitle), h("wpp-typography-v4-7-0", { class: "error-line", type: "s-body", tag: "p", color: "var(--wpp-grey-color-900)" }, this.errorText())), this.canRetry && (h("wpp-button-v4-7-0", { ref: el => (this.retryButtonRef = el), variant: "secondary", size: "s", onClick: this.onRetryClick }, h("wpp-icon-refresh-v4-7-0", { slot: "icon-start" }), this._locales.retryButtonLabel))));
     }
     return null;
   }
@@ -561,7 +561,7 @@ export class WppMediaViewer {
     const fullscreenLabel = this.isFullscreen
       ? this._locales.exitFullscreenButtonLabel
       : this._locales.enterFullscreenButtonLabel;
-    return (h("div", { key: "controls", class: "controls", part: "controls" }, showUploadButton && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar upload-toolbar", ariaProps: { label: this._locales.uploadToolbarLabel }, actionButtonsConfig: [
+    return (h("div", { key: "controls", class: "controls", part: "controls" }, showUploadButton && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar upload-toolbar", ariaProps: { label: this._locales.uploadToolbarLabel }, actionButtonsConfig: [
         {
           id: 'upload',
           icon: 'wpp-icon-upload',
@@ -569,7 +569,7 @@ export class WppMediaViewer {
           ariaProps: { label: this._locales.uploadButtonLabel },
           onClick: this.onUploadClick,
         },
-      ] })), !isErrorState && (h("div", { class: "view-options" }, showZoomControls && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar zoom-toolbar", ariaProps: { label: this._locales.zoomToolbarLabel }, actionButtonsConfig: this.zoomActions(isLoaded) })), showFullscreen && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar", ariaProps: { label: this._locales.fullscreenToolbarLabel }, actionButtonsConfig: [
+      ] })), !isErrorState && (h("div", { class: "view-options" }, showZoomControls && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar zoom-toolbar", ariaProps: { label: this._locales.zoomToolbarLabel }, actionButtonsConfig: this.zoomActions(isLoaded) })), showFullscreen && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar", ariaProps: { label: this._locales.fullscreenToolbarLabel }, actionButtonsConfig: [
         {
           id: 'fullscreen',
           icon: this.isFullscreen ? 'wpp-icon-fullscreen-minimise' : 'wpp-icon-fullscreen',
@@ -585,7 +585,7 @@ export class WppMediaViewer {
     return (h(Host, { class: this.hostCssClasses(), style: this.hostStyle() }, h("div", { class: "media-viewer", onPointerDown: this.onPointerInput, onKeyDown: this.onKeyboardInput, onDragEnter: this.onDragEnter, onDragOver: this.onDragOver, onDragLeave: this.onDragLeave, onDrop: this.onDrop }, h("div", { key: "viewport", ref: el => (this.viewportRef = el), class: { viewport: true, 'tab-focus': this.hasKeyboardFocus }, part: "viewport", role: "application", tabindex: "0", "aria-label": this.viewportLabel(), "aria-describedby": "keyboard-instructions", "aria-busy": this.status === 'loading' ? 'true' : undefined, ...getAriaProps(this.ariaProps), onKeyDown: this.onViewportKeyDown, onPointerDown: this.onViewportPointerDown, onFocus: this.onViewportFocus, onBlur: this.onViewportBlur }), this.renderOverlay(), this.renderControls(isLoaded), h("span", { key: "instructions", id: "keyboard-instructions", class: "visually-hidden" }, this._locales.keyboardInstructions), h("div", { key: "live-region", class: "visually-hidden", "aria-live": "polite" }, this.announcement), this.controls.showUploadButton && (h("input", { key: "file-input", ref: el => (this.fileInputRef = el), class: "file-input", type: "file", multiple: true, hidden: true, accept: this.acceptedFileExtensions.map(extension => `.${extension}`).join(','), onChange: this.onFileInputChange })))));
   }
   static get is() { return "wpp-media-viewer"; }
-  static get registryIs() { return "wpp-media-viewer-v4-6-0"; }
+  static get registryIs() { return "wpp-media-viewer-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

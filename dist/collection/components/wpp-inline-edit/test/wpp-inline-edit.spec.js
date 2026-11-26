@@ -372,7 +372,8 @@ describe('wpp-inline-edit', () => {
       });
       await page.rootInstance['handleAccept']();
       expect(page.rootInstance.errorMessage).toBe('Server error');
-      expect(mockFormEl.setFocus).toHaveBeenCalled();
+      // With its focus ring: the user pressed Confirm, so nothing else shows focus has moved to the field.
+      expect(mockFormEl.setFocus).toHaveBeenCalledWith(true);
     });
   });
   describe('handleClose', () => {
@@ -455,7 +456,7 @@ describe('wpp-inline-edit', () => {
       });
       const mockHandleAccept = jest.fn();
       page.rootInstance['handleAccept'] = mockHandleAccept;
-      page.rootInstance['onKeyDownFormEl']({ key: 'Enter' });
+      page.rootInstance['onKeyDownFormEl'](new KeyboardEvent('keydown', { key: 'Enter' }));
       expect(mockHandleAccept).toHaveBeenCalled();
     });
     it('should not call handleAccept on other keys', async () => {
@@ -465,7 +466,7 @@ describe('wpp-inline-edit', () => {
       });
       const mockHandleAccept = jest.fn();
       page.rootInstance['handleAccept'] = mockHandleAccept;
-      page.rootInstance['onKeyDownFormEl']({ key: 'Tab' });
+      page.rootInstance['onKeyDownFormEl'](new KeyboardEvent('keydown', { key: 'a' }));
       expect(mockHandleAccept).not.toHaveBeenCalled();
     });
   });
@@ -937,6 +938,145 @@ describe('wpp-inline-edit', () => {
       });
       const viewText = page.root?.shadowRoot?.querySelector('[part="view-text"]');
       expect(viewText).toBeTruthy();
+    });
+  });
+  describe('Testing accessibility', () => {
+    // The popover, action buttons and slotted input are not registered here, so give them the methods the
+    // component calls on them.
+    const setup = async (mode) => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit mode="${mode}" value="Draft"><wpp-input slot="form-element"></wpp-input></wpp-inline-edit>`,
+      });
+      const shadow = page.root.shadowRoot;
+      const popover = shadow.querySelector('wpp-popover');
+      const formEl = page.root.querySelector('wpp-input');
+      const [confirm, cancel] = Array.from(shadow.querySelectorAll('wpp-action-button'));
+      popover.closePopover = jest.fn();
+      formEl.setValue = jest.fn();
+      confirm.setFocus = jest.fn();
+      cancel.setFocus = jest.fn();
+      const modes = [];
+      page.root.addEventListener('wppModeChange', (e) => {
+        const { mode: next, reason } = e.detail;
+        modes.push(`${next}:${reason}`);
+      });
+      return { page, shadow, formEl, confirm, cancel, modes };
+    };
+    it('should open the editor when Enter or Space is pressed on the read-mode trigger', async () => {
+      const { shadow, modes } = await setup('read');
+      const trigger = shadow.querySelector('[role="button"].trigger');
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      expect(modes).toEqual(['edit:undefined', 'edit:undefined']);
+    });
+    it('should not wrap the edit field in a button or a tab stop', async () => {
+      const { shadow } = await setup('edit');
+      const trigger = shadow.querySelector('.trigger');
+      expect(trigger.getAttribute('role')).toBe('group');
+      expect(trigger.hasAttribute('tabindex')).toBe(false);
+      expect(shadow.querySelector('[role="button"] slot[name="form-element"]')).toBeNull();
+    });
+    it('should name the confirm and cancel buttons', async () => {
+      const { confirm, cancel } = await setup('edit');
+      expect(confirm.ariaProps).toEqual({ label: 'Confirm' });
+      expect(cancel.ariaProps).toEqual({ label: 'Cancel' });
+    });
+    it('should cancel the edit and restore the value when Escape is pressed in the field', async () => {
+      const { shadow, formEl, modes } = await setup('edit');
+      shadow.querySelector('.form-element').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(modes).toEqual(['read:cancel']);
+      expect(formEl.setValue).toHaveBeenCalled();
+    });
+    it('should hand focus back to the read-mode trigger once Escape has ended the edit', async () => {
+      const { page, shadow } = await setup('edit');
+      const focusSpy = jest.spyOn(Object.getPrototypeOf(shadow.querySelector('.trigger')), 'focus');
+      shadow.querySelector('.form-element').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      page.root.setAttribute('mode', 'read');
+      await page.waitForChanges();
+      const readTrigger = shadow.querySelector('[role="button"].trigger');
+      expect(readTrigger).toBeTruthy();
+      expect(focusSpy.mock.instances).toContain(readTrigger);
+      focusSpy.mockRestore();
+    });
+    it('should move focus from the field to the confirm button on Tab', async () => {
+      const { shadow, confirm, cancel } = await setup('edit');
+      const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      shadow.querySelector('.form-element').dispatchEvent(event);
+      expect(confirm.setFocus).toHaveBeenCalled();
+      expect(cancel.setFocus).not.toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(true);
+    });
+    describe('with the clear button of the field', () => {
+      // wpp-input is not registered here, so give it the shadow root it renders: the input and, once it has text,
+      // the clear button.
+      const setupField = async (withClearButton = true) => {
+        const context = await setup('edit');
+        const fieldShadow = context.formEl.attachShadow({ mode: 'open' });
+        fieldShadow.innerHTML = `<input />${withClearButton ? '<wpp-icon-cross part="icon-cross" tabindex="0"></wpp-icon-cross>' : ''}`;
+        return {
+          ...context,
+          input: fieldShadow.querySelector('input'),
+          clearButton: fieldShadow.querySelector('[part="icon-cross"]'),
+        };
+      };
+      // The mock DOM does not carry events out of a shadow root, so the keydown is dispatched where the component
+      // listens, with the composed path a browser reports for a key pressed on `origin`.
+      const pressInField = (shadow, origin, key, shiftKey = false) => {
+        const event = new KeyboardEvent('keydown', { key, shiftKey, cancelable: true });
+        Object.defineProperty(event, 'composedPath', { value: () => [origin] });
+        shadow.querySelector('.form-element').dispatchEvent(event);
+        return event;
+      };
+      it('should leave Tab from the input to the browser, so it reaches the clear button', async () => {
+        const { shadow, input, confirm, modes } = await setupField();
+        const event = pressInField(shadow, input, 'Tab');
+        expect(event.defaultPrevented).toBe(false);
+        expect(confirm.setFocus).not.toHaveBeenCalled();
+        expect(modes).toEqual([]);
+      });
+      it('should move focus from the clear button to the confirm button on Tab', async () => {
+        const { shadow, clearButton, confirm } = await setupField();
+        const event = pressInField(shadow, clearButton, 'Tab');
+        expect(event.defaultPrevented).toBe(true);
+        expect(confirm.setFocus).toHaveBeenCalled();
+      });
+      it('should keep editing on Shift+Tab from the clear button and end it on Shift+Tab from the input', async () => {
+        const { shadow, input, clearButton, modes } = await setupField();
+        pressInField(shadow, clearButton, 'Tab', true);
+        expect(modes).toEqual([]);
+        pressInField(shadow, input, 'Tab', true);
+        expect(modes).toEqual(['read:outsideClick']);
+      });
+      it('should not confirm the edit when Enter is pressed on the clear button', async () => {
+        const { page, shadow, clearButton, modes } = await setupField();
+        pressInField(shadow, clearButton, 'Enter');
+        await page.waitForChanges();
+        expect(modes).toEqual([]);
+      });
+      it('should move focus from the first button back to the clear button on Shift+Tab while it is shown', async () => {
+        const { clearButton, confirm } = await setupField();
+        const focusSpy = jest.spyOn(clearButton, 'focus');
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+        confirm.dispatchEvent(event);
+        expect(event.defaultPrevented).toBe(true);
+        expect(focusSpy).toHaveBeenCalled();
+      });
+      it('should move focus from the first button back to the input when the field has no clear button', async () => {
+        const { input, confirm } = await setupField(false);
+        const focusSpy = jest.spyOn(input, 'focus');
+        confirm.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+        expect(focusSpy).toHaveBeenCalled();
+      });
+      it('should treat the cancel button as the first button while confirm is disabled', async () => {
+        const { input, confirm, cancel } = await setupField(false);
+        const focusSpy = jest.spyOn(input, 'focus');
+        confirm.disabled = true;
+        confirm.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+        expect(focusSpy).not.toHaveBeenCalled();
+        cancel.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+        expect(focusSpy).toHaveBeenCalled();
+      });
     });
   });
 });

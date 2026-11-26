@@ -34,6 +34,22 @@
   outline: none;
 }
 
+[data-item-id]:has(.menu-trigger[aria-expanded=true], .menu-trigger:focus-visible)::part(tree-item-action-button) {
+  opacity: 1;
+}
+
+.menu-trigger {
+  border-radius: var(--wpp-border-radius-s);
+}
+.menu-trigger:focus {
+  outline: none;
+}
+.menu-trigger:focus-visible {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+
 .content-container {
   display: flex;
   flex-direction: column;

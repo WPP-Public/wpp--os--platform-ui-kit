@@ -67,7 +67,8 @@ export declare class WppTree {
   readonly loading?: boolean;
   /**
    * Accessible label for the tree component.
-   * Provides a name for the tree that assistive technologies can announce.
+   * Provides a name for the tree that assistive technologies can announce. When it is omitted the
+   * tree falls back to the `treeLabel` locale string, so it always has a name.
    */
   readonly label?: string;
   /**
@@ -139,8 +140,10 @@ export declare class WppTree {
    * Focuses a resolved focusable element using the correct strategy:
    * - If the element is the inner <button> of a wpp-action-button (detected via
    *   getRootNode()), calls setFocus() on the action-button host for proper focus ring.
+   * - A wpp-avatar is focused through its setFocus(), as a tooltip avatar's focusable element is
+   *   inside it rather than the host.
    * - Otherwise, calls .focus() + synthetic keyup Tab to trigger the component's
-   *   built-in tab-focus CSS class (wpp-avatar, menu triggers, etc.).
+   *   built-in tab-focus CSS class (menu triggers, etc.).
    */
   private focusActionElement;
   /**
@@ -154,6 +157,11 @@ export declare class WppTree {
    * - Any `wpp-menu-context` elements from the icon-start slot (separate from action-button)
    */
   private getActionElementsInItem;
+  /**
+   * Returns the elements a tree item holds in the given slots. Only its direct children count: an open
+   * item renders its children inside it too, and their icon slots are not this item's actions.
+   */
+  private getOwnSlotted;
   /**
    * Resolves each action component to the actual focusable DOM element.
    *
@@ -230,6 +238,8 @@ export declare class WppTree {
   private checkData;
   componentWillLoad(): void;
   private hostCssClasses;
+  /** Resolves an item's actions-control name from locales. `{title}` is the item's title. */
+  private itemActionsLabelFor;
   private renderIconsList;
   private renderTreeItem;
   private renderTree;

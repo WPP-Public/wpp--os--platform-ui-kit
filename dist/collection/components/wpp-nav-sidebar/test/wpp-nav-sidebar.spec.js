@@ -149,8 +149,8 @@ describe('wpp-nav-sidebar', () => {
       expect(wrapper()?.hasAttribute('inert')).toBe(false);
       expect(wrapper()?.hasAttribute('aria-hidden')).toBe(false);
     });
-    // The rail shortens long labels for layout. Without an explicit name the control is announced
-    // as the clipped string — "Scheduled repo…" rather than "Scheduled reporting".
+    // The rail shortens long labels for layout. The control is named by the visible text so speech
+    // users can say what they see (axe label-content-name-mismatch), and the full text is its description.
     describe('truncated labels', () => {
       const mkLongLabels = () => newSpecPage({
         components: [WppNavSidebar, WppNavSidebarItem],
@@ -162,18 +162,24 @@ describe('wpp-nav-sidebar', () => {
                 </wpp-nav-sidebar-item>
               </wpp-nav-sidebar>`,
       });
-      it('names a truncated link with its full label', async () => {
+      it('names a truncated link by its visible text and describes it with the full label', async () => {
         const page = await mkLongLabels();
         const item = page.root?.querySelector('wpp-nav-sidebar-item[path="/scheduled"]');
         const link = item?.shadowRoot?.querySelector('a');
-        expect(link?.textContent).not.toBe('Scheduled reporting overview');
-        expect(link?.getAttribute('aria-label')).toBe('Scheduled reporting overview');
+        const description = item?.shadowRoot?.querySelector(`#${link?.getAttribute('aria-describedby')}`);
+        expect(link?.hasAttribute('aria-label')).toBe(false);
+        expect(link?.querySelector('[part="label"]')?.textContent).toBe('Scheduled reporting …');
+        expect(description?.textContent).toBe('Scheduled reporting overview');
+        expect(description?.hasAttribute('hidden')).toBe(true);
       });
-      it('names a truncated group toggle with its full label', async () => {
+      it('names a truncated group toggle by its visible text and describes it with the full label', async () => {
         const page = await mkLongLabels();
         const group = page.root?.querySelector('wpp-nav-sidebar-item[extended]');
         const toggle = group?.shadowRoot?.querySelector('[role="button"]');
-        expect(toggle?.getAttribute('aria-label')).toBe('Scheduled reporting');
+        const description = group?.shadowRoot?.querySelector(`#${toggle?.getAttribute('aria-describedby')}`);
+        expect(toggle?.hasAttribute('aria-label')).toBe(false);
+        expect(toggle?.querySelector('[part="label"]')?.textContent).toBe('Scheduled repo…');
+        expect(description?.textContent).toBe('Scheduled reporting');
       });
       it('leaves a label that fits to name itself from its content', async () => {
         const page = await mkLongLabels();
@@ -181,6 +187,7 @@ describe('wpp-nav-sidebar', () => {
         const link = item?.shadowRoot?.querySelector('a');
         expect(link?.textContent).toContain('Shared reports');
         expect(link?.hasAttribute('aria-label')).toBe(false);
+        expect(link?.hasAttribute('aria-describedby')).toBe(false);
       });
     });
     // The parent sets `active` after first render, so the marker has to follow the attribute

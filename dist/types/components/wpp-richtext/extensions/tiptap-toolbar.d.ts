@@ -24,8 +24,10 @@ export interface ToolbarAction {
 export declare function isFormatActive(editor: Editor, name: string, attrs?: Record<string, unknown>): boolean;
 /**
  * Executes a toolbar command on the editor.
+ * @param focusEditor Move focus into the editor. Pass `false` for a keyboard activation, so focus stays on the
+ * toolbar control the way the WAI-ARIA Toolbar pattern expects (e.g. pressing Undo repeatedly).
  */
-export declare function executeToolbarCommand(editor: Editor, name: string, value?: unknown): void;
+export declare function executeToolbarCommand(editor: Editor, name: string, value?: unknown, focusEditor?: boolean): void;
 /**
  * Resolves toolbar alias groups (matching the Quill config pattern).
  * Returns flat array of action names from alias definitions.

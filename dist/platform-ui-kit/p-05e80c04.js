@@ -1,0 +1,1 @@
+import{h as a}from"./p-52d683b3.js";const r=({wrapperClass:r,id:e,role:i,tabIndex:l,"aria-label":t,"aria-labelledby":s,"aria-description":p,title:d,...b},o)=>a("div",{id:e,class:r,part:`${b.name||"ws"}-wrapper`,role:i,tabIndex:l,"aria-label":t,"aria-labelledby":s,"aria-description":p,title:d},a("slot",{part:b.name||"ws-inner",...b},o));export{r as W}

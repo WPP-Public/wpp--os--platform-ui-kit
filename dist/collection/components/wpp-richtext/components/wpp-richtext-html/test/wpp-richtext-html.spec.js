@@ -54,4 +54,11 @@ describe('WppRichtextHtml', () => {
     `);
     expect(page.rootInstance.value).toBe('<p>test</p>');
   });
+  it('adds an empty alt to images that lack one, preserving author alt', async () => {
+    await page.setContent("<wpp-richtext-html value=\"<p><img src='a.png'><img src='b.png' alt='Logo'></p>\"></wpp-richtext-html>");
+    const imgs = page.root.querySelectorAll('.ql-editor img');
+    expect(imgs.length).toBe(2);
+    expect(imgs[0].getAttribute('alt')).toBe('');
+    expect(imgs[1].getAttribute('alt')).toBe('Logo');
+  });
 });

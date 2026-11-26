@@ -113,14 +113,15 @@ export const extractExtraProps = (tree) => {
 export const getAllVisibleItems = (tree) => {
   const result = [];
   const traverse = (items, level = 1) => {
-    for (const item of items) {
-      if (item.hidden)
-        continue;
-      result.push({ ...item, level });
+    // Siblings are counted here, from the source data, because virtualisation renders only a
+    // window: by the time the rows exist there is no sibling set left to count.
+    const siblings = items.filter(item => !item.hidden);
+    siblings.forEach((item, index) => {
+      result.push({ ...item, level, ariaSetSize: siblings.length, ariaPosInSet: index + 1 });
       if (item.open && item.children?.length) {
         traverse(item.children, level + 1);
       }
-    }
+    });
   };
   traverse(tree);
   return result;

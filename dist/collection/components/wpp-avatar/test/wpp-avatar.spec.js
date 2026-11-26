@@ -36,14 +36,80 @@ describe('wpp-avatar', () => {
     expect(a.tooltipConfig.placement).toBe('bottom');
   });
   describe('Testing accessibility', () => {
-    it('does not use a presentational host when the tooltip trigger is focusable', async () => {
+    // A presentational avatar is decoration inside another control (e.g. a pill), so nothing in it may be focusable
+    it('keeps a presentational tooltip avatar decorative, with no focusable trigger', async () => {
       const page = await newSpecPage({
         components: [WppAvatar],
-        html: `<wpp-avatar with-tooltip name="Test Avatar" role="presentation"></wpp-avatar>`,
+        html: `<wpp-avatar with-tooltip name="Test Avatar" src="avatar.png" role="presentation"></wpp-avatar>`,
       });
-      expect(page.root?.getAttribute('role')).toBeNull();
-      expect(page.root?.getAttribute('tabindex')).toBeNull();
+      const trigger = page.root?.shadowRoot?.querySelector('[part="content"]');
+      expect(page.root?.getAttribute('role')).toBe('presentation');
+      expect(trigger?.hasAttribute('role')).toBe(false);
+      expect(trigger?.hasAttribute('tabindex')).toBe(false);
+      expect(trigger?.hasAttribute('aria-label')).toBe(false);
       expect(page.root?.shadowRoot?.querySelector('wpp-tooltip')).not.toBeNull();
+    });
+    it('drops the tooltip button when the avatar is made presentational after it rendered', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar with-tooltip name="Test Avatar"></wpp-avatar>`,
+      });
+      page.root?.setAttribute('role', 'presentation');
+      await page.waitForChanges();
+      const trigger = page.root?.shadowRoot?.querySelector('[part="content"]');
+      expect(page.root?.getAttribute('role')).toBe('presentation');
+      expect(trigger?.hasAttribute('role')).toBe(false);
+      expect(trigger?.hasAttribute('tabindex')).toBe(false);
+    });
+    // The tooltip opens when its trigger, the slotted content, takes focus, so that content is the button
+    it.each([
+      ['an image', 'src="avatar.png"'],
+      ['initials', ''],
+    ])('makes a tooltip avatar with %s a focusable, named button', async (_, src) => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar with-tooltip name="Test Avatar" ${src}></wpp-avatar>`,
+      });
+      const trigger = page.root?.shadowRoot?.querySelector('[part="content"]');
+      expect(trigger?.parentElement?.tagName.toLowerCase()).toBe('wpp-tooltip');
+      expect(trigger?.getAttribute('role')).toBe('button');
+      expect(trigger?.getAttribute('tabindex')).toBe('0');
+      expect(trigger?.getAttribute('aria-label')).toBe('User: Test Avatar');
+    });
+    it('takes a tooltip avatar out of the Tab order when its index is -1', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar with-tooltip name="Test Avatar"></wpp-avatar>`,
+      });
+      page.root.index = -1;
+      await page.waitForChanges();
+      expect(page.root?.shadowRoot?.querySelector('[part="content"]')?.getAttribute('tabindex')).toBe('-1');
+    });
+    it('keeps the button on the host when there is no tooltip', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar name="Test Avatar"></wpp-avatar>`,
+      });
+      const content = page.root?.shadowRoot?.querySelector('[part="content"]');
+      expect(page.root?.getAttribute('role')).toBe('button');
+      expect(page.root?.getAttribute('tabindex')).toBe('0');
+      expect(content?.hasAttribute('role')).toBe(false);
+      expect(content?.hasAttribute('tabindex')).toBe(false);
+    });
+    it.each([
+      ['a tooltip avatar', 'with-tooltip', '[part="content"]'],
+      ['an avatar without a tooltip', '', null],
+    ])('setFocus focuses %s and shows the focus ring', async (_, attr, selector) => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar ${attr} name="Test Avatar"></wpp-avatar>`,
+      });
+      const target = (selector ? page.root?.shadowRoot?.querySelector(selector) : page.root);
+      const focusSpy = jest.spyOn(target, 'focus');
+      await page.root?.setFocus();
+      await page.waitForChanges();
+      expect(focusSpy).toHaveBeenCalled();
+      expect(page.root?.classList.contains('tab-focus')).toBe(true);
     });
   });
   it('should set border radius based on size when variant is square', async () => {

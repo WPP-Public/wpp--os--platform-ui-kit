@@ -48,6 +48,8 @@ export declare class WppNavigationItem {
    */
   wppActiveNavItemChanged: EventEmitter<NavigationItemEventDetail>;
   private onClick;
+  private onLinkKeyDown;
+  private isTopLevelLink;
   private navItemCssClasses;
   private hostCssClasses;
   private getHostRole;

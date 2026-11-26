@@ -113,7 +113,14 @@ export declare class WppStep {
   private connectorLineCssClasses;
   private stepBgCssClasses;
   private hostCssClasses;
+  private get isDisabled();
+  private getFocusTooltipConfig;
   private handleStepClick;
+  private handleFocus;
+  private getNavigableSteps;
+  private focusStep;
+  private moveFocusByOffset;
+  private handleKeyDown;
   private renderStepTypeData;
   render(): any;
 }

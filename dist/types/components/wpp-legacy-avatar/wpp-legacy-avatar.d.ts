@@ -1,6 +1,7 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { FOCUS_TYPE, DropdownConfig, AriaProps } from '../../types/common';
-import { AvatarChangeEventDetail, AvatarSize, AvatarVariant } from '../wpp-avatar-group/types';
+import { AvatarSize, AvatarVariant } from '../wpp-avatar-group/types';
+import { LegacyAvatarChangeEventDetail } from './types';
 /**
  * @part image - Image element
  * @part icon - Icon element
@@ -69,7 +70,7 @@ export declare class WppLegacyAvatar {
   /**
    * Emitted when the avatar item is clicked.
    */
-  wppClick: EventEmitter<AvatarChangeEventDetail>;
+  wppClick: EventEmitter<LegacyAvatarChangeEventDetail>;
   colorChange(newValue: string): void;
   srcChange(): void;
   componentWillLoad(): void;

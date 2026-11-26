@@ -26,6 +26,7 @@ export declare class WppAutocomplete {
   protected crossIconRef?: HTMLWppIconCrossElement;
   protected tippyInstance?: Instance;
   private resizeObserver?;
+  private optionsListResizeObserver?;
   protected withPills: boolean;
   protected activeListNdx: number | null;
   protected activeSuggestionNdx: number | null;
@@ -245,6 +246,8 @@ export declare class WppAutocomplete {
   /**
    * Dropdown methods
    */
+  private updateOptionsScrollable;
+  private setOptionsListRef;
   private createTippyInstance;
   private showDropdown;
   private hideDropdown;

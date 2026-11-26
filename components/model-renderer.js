@@ -52893,11 +52893,11 @@ var slzh$1 = function (d, b) { return b + 30 + b2$1(d, b + 26) + b2$1(d, b + 28)
 // read zip header
 var zh$1 = function (d, b, z) {
     var fnl = b2$1(d, b + 28), fn = strFromU8$1(d.subarray(b + 46, b + 46 + fnl), !(b2$1(d, b + 8) & 2048)), es = b + 46 + fnl, bs = b4$1(d, b + 20);
-    var _a = z && bs == 4294967295 ? z64e$1(d, es) : [bs, b4$1(d, b + 24), b4$1(d, b + 42)], sc = _a[0], su = _a[1], off = _a[2];
+    var _a = z && bs == 4294967295 ? z64e(d, es) : [bs, b4$1(d, b + 24), b4$1(d, b + 42)], sc = _a[0], su = _a[1], off = _a[2];
     return [b2$1(d, b + 10), sc, su, fn, es + b2$1(d, b + 30) + b2$1(d, b + 32), off];
 };
 // read zip64 extra field
-var z64e$1 = function (d, b) {
+var z64e = function (d, b) {
     for (; b2$1(d, b) != 1; b += 4 + b2$1(d, b + 2))
         ;
     return [b8$1(d, b + 12), b8$1(d, b + 4), b8$1(d, b + 20)];
@@ -67871,7 +67871,7 @@ var ec = [
     'invalid distance',
     'stream finished',
     'no stream handler',
-    ,
+    , // determined by compression function
     'no callback',
     'invalid UTF-8 data',
     'extra field too long',
@@ -68077,13 +68077,8 @@ var et = /*#__PURE__*/ new u8(0);
 var b2 = function (d, b) { return d[b] | (d[b + 1] << 8); };
 // read 4 bytes
 var b4 = function (d, b) { return (d[b] | (d[b + 1] << 8) | (d[b + 2] << 16) | (d[b + 3] << 24)) >>> 0; };
+// read 8 bytes
 var b8 = function (d, b) { return b4(d, b) + (b4(d, b + 4) * 4294967296); };
-/**
- * Expands DEFLATE data with no wrapper
- * @param data The data to decompress
- * @param opts The decompression options
- * @returns The decompressed version of the data
- */
 function inflateSync(data, opts) {
     return inflt(data, { i: 2 }, opts && opts.out, opts && opts.dictionary);
 }
@@ -68140,15 +68135,30 @@ function strFromU8(dat, latin1) {
 var slzh = function (d, b) { return b + 30 + b2(d, b + 26) + b2(d, b + 28); };
 // read zip header
 var zh = function (d, b, z) {
-    var fnl = b2(d, b + 28), fn = strFromU8(d.subarray(b + 46, b + 46 + fnl), !(b2(d, b + 8) & 2048)), es = b + 46 + fnl, bs = b4(d, b + 20);
-    var _a = z && bs == 4294967295 ? z64e(d, es) : [bs, b4(d, b + 24), b4(d, b + 42)], sc = _a[0], su = _a[1], off = _a[2];
-    return [b2(d, b + 10), sc, su, fn, es + b2(d, b + 30) + b2(d, b + 32), off];
+    var fnl = b2(d, b + 28), efl = b2(d, b + 30), fn = strFromU8(d.subarray(b + 46, b + 46 + fnl), !(b2(d, b + 8) & 2048)), es = b + 46 + fnl;
+    var _a = z64hs(d, es, efl, z, b4(d, b + 20), b4(d, b + 24), b4(d, b + 42)), sc = _a[0], su = _a[1], off = _a[2];
+    return [b2(d, b + 10), sc, su, fn, es + efl + b2(d, b + 32), off];
 };
-// read zip64 extra field
-var z64e = function (d, b) {
-    for (; b2(d, b) != 1; b += 4 + b2(d, b + 2))
-        ;
-    return [b8(d, b + 12), b8(d, b + 4), b8(d, b + 20)];
+// read zip64 header sizes
+var z64hs = function (d, b, l, z, sc, su, off) {
+    var nsc = sc == 4294967295, nsu = su == 4294967295, noff = off == 4294967295, e = b + l;
+    var nf = nsc + nsu + noff;
+    if (z && nf) {
+        for (; b + 4 < e; b += 4 + b2(d, b + 2)) {
+            if (b2(d, b) == 1) {
+                return [
+                    nsc ? b8(d, b + 4 + 8 * nsu) : sc,
+                    nsu ? b8(d, b + 4) : su,
+                    noff ? b8(d, b + 4 + 8 * (nsu + nsc)) : off,
+                    1
+                ];
+            }
+        }
+        // z == 2 for unknown whether or not zip64
+        if (z < 2)
+            err(13);
+    }
+    return [sc, su, off, 0];
 };
 /**
  * Synchronously decompresses a ZIP archive. Prefer using `unzip` for better
@@ -68168,7 +68178,7 @@ function unzipSync(data, opts) {
     if (!c)
         return {};
     var o = b4(data, e + 16);
-    var z = o == 4294967295 || c == 65535;
+    var z = b4(data, e - 20) == 0x7064B50;
     if (z) {
         var ze = b4(data, e - 12);
         z = b4(data, ze) == 0x6064B50;

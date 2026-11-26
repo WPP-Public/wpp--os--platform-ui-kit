@@ -12,6 +12,8 @@ export declare class WppSidePanel {
   private panelRef?;
   private bodyRef?;
   private themeSubscription;
+  private panelFocus;
+  private closedFromKeyboard;
   private titleRef?;
   isHidden: boolean;
   closeReason: SidePanelCloseReason | null;

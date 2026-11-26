@@ -48,6 +48,7 @@
 */
 :host {
   display: block;
+  cursor: pointer;
   --step-width: var(--wpp-step-width, 20px);
   --step-height: var(--wpp-step-height, 20px);
   --step-with-description-height: var(--wpp-step-with-description-height, 50px);
@@ -119,6 +120,10 @@
   --step-horizontal-text-color-active: var(--wpp-step-horizontal-text-color-active, var(--wpp-brand-color));
   --step-horizontal-icon-margin-left: var(--wpp-step-horizontal-icon-margin-left, 8px);
   --step-horizontal-line-width: var(--wpp-step-horizontal-line-width, 2px);
+}
+
+:host([aria-disabled=true]) {
+  cursor: not-allowed;
 }
 
 .text-wrapper {
@@ -263,6 +268,15 @@
 
 .connector-substep {
   margin-left: 8px;
+}
+
+.focus-tooltip {
+  position: absolute;
+}
+
+:host(:focus),
+:host(.tab-focus) {
+  outline: none;
 }
 
 :host(.wpp-last-step) .connector {
@@ -517,6 +531,24 @@
   background-color: var(--step-horizontal-text-color-active);
 }
 
+:host(.wpp-vertical:not([aria-disabled=true])):host(:focus-visible) .step-wrapper .step-bg, :host(.wpp-vertical:not([aria-disabled=true])):host(.tab-focus) .step-wrapper .step-bg {
+  background-color: var(--step-vertical-bg-color-pressed);
+}
+:host(.wpp-vertical:not([aria-disabled=true])):host(:focus-visible) .step-wrapper .step-index.active:not(.completed), :host(.wpp-vertical:not([aria-disabled=true])):host(.tab-focus) .step-wrapper .step-index.active:not(.completed) {
+  background-color: var(--step-vertical-bg-color-pressed);
+}
+
+:host(.wpp-horizontal:not([aria-disabled=true])):host(:focus-visible) .step-wrapper .text-wrapper, :host(.wpp-horizontal:not([aria-disabled=true])):host(.tab-focus) .step-wrapper .text-wrapper {
+  background-color: var(--step-horizontal-text-wrapper-bg-color-pressed);
+}
+
+@media (forced-colors: active) {
+  :host(:focus-visible),
+  :host(.tab-focus) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
 :host([data-wpp-theme=dark]) {
   --step-horizontal-text-wrapper-bg-color-active: var(--wpp-primary-color-300);
   --step-horizontal-text-color-active: var(--wpp-primary-color-800);

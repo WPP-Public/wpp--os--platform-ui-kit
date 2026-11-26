@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const consts = require('./consts-d8f5ef98.js');
+const utils = require('./utils-8b2c3bc1.js');
 
 const MULTIPLE_PRIMARY_BUTTONS_ERROR = 'Only one primary button allowed in the sticky bar.';
 const TOO_MANY_SECONDARY_BUTTONS_ERROR = 'Only 2 secondary buttons allowed in the sticky bar.';
@@ -13,6 +14,9 @@ const MAXIMUM_SECONDARY_BUTTONS = 2;
 const MAXIMUM_ACTION_BUTTONS = 1;
 const INITIAL_BUTTONS_LIST_VALUE = [null, null, null, null];
 const DEFAULT_SCROLL_TRESHOLD = 200;
+const LOCALES_DEFAULTS = {
+  backButtonLabel: 'Back',
+};
 
 const wppLegacyStickyBarCss = ":host{--sticky-bar-offset-top:var(--wpp-sticky-bar-offset-top, 63px);--sticky-bar-padding:var(--wpp-sticky-bar-padding, 12px 32px);--sticky-bar-header-size:var(--wpp-sticky-bar-header-size, 32px);--sticky-bar-header-size-m:var(--wpp-sticky-bar-header-size-m, 40px);--sticky-bar-with-tabs-body-height:var(--wpp-sticky-bar-with-tabs-body-height, 36px);width:100%;position:fixed;left:0;top:0;right:0;z-index:4;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host .container{-webkit-box-sizing:border-box;box-sizing:border-box;background-color:var(--wpp-grey-color-000);padding:var(--sticky-bar-padding);position:relative}:host .container::before{position:absolute;content:\"\";bottom:0;left:0;width:100%;height:1px;background:var(--wpp-grey-color-300)}:host .container .header{height:var(--sticky-bar-header-size);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}:host .container .header .left-area,:host .container .header .right-area{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .container .header .left-area .wpp-action-button{margin-right:4px}:host .container .header .right-area .wpp-button,:host .container .header .right-area .wpp-action-button{margin-right:12px}:host .container .header .right-area .wpp-button:last-child,:host .container .header .right-area .wpp-action-button:last-child{margin-right:0}:host .container .body{height:var(--sticky-bar-header-size);margin-top:8px;--wpp-tabs-width:auto;--wpp-tab-width:auto}:host(.wpp-visible){-webkit-transition:0.3s ease;transition:0.3s ease;top:var(--sticky-bar-offset-top);-webkit-transform:translateY(0);transform:translateY(0)}:host(.wpp-invisible){-webkit-transition:0.3s ease;transition:0.3s ease;top:0;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host(.wpp-blank) .container{height:96px}:host(.wpp-two-lines-with-tabs) .container{padding-bottom:0}:host(.wpp-two-lines-with-tabs) .container .body{height:var(--sticky-bar-with-tabs-body-height)}";
 
@@ -92,6 +96,7 @@ const WppLegacyStickyBar = class {
     this.scrollTreshold = DEFAULT_SCROLL_TRESHOLD;
     this.buttons = [];
     this.tabs = [];
+    this.locales = {};
   }
   updateButtons() {
     this.getButtonsList();
@@ -133,17 +138,20 @@ const WppLegacyStickyBar = class {
       this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${this.offsetFromTop}px`);
     }
   }
+  get _locales() {
+    return utils.mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, this.variant === 'blank' ? (index.h("slot", { name: "content" })) : (index.h(index.Fragment, null, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-6-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-6-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, this.variant === 'blank' ? (index.h("slot", { name: "content" })) : (index.h(index.Fragment, null, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label: this._locales.backButtonLabel }, onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-7-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-7-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (index.h("wpp-action-button-v4-6-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (index.h("wpp-action-button-v4-7-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (index.h("wpp-button-v4-6-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (index.h("div", { class: "body" }, this.variant === 'two-lines' ? (index.h("slot", { name: "content" })) : (this.tabs.length > 0 && (index.h("wpp-tabs-v4-6-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (index.h("wpp-tab-v4-6-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (index.h("wpp-button-v4-7-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    }))), this.variant !== 'one-line' && (index.h("div", { class: "body" }, this.variant === 'two-lines' ? (index.h("slot", { name: "content" })) : (this.tabs.length > 0 && (index.h("wpp-tabs-v4-7-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (index.h("wpp-tab-v4-7-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
   }
-  static get registryIs() { return "wpp-legacy-sticky-bar-v4-6-0"; }
+  static get registryIs() { return "wpp-legacy-sticky-bar-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "buttons": ["updateButtons"],

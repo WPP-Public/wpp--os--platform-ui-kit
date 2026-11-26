@@ -34,7 +34,9 @@
 }
 
 .ag-pinned-left-header,
-.ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell):not(.ag-cell-focus:not(.ag-cell-range-selected):focus-within) {
+.ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell):not(
+    .ag-cell-focus:not(.ag-cell-range-selected):focus-within
+  ) {
   border-right: none;
 }
 
@@ -46,6 +48,63 @@
 
 .ag-theme-wpp .ag-header-row {
   font-weight: bold;
+}
+
+.ag-theme-wpp {
+  --wpp-ag-grid-focus-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+
+.ag-theme-wpp .ag-header-cell:focus-visible,
+.ag-theme-wpp .ag-header-cell:has(:focus-visible) {
+  background-color: var(--ag-header-cell-hover-background-color);
+}
+
+/* Header cells are taller than the clipped header container, so the bottom offset is larger. */
+.ag-theme-wpp .ag-header-cell:focus-visible::after,
+.ag-theme-wpp .ag-header-cell:has(:focus-visible)::after {
+  content: '';
+  position: absolute;
+  inset: 3px 3px 5px;
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: var(--wpp-border-radius-s);
+  box-shadow: var(--wpp-ag-grid-focus-shadow);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ag-theme-wpp .ag-header-cell:focus-visible,
+.ag-theme-wpp .ag-header-cell:has(:focus-visible),
+.ag-theme-wpp .ag-cell:focus-visible {
+  outline: none;
+}
+
+.ag-theme-wpp .ag-cell:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px var(--wpp-grey-color-000),
+    inset 0 0 0 3px var(--wpp-brand-color);
+}
+
+/* Draw outside the masked icon so the checkbox focus ring is not masked too. */
+.ag-theme-wpp .ag-checkbox:has(.ag-checkbox-input:focus-visible) {
+  border-radius: var(--wpp-border-radius-xs);
+  box-shadow: var(--wpp-ag-grid-focus-shadow);
+}
+
+.ag-cell-validation-icon {
+  display: inline-flex;
+  border-radius: var(--wpp-border-radius-xs);
+}
+
+.ag-theme-wpp .ag-cell-validation-icon:focus-visible {
+  outline: none;
+  box-shadow: var(--wpp-ag-grid-focus-shadow);
+}
+
+.ag-theme-wpp .ag-cell-error:focus-within,
+.ag-theme-wpp .ag-cell-error-content:focus-within {
+  overflow: visible;
 }
 
 .ag-header-cell-comp-wrapper,
@@ -236,8 +295,16 @@
   opacity: 1;
 }
 
+.ag-row:not(.ag-row-hover, .ag-row-selected) .ag-selection-checkbox:focus-within {
+  opacity: 1;
+}
+
 .ag-row:not(.ag-row-hover, .ag-row-selected) .ag-selection-checkbox {
   opacity: 0;
+}
+
+.ag-row .ag-cell:focus-visible .ag-selection-checkbox {
+  opacity: 1;
 }
 
 .ag-row {
@@ -336,13 +403,11 @@
 
 .ag-layout-auto-height,
 .ag-layout-print {
-
   .ag-center-cols-container,
   .ag-center-cols-viewport {
-    min-height: 50px
+    min-height: 50px;
   }
 }
-
 
 /* Warning Row Indicator */
 .ag-row-warning {
@@ -408,6 +473,7 @@
   --ag-row-hover-color: var(--wpp-grey-color-200);
   --ag-odd-row-background-color: var(--wpp-grey-color-000);
   --ag-selected-row-background-color: var(--wpp-grey-color-200);
+   --ag-focus-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-primary-color-900);
   --ag-range-selection-border-color: transparent;
   --ag-cell-horizontal-padding: 16px;
 

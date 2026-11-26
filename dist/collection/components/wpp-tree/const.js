@@ -1,6 +1,8 @@
 export const LOCALES_DEFAULTS = {
   nothingFound: 'No result',
   loadingTree: 'Loading tree',
+  treeLabel: 'Tree',
+  itemActionsLabel: 'Actions for {title}',
 };
 /**
  * Specific to Virtualisation

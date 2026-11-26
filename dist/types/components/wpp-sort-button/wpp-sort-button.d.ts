@@ -38,6 +38,7 @@ export declare class WppSortButton {
   private onKeyDown;
   private onKeyUp;
   private onBlur;
+  private onFocus;
   private onMouseDown;
   private hostCssClasses;
   private buttonCssClasses;

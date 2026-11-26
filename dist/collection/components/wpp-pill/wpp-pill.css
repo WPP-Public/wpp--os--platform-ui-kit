@@ -159,7 +159,7 @@
   border-color: var(--pill-border-color-hover);
 }
 :host .pill-wrapper:hover:not(.display, .draggable, .checked) ::slotted([slot=icon-start]),
-:host .pill-wrapper:hover:not(.display, .draggable, .checked) .wpp-icon-drag-indicator {
+:host .pill-wrapper:hover:not(.display, .draggable, .checked) .wpp-icon-drag {
   color: var(--pill-start-icon-color-hover);
 }
 :host .pill-wrapper:active:not(.display, .draggable, .checked) {
@@ -167,7 +167,7 @@
   border-color: var(--pill-border-color-active);
 }
 :host .pill-wrapper:active:not(.display, .draggable, .checked) ::slotted([slot=icon-start]),
-:host .pill-wrapper:active:not(.display, .draggable, .checked) .wpp-icon-drag-indicator {
+:host .pill-wrapper:active:not(.display, .draggable, .checked) .wpp-icon-drag {
   color: var(--pill-start-icon-color-active);
 }
 :host .pill-wrapper .icon-start {
@@ -201,11 +201,11 @@
   margin: var(--pill-margin-icon-close);
 }
 :host .pill-wrapper .wpp-icon-cross,
-:host .pill-wrapper .wpp-icon-drag-indicator {
+:host .pill-wrapper .wpp-icon-drag {
   outline: none;
 }
 :host .pill-wrapper .wpp-icon-cross.tab-focus,
-:host .pill-wrapper .wpp-icon-drag-indicator.tab-focus {
+:host .pill-wrapper .wpp-icon-drag.tab-focus {
   border-radius: 3px;
   outline: none;
   box-shadow: 0 0 0 1px var(--pill-first-border-color-focus), 0 0 0 3px var(--pill-second-border-color-focus);
@@ -257,24 +257,21 @@
   margin: var(--pill-draggable-margin-icon-text-m);
 }
 :host .pill-wrapper.draggable.hover {
+  cursor: grab;
   background-color: var(--pill-bg-color-hover);
   border-color: var(--pill-border-color-hover);
 }
+:host .pill-wrapper.draggable.hover .wpp-icon-drag {
+  color: var(--pill-start-icon-color-hover);
+}
 :host .pill-wrapper.draggable.active {
+  cursor: grabbing;
   background-color: var(--pill-bg-color-active);
   border-color: var(--pill-border-color-active);
   box-shadow: var(--pill-draggable-active-box-shadow-color);
 }
-:host .pill-wrapper.draggable .drag-wrapper {
-  cursor: pointer;
-}
-:host .pill-wrapper.draggable .drag-wrapper:hover {
-  color: var(--pill-start-icon-color-hover);
-  cursor: grabbing;
-}
-:host .pill-wrapper.draggable .drag-wrapper:active {
+:host .pill-wrapper.draggable.active .wpp-icon-drag {
   color: var(--pill-start-icon-color-active);
-  cursor: grabbing;
 }
 :host .pill-wrapper.draggable .wpp-icon-cross {
   cursor: pointer;
@@ -339,7 +336,7 @@
 :host .pill-wrapper.disabled:not(.checked) .wpp-icon-cross {
   color: var(--pill-cross-icon-color-disabled);
 }
-:host .pill-wrapper.disabled:not(.checked) .wpp-icon-drag-indicator {
+:host .pill-wrapper.disabled:not(.checked) .wpp-icon-drag {
   color: var(--pill-drag-icon-color-disabled);
 }
 :host .pill-wrapper.disabled:not(.checked) .label {
@@ -355,6 +352,15 @@
 }
 :host .wpp-tooltip::part(anchor) {
   width: 100%;
+}
+
+:host([data-grabbed]) .pill-wrapper {
+  background-color: var(--pill-bg-color-active);
+  border-color: var(--pill-border-color-active);
+}
+:host([data-grabbed]) .pill-wrapper ::slotted([slot=icon-start]),
+:host([data-grabbed]) .pill-wrapper .wpp-icon-drag {
+  color: var(--pill-start-icon-color-active);
 }
 
 :host([disabled]:not([disabled=false])) {

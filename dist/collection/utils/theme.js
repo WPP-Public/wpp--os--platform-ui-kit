@@ -105,6 +105,7 @@ export const WppAgGridThemeConfig = {
   rowHoverColor: 'var(--wpp-grey-color-200)',
   oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
   selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  focusShadow: '0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-primary-color-900)',
   rangeSelectionBorderColor: 'transparent',
   cellHorizontalPadding: 16,
   fontFamily: 'var(--wpp-font-family)',

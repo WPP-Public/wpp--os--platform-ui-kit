@@ -31,3 +31,11 @@
   left: calc(var(--marker-position) - 8px);
   z-index: 2;
 }
+:host .marker:focus {
+  outline: none;
+}
+:host .marker:focus-visible {
+  border-radius: var(--wpp-border-radius-round);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}

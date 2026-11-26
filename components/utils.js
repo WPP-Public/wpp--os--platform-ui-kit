@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v4-6-0';
+const version = 'v4-7-0';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -170,6 +170,8 @@ const transformToVersionedTag = (tag) => {
     return tag;
   return `${tag}-${version}`;
 };
+/** Builds a selector matching both the plain and the versioned tag, e.g. `wpp-step, wpp-step-v4-4-0`. */
+const getTagSelector = (tag) => [tag, transformToVersionedTag(tag)].filter((item, index, items) => items.indexOf(item) === index).join(', ');
 function closestElement(selector, base) {
   const isWindow = (value) => value === window;
   const isDocument = (value) => value === document;
@@ -391,6 +393,20 @@ const getAriaProps = (ariaProps) => {
   });
   return result;
 };
+/**
+ * Text of the elements an `aria-labelledby` list names, looked up in the tree that holds `host`.
+ * A control rendered inside a shadow root cannot carry the dev's `aria-labelledby` itself: IDREFs
+ * only resolve inside the shadow root, never to the dev's elements outside it.
+ */
+const getLabelledbyText = (host, labelledby) => {
+  const root = host.getRootNode();
+  return (labelledby ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(id => root.getElementById?.(id)?.textContent?.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join(' ');
+};
 const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');
 
-export { getScrollbarGutterWidth as A, uniquePortalId as B, activateOnEnterOrSpace as C, getAriaProps as D, isWppElement as E, version as F, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, mergeLocales as y, isMimeAccepted as z };
+export { isMimeAccepted as A, getScrollbarGutterWidth as B, uniquePortalId as C, activateOnEnterOrSpace as D, getAriaProps as E, getLabelledbyText as F, isWppElement as G, version as H, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, getTagSelector as l, closestElement as m, applyBodyStylesIfNeeded as n, autoFocusElement as o, form2object as p, getDurationValues as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, getHasFocused as v, setHasFocused as w, getHighestContainerInDOM as x, getOsBarOffsetHeight as y, mergeLocales as z };

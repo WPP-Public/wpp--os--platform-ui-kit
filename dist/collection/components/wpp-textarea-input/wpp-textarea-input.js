@@ -128,10 +128,12 @@ export class WppTextareaInput {
     this.inputRef?.select();
   }
   /**
-   * Method that sets focus on the native input.
+   * Method that sets focus on the native input. Pass `isOutlined` to show the keyboard focus ring.
    */
-  async setFocus() {
+  async setFocus(isOutlined) {
     this.inputRef?.focus();
+    if (isOutlined)
+      this.focusType = FOCUS_TYPE.TAB;
   }
   /**
    * Method that sets input value.
@@ -245,10 +247,10 @@ export class WppTextareaInput {
     };
     const ariaAttrs = this.getAriaAttributes();
     const overLimit = this.isOverLimit;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-6-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-6-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-6-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-6-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps, "aria-labelledby": ariaAttrs['aria-labelledby'], "aria-describedby": ariaAttrs['aria-describedby'] }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-7-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-7-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-7-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-7-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
   }
   static get is() { return "wpp-textarea-input"; }
-  static get registryIs() { return "wpp-textarea-input-v4-6-0"; }
+  static get registryIs() { return "wpp-textarea-input-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -704,8 +706,11 @@ export class WppTextareaInput {
       },
       "setFocus": {
         "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
+          "signature": "(isOutlined?: boolean) => Promise<void>",
+          "parameters": [{
+              "tags": [],
+              "text": ""
+            }],
           "references": {
             "Promise": {
               "location": "global",
@@ -715,7 +720,7 @@ export class WppTextareaInput {
           "return": "Promise<void>"
         },
         "docs": {
-          "text": "Method that sets focus on the native input.",
+          "text": "Method that sets focus on the native input. Pass `isOutlined` to show the keyboard focus ring.",
           "tags": []
         }
       },

@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { LoadMoreChangeEventDetail } from './types';
+import { LoadMoreChangeEventDetail, LoadMoreLocales } from './types';
 import { AriaProps } from '../../types/common';
 /**
  * @part container - Container element
@@ -39,6 +39,10 @@ export declare class WppLoadMore {
    */
   readonly ariaProps: AriaProps;
   /**
+   * Localised strings for the button text and the progress text.
+   */
+  readonly locales: Partial<LoadMoreLocales>;
+  /**
    * Emitted when the "Load more" button is clicked.
    */
   wppClickLoadMore: EventEmitter<LoadMoreChangeEventDetail>;
@@ -50,6 +54,7 @@ export declare class WppLoadMore {
   componentDidRender(): void;
   componentWillLoad(): void;
   private handleClick;
+  private get _locales();
   private isDisabled;
   private onKeyDown;
   private hostCssClasses;

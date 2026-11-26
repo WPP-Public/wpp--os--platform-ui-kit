@@ -78,14 +78,27 @@ export class WppAvatar {
     /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
     this.hasTooltip = () => this.withTooltip && !this.isAvatarIcon();
     /**
-     * Explicitly presentational avatars are removed from the a11y tree. Tooltip avatars leave their
-     * host unsemanticed because the tooltip supplies the focusable, labelled trigger.
+     * A tooltip avatar's content is its focusable, labelled button, unless the avatar is presentational: then it is
+     * decoration inside another control (e.g. a pill, which demotes its `icon-start` avatar), and a button there would
+     * be a nested interactive control and an extra Tab stop. Its tooltip still opens on hover.
      */
-    this.getHostAriaProps = () => this.hasTooltip()
+    this.hasFocusableTooltipTrigger = () => this.hasTooltip() && this.role !== 'presentation';
+    /**
+     * Explicitly presentational avatars are removed from the a11y tree. Tooltip avatars leave their
+     * host unsemanticed because their content, the tooltip's trigger, is the focusable, labelled button.
+     */
+    this.getHostAriaProps = () => this.hasFocusableTooltipTrigger()
       ? {}
       : this.role === 'presentation'
         ? { role: 'presentation' }
         : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label };
+    /**
+     * The tooltip shows when its trigger, the slotted content, takes focus, so for a tooltip avatar that content is
+     * the button. `index` decides whether it is in the Tab order (0) or only focusable from code (-1).
+     */
+    this.getTooltipTriggerProps = () => this.hasFocusableTooltipTrigger()
+      ? { role: 'button', tabIndex: this.index, 'aria-label': `User: ${this.name}` }
+      : {};
     this.isImageFailedToLoad = false;
     this.focusType = undefined;
     this.name = '';
@@ -103,6 +116,15 @@ export class WppAvatar {
     this.tooltipConfig = {
       placement: 'bottom',
     };
+  }
+  /**
+   * Method that sets focus on the avatar: its tooltip trigger when it has a tooltip, otherwise the host. The
+   * keyboard focus ring shows unless `focusVisible` is false, which suits focus moved in response to a pointer press.
+   */
+  async setFocus(options = {}) {
+    ;
+    (this.hasFocusableTooltipTrigger() ? this.contentRef : this.host)?.focus();
+    this.focusType = options.focusVisible === false ? FOCUS_TYPE.MOUSE : FOCUS_TYPE.TAB;
   }
   colorChange(newValue) {
     if (!this.isAvatarIcon())
@@ -123,21 +145,21 @@ export class WppAvatar {
     this.host.style.setProperty('--avatar-border-radius', borderRadius);
   }
   componentDidRender() {
-    if (this.hasTooltip()) {
+    if (this.hasFocusableTooltipTrigger()) {
       this.host.removeAttribute('role');
       this.host.removeAttribute('tabindex');
     }
   }
   render() {
-    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.isAvatarIcon()
+    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content", ref: el => (this.contentRef = el), ...this.getTooltipTriggerProps() }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content", ref: el => (this.contentRef = el), ...this.getTooltipTriggerProps() }, this.isAvatarIcon()
       ? this.renderIcon()
       : this.amountOfHiddenAvatars
         ? `+${this.amountOfHiddenAvatars}`
         : this.getUserAbbreviation(this.name))));
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-6-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-7-0", { text: this.name, config: this.tooltipConfig, part: "tooltip" }, content)) : (content)));
   }
   static get is() { return "wpp-avatar"; }
-  static get registryIs() { return "wpp-avatar-v4-6-0"; }
+  static get registryIs() { return "wpp-avatar-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -435,6 +457,30 @@ export class WppAvatar {
           }
         }
       }];
+  }
+  static get methods() {
+    return {
+      "setFocus": {
+        "complexType": {
+          "signature": "(options?: { focusVisible?: boolean; }) => Promise<void>",
+          "parameters": [{
+              "tags": [],
+              "text": ""
+            }],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Method that sets focus on the avatar: its tooltip trigger when it has a tooltip, otherwise the host. The\nkeyboard focus ring shows unless `focusVisible` is false, which suits focus moved in response to a pointer press.",
+          "tags": []
+        }
+      }
+    };
   }
   static get elementRef() { return "host"; }
   static get watchers() {

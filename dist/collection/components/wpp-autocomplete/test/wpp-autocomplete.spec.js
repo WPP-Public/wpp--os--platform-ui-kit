@@ -7,6 +7,7 @@ import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
 import { FOCUS_TYPE } from '../../../types/common';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
+import { ResizeObserverMock } from '../../wpp-artefact/test/mocks';
 describe('wpp-autocomplete', () => {
   describe('snapshots', () => {
     it('should render autocomplete component', async () => {
@@ -21,7 +22,7 @@ describe('wpp-autocomplete', () => {
     const renderAutocompleteWithLabel = async (disabled = false) => {
       const page = await newSpecPage({
         components: [WppAutocomplete, WppLabel, WppInternalLabel],
-        template: () => h("wpp-autocomplete-v4-6-0", { disabled: disabled, labelConfig: { text: 'Autocomplete label' } }),
+        template: () => h("wpp-autocomplete-v4-7-0", { disabled: disabled, labelConfig: { text: 'Autocomplete label' } }),
       });
       await page.waitForChanges();
       return {
@@ -319,7 +320,7 @@ describe('wpp-autocomplete', () => {
       const getItemKey = (v) => v?.id;
       const page = await newSpecPage({
         components: [WppAutocomplete],
-        template: () => h("wpp-autocomplete-v4-6-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
+        template: () => h("wpp-autocomplete-v4-7-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
       });
       const inst = page.rootInstance;
       const spyUpdate = (inst.updatePlaceholderText = jest.fn());
@@ -867,6 +868,123 @@ describe('wpp-autocomplete', () => {
         inst.setActiveClass('list', 1, 0);
         expect(inst.listItemsRefs[1].classList.contains('wpp-list-item-active')).toBe(false);
         expect(inst.listItemsRefs[0].classList.contains('wpp-list-item-active')).toBe(true);
+      });
+    });
+    describe('selection and message on the combobox (CSPFND-460)', () => {
+      const FRUITS = [
+        { value: 'a', label: 'Apple' },
+        { value: 'b', label: 'Banana' },
+      ];
+      const renderWith = async (props) => {
+        const page = await newSpecPage({
+          components: [WppAutocomplete, WppInput],
+          template: () => h("wpp-autocomplete-v4-7-0", { list: FRUITS, ...props }),
+        });
+        return { page, input: page.root?.shadowRoot?.querySelector('wpp-input')?.shadowRoot?.querySelector('input') };
+      };
+      it('describes the combobox with the selected option', async () => {
+        const { input } = await renderWith({ value: ['a'] });
+        expect(input?.getAttribute('aria-description')).toBe('Apple');
+      });
+      it('describes the combobox with every selected option when multiple', async () => {
+        const { input } = await renderWith({ multiple: true, value: ['a', 'b'] });
+        expect(input?.getAttribute('aria-description')).toBe('Apple, Banana');
+      });
+      it('adds an error message to the description and marks the combobox invalid', async () => {
+        const { input } = await renderWith({ value: ['a'], message: 'Pick a fruit', messageType: 'error' });
+        expect(input?.getAttribute('aria-description')).toBe('Apple. Pick a fruit');
+        expect(input?.getAttribute('aria-invalid')).toBe('true');
+      });
+      it('describes a warning without marking the combobox invalid', async () => {
+        const { input } = await renderWith({ message: 'Pick a fruit', messageType: 'warning' });
+        expect(input?.getAttribute('aria-description')).toBe('Pick a fruit');
+        expect(input?.hasAttribute('aria-invalid')).toBe(false);
+      });
+      it('renders no description with no selection and no message', async () => {
+        const { input } = await renderWith({});
+        expect(input?.hasAttribute('aria-description')).toBe(false);
+      });
+    });
+    describe('picking a single option (CSPFND-460)', () => {
+      const renderOpen = async () => {
+        const page = await newSpecPage({
+          components: [WppAutocomplete, WppInput],
+          template: () => (h("wpp-autocomplete-v4-7-0", { list: [
+              { value: 'a', label: 'Apple' },
+              { value: 'b', label: 'Banana' },
+            ] })),
+        });
+        const inst = page.rootInstance;
+        const wppInput = page.root?.shadowRoot?.querySelector('wpp-input');
+        const changeSpy = jest.fn();
+        inst.tippyInstance = {
+          state: { isShown: true, isDestroyed: false },
+          show: jest.fn(),
+          hide: jest.fn(),
+          destroy: jest.fn(),
+        };
+        inst.isFocused = true;
+        inst.searchText = 'a';
+        await page.waitForChanges();
+        page.root?.addEventListener('wppChange', changeSpy);
+        return {
+          page,
+          wppInput,
+          changeSpy,
+          blurSpy: jest.spyOn(wppInput, 'blur'),
+          triggerFocusSpy: jest.spyOn(page.root.shadowRoot.querySelector('.trigger'), 'focus'),
+          nativeInput: () => wppInput.shadowRoot?.querySelector('input'),
+        };
+      };
+      it('keeps focus in the combobox when the option is picked with Enter', async () => {
+        const { page, wppInput, changeSpy, blurSpy, triggerFocusSpy, nativeInput } = await renderOpen();
+        wppInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+        await page.waitForChanges();
+        wppInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+        await page.waitForChanges();
+        expect(changeSpy.mock.calls[0][0].detail.value).toEqual(['a']);
+        expect(blurSpy).not.toHaveBeenCalled();
+        expect(triggerFocusSpy).not.toHaveBeenCalled();
+        expect(nativeInput()?.getAttribute('aria-expanded')).toBe('false');
+        expect(nativeInput()?.getAttribute('aria-description')).toBe('Apple');
+      });
+      it('still ends the interaction when the option is picked with the pointer', async () => {
+        const { page, changeSpy, blurSpy } = await renderOpen();
+        page.root?.shadowRoot
+          ?.querySelector('[role="option"]')
+          ?.dispatchEvent(new CustomEvent('wppChangeListItem', { detail: { value: 'b' } }));
+        await page.waitForChanges();
+        expect(changeSpy.mock.calls[0][0].detail.value).toEqual(['b']);
+        expect(blurSpy).toHaveBeenCalled();
+      });
+    });
+    describe('scrollable options list (CSPFND-460)', () => {
+      let observers;
+      beforeEach(() => {
+        observers = [];
+        global.ResizeObserver = jest.fn().mockImplementation(callback => {
+          const observer = new ResizeObserverMock(callback);
+          observers.push(observer);
+          return observer;
+        });
+      });
+      afterEach(() => {
+        global.ResizeObserver = ResizeObserverMock;
+      });
+      it('becomes a tab stop when its options grow past its height after the render', async () => {
+        const page = await mkPage('<wpp-autocomplete></wpp-autocomplete>');
+        const inst = page.rootInstance;
+        inst.isDropdownShown = true;
+        await page.waitForChanges();
+        const listbox = page.root?.shadowRoot?.querySelector('[role="listbox"]');
+        const listObserver = observers.find(observer => observer.observe.mock.calls.some(([el]) => el === listbox));
+        expect(listbox.getAttribute('tabindex')).toBe('-1');
+        // The mock DOM lays nothing out: the options hydrating is the list's content outgrowing its box
+        Object.defineProperty(listbox, 'scrollHeight', { configurable: true, value: 560 });
+        Object.defineProperty(listbox, 'clientHeight', { configurable: true, value: 372 });
+        listObserver.triggerResize(372);
+        await page.waitForChanges();
+        expect(listbox.getAttribute('tabindex')).toBe('0');
       });
     });
   });

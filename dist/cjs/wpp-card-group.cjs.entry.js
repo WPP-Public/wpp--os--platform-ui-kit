@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 require('./consts-d8f5ef98.js');
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";
@@ -211,9 +211,9 @@ const WppCardGroup = class {
     });
   }
   render() {
-    return (index.h(index.Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, index.h("slot", { part: "inner" })));
+    return (index.h(index.Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label }, index.h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v4-6-0"; }
+  static get registryIs() { return "wpp-card-group-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

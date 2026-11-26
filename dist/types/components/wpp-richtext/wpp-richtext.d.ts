@@ -7,13 +7,22 @@ import { Formats, RichtextLocales, RichtextValue, DebugLevels } from './types';
 import type { TiptapChangeEventDetail, TiptapSelectionChangeEventDetail, TiptapUploadRequestEventDetail } from './tiptap-types';
 export declare class WppRichtext implements BaseComponent {
   private themeSubscription;
+  private readonly messageId;
   host: HTMLWppRichtextElement;
   focusType: FOCUS_TYPE;
+  private isEditorFocused;
   isLabelHovered: boolean;
   private enteredCharacters;
   plainText: string;
   private toolbarActiveFormats;
   private parsedToolbarItems;
+  /**
+   * Index of the single toolbar control that is currently tabbable. Implements
+   * the roving-tabindex requirement of the WAI-ARIA Toolbar pattern so the
+   * whole toolbar is reachable with a single Tab stop and traversed with the
+   * arrow keys (WCAG 2.1.1).
+   */
+  private toolbarFocusIndex;
   private activeFontSize;
   private isFontSizePickerOpen;
   private linkPromptOpen;
@@ -22,6 +31,12 @@ export declare class WppRichtext implements BaseComponent {
   private linkPromptPreviewHref;
   private linkPromptPosition;
   private linkPromptRange;
+  /** The toolbar Link button that opened the popup; focus returns there on Escape. `null` returns it to the editor. */
+  private linkPromptReturnFocus;
+  private linkPromptInput?;
+  private linkPromptPreview?;
+  /** Move focus into the URL field once the edit-mode popup has rendered. */
+  private focusLinkPromptInputOnRender;
   /**
    * Defines the component name.
    */
@@ -161,6 +176,7 @@ export declare class WppRichtext implements BaseComponent {
   private tiptapEditor;
   private initTimerId;
   containerElement?: HTMLDivElement | HTMLPreElement;
+  private toolbarElement?;
   formControlInput?: HTMLInputElement;
   private savedSelectionRange;
   private previousSelectionRange;
@@ -174,6 +190,12 @@ export declare class WppRichtext implements BaseComponent {
    * tooltip dismisses it.
    */
   private onDocumentMouseDown;
+  /**
+   * Tab from the editor moves into the open link popup. In DOM order the controls of any video embedded in the
+   * content come first, which can put the popup many Tab presses away from the link it belongs to.
+   */
+  private onEditorKeyDown;
+  private focusLinkPromptFirstControl;
   private onEditorBlur;
   private onEditorFocus;
   private updateEnteredCharacters;
@@ -194,6 +216,28 @@ export declare class WppRichtext implements BaseComponent {
   connectedCallback(): void;
   disconnectedCallback(): void;
   private get _locales();
+  /**
+   * Keep the ARIA state of the contenteditable editing surface in sync with
+   * the component props. Runs after each render so external prop changes
+   * (required/messageType/message/label/disabled/placeholder) are reflected onto the
+   * real inner control.
+   */
+  private syncEditorAria;
+  componentDidRender(): void;
+  /**
+   * Human-readable accessible name for an icon-only toolbar button, sourced
+   * from the merged locales so it stays translatable (WCAG 4.1.2 / 2.4.6).
+   */
+  private getToolbarActionLabel;
+  /** Enabled, focusable toolbar controls in DOM (visual) order. */
+  private getToolbarControls;
+  private focusToolbarControl;
+  /**
+   * Roving-tabindex keyboard handling for the toolbar (WAI-ARIA Toolbar
+   * pattern): arrow keys move between controls, Home/End jump to the ends.
+   * Enter/Space activation is handled natively by the underlying buttons.
+   */
+  private onToolbarKeyDown;
   updateContent(newValue: RichtextValue): void | null;
   updateDisabled(newValue: boolean): void;
   updatePlaceholder(newValue: string, oldValue: string): void;
@@ -228,7 +272,9 @@ export declare class WppRichtext implements BaseComponent {
   /** Remove the link mark from the current range and close the tooltip. */
   private onLinkPromptDelete;
   private onLinkPromptSave;
+  /** Close the popup without changing the link and return focus to where it was opened from. */
   private onLinkPromptCancel;
+  private onLinkPromptInputKeyDown;
   private onLinkPromptKeyDown;
   private closeLinkPrompt;
   /**

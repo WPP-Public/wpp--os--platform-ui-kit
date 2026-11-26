@@ -8,6 +8,11 @@ export declare class WppTreeItem {
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
   hasIconEndContextMenu: boolean;
+  /**
+   * Name for this item's actions control, already resolved by `wpp-tree` from its locales.
+   * Passed in rather than read here so this sub-component keeps no locales API of its own.
+   */
+  readonly itemActionsLabel?: string;
   isMouseOnIconEnd: boolean;
   isCollapseTransitionEnd: boolean;
   isTextWrappable: boolean;

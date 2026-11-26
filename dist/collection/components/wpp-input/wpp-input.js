@@ -327,6 +327,13 @@ export class WppInput {
     });
     this.inputId = this.name || 'wpp-input';
     this.labelId = `${this.inputId}-label`;
+    this.messageId = `${this.inputId}-message`;
+    this.validationMessageId = `${this.inputId}-validation-message`;
+    // The messages render beside the input in this shadow root, so they can be referenced by id. Without the
+    // reference a screen reader only hears "invalid" and never the help or error text itself.
+    this.getDescribedBy = () => [this.lengthValidationError && this.validationMessageId, this.message && this.messageId]
+      .filter(Boolean)
+      .join(' ') || undefined;
     this.getInputType = () => {
       if (this.maskOptions) {
         // When mask options are provided, we need to ensure the input type is supported for masking
@@ -334,18 +341,22 @@ export class WppInput {
       }
       return this.type === 'decimal' ? 'text' : this.type;
     };
-    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.getInputType(), value: this.renderedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "aria-activedescendant": this.ariaProps.activedescendant ?? undefined,
+    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.getInputType(), value: this.renderedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress,
+      // Listened for here rather than on the host: a Tab that lands on the label's info icon also bubbles to
+      // the host, and would give the input its focus ring while the icon has focus.
+      onKeyUp: (event) => this.onKeyUp(event, 'input'), readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' || this.ariaProps.invalid ? 'true' : undefined, "aria-describedby": this.getDescribedBy(), "aria-activedescendant": this.ariaProps.activedescendant ?? undefined,
       // Composite widgets (e.g. autocomplete) must place their combobox semantics on the native
       // input itself — attributes set on the wpp-input host never cross the shadow boundary, so
       // assistive tech would see a plain textbox. All default to undefined (no attribute).
-      role: this.ariaProps.role, "aria-expanded": this.ariaProps.expanded !== undefined ? String(this.ariaProps.expanded) : undefined, "aria-controls": this.ariaProps.controls, "aria-haspopup": this.ariaProps.haspopup, "aria-autocomplete": this.ariaProps.autocomplete, "data-testid": "input" }));
+      role: this.ariaProps.role, "aria-expanded": this.ariaProps.expanded !== undefined ? String(this.ariaProps.expanded) : undefined, "aria-controls": this.ariaProps.controls, "aria-haspopup": this.ariaProps.haspopup, "aria-autocomplete": this.ariaProps.autocomplete, "aria-description": this.ariaProps.description, "data-testid": "input" }));
     this.renderSearchIconOrSpinner = () => {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v4-6-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        // wpp-spinner only exposes itself when given `ariaProps.label`; a plain aria-label left it hidden.
+        return h("wpp-spinner-v4-7-0", { class: this.iconStartCssClasses(), slot: "left", ariaProps: { label: this._locales.loading } });
       }
-      return h("wpp-icon-search-v4-6-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v4-7-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
     this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
@@ -465,6 +476,11 @@ export class WppInput {
     }
     this.checkForEllipsis();
     this.internalDefaultValue = this.defaultValue;
+    // Reattached after a detach (e.g. a popover's content is removed on close and put back on open):
+    // disconnectedCallback destroyed the mask and componentDidLoad will not run again to rebuild it, which
+    // would leave `value` updates ignored. On first connect there is no input yet, so this does nothing.
+    if (!this.generatedMask)
+      this.createMaskForInput();
   }
   componentWillLoad() {
     if (this.host.querySelector('[slot="icon-end"]')) {
@@ -498,7 +514,7 @@ export class WppInput {
       }, onMouseLeave: () => {
         this.isHovered = false;
         this.updateCrossIcon();
-      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-6-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", anchorTabIndex: -1, config: {
+      }, exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-7-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", anchorTabIndex: -1, config: {
         ...this.truncationTooltipConfig,
         onShow: (instance) => {
           if (!this.hasActiveEllipses || this.type === 'password')
@@ -507,10 +523,10 @@ export class WppInput {
             return this.truncationTooltipConfig?.onShow(instance);
           }
         },
-      } }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-6-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onKeyUp: (event) => this.onKeyUp(event, 'icon'), onKeyDown: (event) => this.onKeyDown(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-6-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-6-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+      } }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-7-0", { class: this.iconEndCssClasses('native'), "aria-label": this._locales.clearInput, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onKeyUp: (event) => this.onKeyUp(event, 'icon'), onKeyDown: (event) => this.onKeyDown(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": this._locales.clearInput, role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-7-0", { id: this.validationMessageId, message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-7-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
   static get is() { return "wpp-input"; }
-  static get registryIs() { return "wpp-input-v4-6-0"; }
+  static get registryIs() { return "wpp-input-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -947,7 +963,7 @@ export class WppInput {
         "mutable": false,
         "complexType": {
           "original": "Partial<InputLocaleInterface>",
-          "resolved": "{ minLengthErrorMessage?: ((minLength: number) => string) | undefined; maxLengthErrorMessage?: ((maxLength: number) => string) | undefined; }",
+          "resolved": "{ minLengthErrorMessage?: ((minLength: number) => string) | undefined; maxLengthErrorMessage?: ((maxLength: number) => string) | undefined; clearInput?: string | undefined; loading?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",

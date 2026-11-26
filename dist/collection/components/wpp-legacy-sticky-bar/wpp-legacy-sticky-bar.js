@@ -1,6 +1,7 @@
 import { Host, h, Fragment } from '@stencil/core';
-import { DEFAULT_SCROLL_TRESHOLD, INITIAL_BUTTONS_LIST_VALUE, MAXIMUM_ACTION_BUTTONS, MAXIMUM_PRIMARY_BUTTONS, MAXIMUM_SECONDARY_BUTTONS, MULTIPLE_ACTION_BUTTONS_ERROR, MULTIPLE_PRIMARY_BUTTONS_ERROR, TOO_MANY_SECONDARY_BUTTONS_ERROR, } from './const';
+import { DEFAULT_SCROLL_TRESHOLD, INITIAL_BUTTONS_LIST_VALUE, LOCALES_DEFAULTS, MAXIMUM_ACTION_BUTTONS, MAXIMUM_PRIMARY_BUTTONS, MAXIMUM_SECONDARY_BUTTONS, MULTIPLE_ACTION_BUTTONS_ERROR, MULTIPLE_PRIMARY_BUTTONS_ERROR, TOO_MANY_SECONDARY_BUTTONS_ERROR, } from './const';
 import { Z_INDEX } from '../../common/consts';
+import { mergeLocales } from '../../utils/utils';
 /**
  * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variants: 'two-lines' and 'blank'
  */
@@ -76,6 +77,7 @@ export class WppLegacyStickyBar {
     this.scrollTreshold = DEFAULT_SCROLL_TRESHOLD;
     this.buttons = [];
     this.tabs = [];
+    this.locales = {};
   }
   updateButtons() {
     this.getButtonsList();
@@ -117,18 +119,21 @@ export class WppLegacyStickyBar {
       this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${this.offsetFromTop}px`);
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-6-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-6-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label: this._locales.backButtonLabel }, onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-7-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-7-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-6-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-7-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v4-6-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-6-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-6-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (h("wpp-button-v4-7-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-7-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-7-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
   }
   static get is() { return "wpp-legacy-sticky-bar"; }
-  static get registryIs() { return "wpp-legacy-sticky-bar-v4-6-0"; }
+  static get registryIs() { return "wpp-legacy-sticky-bar-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -298,6 +303,32 @@ export class WppLegacyStickyBar {
           "text": "The configuration of the tabs. Based on this array with config items, tabs are placed on the sticky bar.\nThis prop can only be used with the \"two-lines-with-tabs\" variant."
         },
         "defaultValue": "[]"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<LegacyStickyBarLocales>",
+          "resolved": "{ backButtonLabel?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "LegacyStickyBarLocales": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-legacy-sticky-bar/types.ts::LegacyStickyBarLocales"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the component locale types."
+        },
+        "defaultValue": "{}"
       }
     };
   }

@@ -182,56 +182,14 @@
 :host .range-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb,
 :host .middle-range-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb,
 :host .middle-range-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 var(--slider-handle-border-width) var(--slider-handle-border-color), 0 0 0 calc(var(--slider-handle-border-width) + 1px) var(--slider-handle-first-border-color-focus), 0 0 0 calc(var(--slider-handle-border-width) + 1px + 2px) var(--slider-handle-second-border-color-focus);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 var(--slider-handle-border-width) var(--slider-handle-border-color), 0 0 0 calc(var(--slider-handle-border-width) + 1px) var(--slider-handle-first-border-color-focus), 0 0 0 calc(var(--slider-handle-border-width) + 1px + 2px) var(--slider-handle-second-border-color-focus);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb {
-  background-color: var(--slider-handle-border-color);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-webkit-slider-thumb:hover,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-webkit-slider-thumb:hover {
-  background-color: var(--slider-handle-border-color);
+  box-shadow: 0 0 0 1px var(--slider-handle-first-border-color-focus), 0 0 0 3px var(--slider-handle-second-border-color-focus);
 }
 :host .single-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb,
 :host .range-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb,
 :host .range-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb,
 :host .middle-range-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb,
 :host .middle-range-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb {
-  box-shadow: 0 0 0 var(--slider-handle-border-width) var(--slider-handle-border-color), 0 0 0 calc(var(--slider-handle-border-width) + 1px) var(--slider-handle-first-border-color-focus), 0 0 0 calc(var(--slider-handle-border-width) + 1px + 2px) var(--slider-handle-second-border-color-focus);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover {
-  box-shadow: 0 0 0 var(--slider-handle-border-width) var(--slider-handle-border-color), 0 0 0 calc(var(--slider-handle-border-width) + 1px) var(--slider-handle-first-border-color-focus), 0 0 0 calc(var(--slider-handle-border-width) + 1px + 2px) var(--slider-handle-second-border-color-focus);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb {
-  background-color: var(--slider-handle-border-color);
-}
-:host .single-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover, :host .single-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover,
-:host .range-slider-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover,
-:host .range-slider-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover,
-:host .middle-range-wrapper input[type=range].min-range-tab-focus::-moz-range-thumb:hover,
-:host .middle-range-wrapper input[type=range].max-range-tab-focus::-moz-range-thumb:hover {
-  background-color: var(--slider-handle-border-color);
+  box-shadow: 0 0 0 1px var(--slider-handle-first-border-color-focus), 0 0 0 3px var(--slider-handle-second-border-color-focus);
 }
 :host .single-slider-wrapper input[type=range]::-webkit-slider-runnable-track,
 :host .range-slider-wrapper input[type=range]::-webkit-slider-runnable-track,

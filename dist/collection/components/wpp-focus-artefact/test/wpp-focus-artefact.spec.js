@@ -63,7 +63,7 @@ describe('wpp-focus-artefact', () => {
     it('should render the title and the default document icon', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { artefactTitle: "Campaign brief" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { artefactTitle: "Campaign brief" }),
       });
       expect(shadow(page).querySelector('.title')?.textContent).toBe('Campaign brief');
       expect(shadow(page).querySelector(`.title-wrapper ${icon('wpp-icon-document')}`)).not.toBeNull();
@@ -71,7 +71,7 @@ describe('wpp-focus-artefact', () => {
     it('should render a custom title icon', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { titleIcon: "wpp-icon-image" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { titleIcon: "wpp-icon-image" }),
       });
       expect(shadow(page).querySelector(`.title-wrapper ${icon('wpp-icon-image')}`)).not.toBeNull();
       expect(shadow(page).querySelector(`.title-wrapper ${icon('wpp-icon-document')}`)).toBeNull();
@@ -79,7 +79,7 @@ describe('wpp-focus-artefact', () => {
     it('should show the title tooltip only when the title is truncated', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { artefactTitle: "A long title" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { artefactTitle: "A long title" }),
       });
       const title = shadow(page).querySelector('.title');
       const { onShow } = shadow(page).querySelector('.title-tooltip').config;
@@ -201,7 +201,7 @@ describe('wpp-focus-artefact', () => {
       it('should take the "Copied" text from locales', async () => {
         const page = await newSpecPage({
           components: [WppFocusArtefact],
-          template: () => h("wpp-focus-artefact-v4-6-0", { locales: { copiedAction: 'Copiado' } }),
+          template: () => h("wpp-focus-artefact-v4-7-0", { locales: { copiedAction: 'Copiado' } }),
         });
         await clickCopy(page);
         expect(copyTooltipText(page)).toBe('Copiado');
@@ -219,7 +219,7 @@ describe('wpp-focus-artefact', () => {
     it('should emit wppActionClick with the picked menu action', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { menuActions: MENU_ACTIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { menuActions: MENU_ACTIONS }),
       });
       const onActionClick = jest.fn();
       page.root.addEventListener('wppActionClick', onActionClick);
@@ -238,7 +238,7 @@ describe('wpp-focus-artefact', () => {
     it('should render an action button showing the selected version, with a menu of the versions', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS }),
       });
       const chevron = versionTrigger(page).querySelector('[slot="icon-end"]');
       expect(versionTrigger(page).getAttribute('variant')).toBe('secondary');
@@ -251,7 +251,7 @@ describe('wpp-focus-artefact', () => {
     it('should name the selector after what it selects and the selected version', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS, selectedVersionId: "v2" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS, selectedVersionId: "v2" }),
       });
       expect(versionTrigger(page).ariaProps).toMatchObject({
         label: `${LOCALES_DEFAULTS.versionSelectorLabel}: Version 2`,
@@ -263,7 +263,7 @@ describe('wpp-focus-artefact', () => {
     it('should select the first version when none is selected', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS }),
       });
       expect(checkedVersionsOf(page)).toEqual(['Version 1']);
       expect(versionItems(page).map(item => item.getAttribute('aria-checked'))).toEqual(['true', 'false']);
@@ -271,7 +271,7 @@ describe('wpp-focus-artefact', () => {
     it('should select the first version when the given one matches none', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS, selectedVersionId: "missing" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS, selectedVersionId: "missing" }),
       });
       expect(versionTrigger(page).textContent).toBe('Version 1');
       expect(checkedVersionsOf(page)).toEqual(['Version 1']);
@@ -279,7 +279,7 @@ describe('wpp-focus-artefact', () => {
     it('should select the given version', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS, selectedVersionId: "v2" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS, selectedVersionId: "v2" }),
       });
       expect(versionTrigger(page).textContent).toBe('Version 2');
       expect(checkedVersionsOf(page)).toEqual(['Version 2']);
@@ -288,7 +288,7 @@ describe('wpp-focus-artefact', () => {
     it('should select a version, show it in the trigger and emit wppVersionSelect', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS }),
       });
       const onVersionSelect = jest.fn();
       page.root.addEventListener('wppVersionSelect', onVersionSelect);
@@ -302,7 +302,7 @@ describe('wpp-focus-artefact', () => {
     it('should emit nothing when the selected version is picked again', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS }),
       });
       const onVersionSelect = jest.fn();
       page.root.addEventListener('wppVersionSelect', onVersionSelect);
@@ -314,7 +314,7 @@ describe('wpp-focus-artefact', () => {
     it('should expose the menu state on the trigger and turn the chevron while the menu is open', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { versions: VERSIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { versions: VERSIONS }),
       });
       const chevronDirection = () => versionTrigger(page).querySelector('[slot="icon-end"]').getAttribute('direction');
       expect(versionTrigger(page).ariaProps).toMatchObject({ haspopup: 'menu', expanded: false });
@@ -349,7 +349,7 @@ describe('wpp-focus-artefact', () => {
     it('should always render the close button at the end of the header', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { menuActions: MENU_ACTIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { menuActions: MENU_ACTIONS }),
       });
       const lastHeaderElement = shadow(page).querySelector('.actions-wrapper').lastElementChild;
       expect(lastHeaderElement.querySelector('.close-button')).not.toBeNull();
@@ -359,7 +359,7 @@ describe('wpp-focus-artefact', () => {
     it('should use the default English labels', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { menuActions: MENU_ACTIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { menuActions: MENU_ACTIONS }),
       });
       expect(buttonById(page, 'quote').ariaProps.label).toBe('Quote');
       expect(shadow(page).querySelector('.close-button').ariaProps.label).toBe('Close');
@@ -368,7 +368,7 @@ describe('wpp-focus-artefact', () => {
     it('should merge partial locale overrides with the defaults', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { locales: { quoteAction: 'Citer', closeAction: 'Fermer' } }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { locales: { quoteAction: 'Citer', closeAction: 'Fermer' } }),
       });
       expect(buttonById(page, 'quote').ariaProps.label).toBe('Citer');
       expect(buttonById(page, 'copy').ariaProps.label).toBe(LOCALES_DEFAULTS.copyAction);
@@ -388,7 +388,7 @@ describe('wpp-focus-artefact', () => {
     it('should be a region named after the title by default', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { artefactTitle: "Campaign brief" }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { artefactTitle: "Campaign brief" }),
       });
       expect(page.root.getAttribute('role')).toBe('region');
       expect(page.root.getAttribute('aria-label')).toBe('Campaign brief');
@@ -396,14 +396,14 @@ describe('wpp-focus-artefact', () => {
     it('should use the label from ariaProps', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { artefactTitle: "Campaign brief", ariaProps: { label: 'Focused artefact' } }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { artefactTitle: "Campaign brief", ariaProps: { label: 'Focused artefact' } }),
       });
       expect(page.root.getAttribute('aria-label')).toBe('Focused artefact');
     });
     it('should not add the title as aria-label when the region is labelled by reference', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { ariaProps: { labelledby: 'heading-id' } }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { ariaProps: { labelledby: 'heading-id' } }),
       });
       expect(page.root.getAttribute('aria-labelledby')).toBe('heading-id');
       expect(page.root.hasAttribute('aria-label')).toBe(false);
@@ -429,7 +429,7 @@ describe('wpp-focus-artefact', () => {
     it('should expose the more menu as a popup and reflect its open state', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { menuActions: MENU_ACTIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { menuActions: MENU_ACTIONS }),
       });
       const moreMenu = shadow(page).querySelector('.more-menu');
       const moreTrigger = () => shadow(page).querySelector('.more-menu wpp-action-button');
@@ -444,7 +444,7 @@ describe('wpp-focus-artefact', () => {
     it('should keep the more menu config stable across renders', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { menuActions: MENU_ACTIONS }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { menuActions: MENU_ACTIONS }),
       });
       const config = shadow(page).querySelector('.more-menu').dropdownConfig;
       config.onShow();
@@ -467,7 +467,7 @@ describe('wpp-focus-artefact', () => {
     });
     const renderArtefact = (locales) => newSpecPage({
       components: [WppFocusArtefact],
-      template: () => (h("wpp-focus-artefact-v4-6-0", { locales: locales }, h("div", { slot: "body" }, "Content"))),
+      template: () => (h("wpp-focus-artefact-v4-7-0", { locales: locales }, h("div", { slot: "body" }, "Content"))),
     });
     const body = (page) => shadow(page).querySelector('.body');
     // The latest observer watching the body: a slot change replaces it
@@ -632,7 +632,7 @@ describe('wpp-focus-artefact', () => {
     it('should use the label from locales', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { locales: { resizeHandleLabel: 'Redimensionar' } }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { locales: { resizeHandleLabel: 'Redimensionar' } }),
       });
       expect(shadow(page).querySelector('.resize-handle')?.getAttribute('aria-label')).toBe('Redimensionar');
     });
@@ -676,7 +676,7 @@ describe('wpp-focus-artefact', () => {
       });
       await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => h("wpp-focus-artefact-v4-6-0", { width: 600 }),
+        template: () => h("wpp-focus-artefact-v4-7-0", { width: 600 }),
       });
       renderSpy.mockRestore();
       expect(widthsAtRender[0]).toBe('min(600px, 100%)');
@@ -889,14 +889,14 @@ describe('wpp-focus-artefact', () => {
     it('should render the default focus artefact', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => (h("wpp-focus-artefact-v4-6-0", { artefactTitle: "Campaign brief" }, h("div", { slot: "body" }, "Content"))),
+        template: () => (h("wpp-focus-artefact-v4-7-0", { artefactTitle: "Campaign brief" }, h("div", { slot: "body" }, "Content"))),
       });
       expect(page.root).toMatchSnapshot();
     });
     it('should render the focus artefact with versions and menu actions', async () => {
       const page = await newSpecPage({
         components: [WppFocusArtefact],
-        template: () => (h("wpp-focus-artefact-v4-6-0", { artefactTitle: "Campaign brief", versions: VERSIONS, selectedVersionId: "v2", menuActions: MENU_ACTIONS })),
+        template: () => (h("wpp-focus-artefact-v4-7-0", { artefactTitle: "Campaign brief", versions: VERSIONS, selectedVersionId: "v2", menuActions: MENU_ACTIONS })),
       });
       expect(page.root).toMatchSnapshot();
     });

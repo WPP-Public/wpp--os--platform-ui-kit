@@ -208,7 +208,6 @@
   width: 100%;
 }
 :host .wpp-select-portal .nothing-found {
-  --wpp-typography-color: var(--wpp-grey-color-700);
   padding: 5px 8px;
 }
 :host .wpp-select-portal .wpp-divider {

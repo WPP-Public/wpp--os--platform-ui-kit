@@ -13,6 +13,7 @@ export default {
 export const Pagination = () => 
 // TODO: src will be replaced with our own react dev environment soon
 html `<iframe
+    title="AG Grid table with pagination"
     width="100%"
     height="800px"
     src="https://statuesque-longma-ba5133.netlify.app/ag-grid-table-pagination?storybook-demo"
